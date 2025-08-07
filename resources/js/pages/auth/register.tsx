@@ -8,12 +8,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
+import TagSelector from '@/components/select/tag-selector';
 
 type RegisterForm = {
     name: string;
     email: string;
     password: string;
     password_confirmation: string;
+    profile_picture: File | null;
+    company_name: string;
+    company_description: string;
+    industry: string;
+    categories: string[];
+    great_at: string[];
+    can_help_with: string[];
 };
 
 type RegisterProps = {
@@ -24,16 +32,36 @@ type RegisterProps = {
 };
 
 export default function Register({ prefill }: RegisterProps) {
-    const { data, setData, post, processing, errors, reset } = useForm<Required<RegisterForm>>({
+    const { data, setData, post, processing, errors, reset } = useForm<RegisterForm>({
         name: prefill?.name ?? '',
         email: prefill?.email ?? '',
         password: '',
         password_confirmation: '',
+        profile_picture: null,
+        company_name: '',
+        company_description: '',
+        industry: '',
+        categories: [],
+        great_at: [],
+        can_help_with: [],
     });
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
+        
         post(route('register'), {
+            forceFormData: true,
+            transform: (data) => {
+                const formData = new FormData();
+                Object.entries(data).forEach(([key, value]) => {
+                    if (Array.isArray(value)) {
+                        value.forEach((v) => formData.append(`${key}[]`, v));
+                    } else if (value !== null) {
+                        formData.append(key, value as any);
+                    }
+                });
+                return formData;
+            },
             onFinish: () => reset('password', 'password_confirmation'),
         });
     };
@@ -41,7 +69,7 @@ export default function Register({ prefill }: RegisterProps) {
     return (
         <AuthLayout title="Create an account" description="Enter your details below to create your account">
             <Head title="Register" />
-            <form className="flex flex-col gap-6" onSubmit={submit}>
+            <form className="flex flex-col gap-6" onSubmit={submit} encType="multipart/form-data">
                 <div className="grid gap-6">
                     <div className="grid gap-2">
                         <Label htmlFor="name">Name</Label>
@@ -108,6 +136,95 @@ export default function Register({ prefill }: RegisterProps) {
                             placeholder="Confirm password"
                         />
                         <InputError message={errors.password_confirmation} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="profile_picture">Profile Picture</Label>
+                        <Input
+                            id="profile_picture"
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                const file = e.target.files?.[0] ?? null;
+                                setData('profile_picture', file);
+                            }}
+                        />
+                        {data.profile_picture && (
+                            <img src={URL.createObjectURL(data.profile_picture)} alt="Preview" className="mt-2 h-24 w-24 rounded-full object-cover" />
+                        )}
+                        <InputError message={errors.profile_picture} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="company_name">Company Name</Label>
+                        <Input
+                            id="company_name"
+                            value={data.company_name}
+                            onChange={(e) => setData('company_name', e.target.value)}
+                            placeholder="Company Name"
+                        />
+                        <InputError message={errors.company_name} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="company_description">What does your company do?</Label>
+                        <Input
+                            id="company_description"
+                            value={data.company_description}
+                            onChange={(e) => setData('company_description', e.target.value)}
+                            placeholder="Describe your company"
+                        />
+                        <InputError message={errors.company_description} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label htmlFor="industry">Select Interested Industry</Label>
+                        <select
+                            id="industry"
+                            value={data.industry}
+                            onChange={(e) => setData('industry', e.target.value)}
+                            className="rounded border p-2"
+                        >
+                            <option value="">-- Select --</option>
+                            <option value="tech">Tech</option>
+                            <option value="finance">Finance</option>
+                            <option value="health">Health</option>
+                            {/* Add more options */}
+                        </select>
+                        <InputError message={errors.industry} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>Categories (choose up to 5)</Label>
+                        <TagSelector
+                            options={['Startup', 'SME', 'Enterprise', 'Tech', 'Retail', 'Education', 'Finance', 'Healthcare']}
+                            selected={data.categories}
+                            onChange={(val) => setData('categories', val)}
+                            max={5}
+                        />
+                        <InputError message={errors.categories} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>I'm great at</Label>
+                        <TagSelector
+                            options={['Sales', 'Marketing', 'Networking', 'Pitching', 'Team Building', 'Design']}
+                            selected={data.great_at}
+                            onChange={(val) => setData('great_at', val)}
+                            max={3}
+                        />
+                        <InputError message={errors.great_at} />
+                    </div>
+
+                    <div className="grid gap-2">
+                        <Label>I can help others with</Label>
+                        <TagSelector
+                            options={['Fundraising', 'Partnerships', 'Product Advice', 'Hiring', 'Growth Strategy', 'Mentoring']}
+                            selected={data.can_help_with}
+                            onChange={(val) => setData('can_help_with', val)}
+                            max={3}
+                        />
+                        <InputError message={errors.can_help_with} />
                     </div>
 
                     <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
