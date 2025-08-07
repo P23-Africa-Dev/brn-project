@@ -79,6 +79,7 @@ class RegisteredUserController extends Controller
                 'prefill' => [
                     'name' => $userData['name'] ?? '',
                     'email' => $userData['email'] ?? '',
+                    'company_name' => $userData['company_name'] ?? '',
                 ]
             ]);
         } catch (\Exception $e) {

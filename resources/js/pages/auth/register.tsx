@@ -162,13 +162,12 @@ export default function Register({ prefill }: RegisterProps) {
                         <Input
                             id="company_name"
                             type="text"
-                            // autoFocus
                             tabIndex={6}
                             autoComplete="company_name"
                             value={data.company_name}
                             onChange={(e) => setData('company_name', e.target.value)}
                             disabled={processing}
-                            // readOnly={!!prefill?.company_name}
+                            readOnly={!!prefill?.company_name}
                             placeholder="Company Name"
                         />
                         <InputError message={errors.company_name} />
