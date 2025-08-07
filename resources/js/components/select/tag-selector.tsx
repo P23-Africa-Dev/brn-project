@@ -4,6 +4,7 @@ type Props = {
     selected: string[];
     onChange: (value: string[]) => void;
     max: number;
+    tabIndex?: number;
 };
 
 export default function TagSelector({ options, selected, onChange, max }: Props) {

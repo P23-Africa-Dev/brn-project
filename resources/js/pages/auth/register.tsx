@@ -3,12 +3,12 @@ import { LoaderCircle } from 'lucide-react';
 import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
+import TagSelector from '@/components/select/tag-selector';
 import TextLink from '@/components/text-link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
-import TagSelector from '@/components/select/tag-selector';
 
 type RegisterForm = {
     name: string;
@@ -145,9 +145,14 @@ export default function Register({ prefill }: RegisterProps) {
                             id="profile_picture"
                             type="file"
                             tabIndex={5}
-                            accept="image/*"
+                            accept="image/jpeg,image/png,image/gif"
                             onChange={(e) => {
                                 const file = e.target.files?.[0] ?? null;
+                                if (file && file.size > 5242880) { // 5MB limit
+                                    alert('File size should not exceed 5MB');
+                                    e.target.value = '';
+                                    return;
+                                }
                                 setData('profile_picture', file);
                             }}
                         />
@@ -162,13 +167,13 @@ export default function Register({ prefill }: RegisterProps) {
                         <Input
                             id="company_name"
                             type="text"
-                            tabIndex={6}
                             autoComplete="company_name"
                             value={data.company_name}
                             onChange={(e) => setData('company_name', e.target.value)}
                             disabled={processing}
                             readOnly={!!prefill?.company_name}
                             placeholder="Company Name"
+                            tabIndex={6}
                         />
                         <InputError message={errors.company_name} />
                     </div>
@@ -177,10 +182,10 @@ export default function Register({ prefill }: RegisterProps) {
                         <Label htmlFor="company_description">What does your company do?</Label>
                         <Input
                             id="company_description"
-                            tabIndex={7}
                             value={data.company_description}
                             onChange={(e) => setData('company_description', e.target.value)}
                             placeholder="Describe your company"
+                            tabIndex={7}
                         />
                         <InputError message={errors.company_description} />
                     </div>
@@ -189,10 +194,10 @@ export default function Register({ prefill }: RegisterProps) {
                         <Label htmlFor="industry">Select Interested Industry</Label>
                         <select
                             id="industry"
-                            tabIndex={8}
                             value={data.industry}
                             onChange={(e) => setData('industry', e.target.value)}
                             className="rounded border p-2"
+                            tabIndex={8}
                         >
                             <option value="">-- Select --</option>
                             <option value="tech">Tech</option>
@@ -210,6 +215,7 @@ export default function Register({ prefill }: RegisterProps) {
                             selected={data.categories}
                             onChange={(val) => setData('categories', val)}
                             max={5}
+                            tabIndex={9}
                         />
                         <InputError message={errors.categories} />
                     </div>
@@ -221,6 +227,7 @@ export default function Register({ prefill }: RegisterProps) {
                             selected={data.great_at}
                             onChange={(val) => setData('great_at', val)}
                             max={3}
+                            tabIndex={10}
                         />
                         <InputError message={errors.great_at} />
                     </div>
@@ -232,11 +239,12 @@ export default function Register({ prefill }: RegisterProps) {
                             selected={data.can_help_with}
                             onChange={(val) => setData('can_help_with', val)}
                             max={3}
+                            tabIndex={11}
                         />
                         <InputError message={errors.can_help_with} />
                     </div>
 
-                    <Button type="submit" className="mt-2 w-full" tabIndex={5} disabled={processing}>
+                    <Button type="submit" className="mt-2 w-full" tabIndex={12} disabled={processing}>
                         {processing && <LoaderCircle className="h-4 w-4 animate-spin" />}
                         Create account
                     </Button>
@@ -244,7 +252,7 @@ export default function Register({ prefill }: RegisterProps) {
 
                 <div className="text-center text-sm text-muted-foreground">
                     Already have an account?{' '}
-                    <TextLink href={route('login')} tabIndex={6}>
+                    <TextLink href={route('login')} tabIndex={13}>
                         Log in
                     </TextLink>
                 </div>
