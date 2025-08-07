@@ -28,6 +28,7 @@ type RegisterProps = {
     prefill?: {
         name?: string;
         email?: string;
+        company_name?: string;
     };
 };
 
@@ -38,7 +39,7 @@ export default function Register({ prefill }: RegisterProps) {
         password: '',
         password_confirmation: '',
         profile_picture: null,
-        company_name: '',
+        company_name: prefill?.company_name ?? '',
         company_description: '',
         industry: '',
         categories: [],
@@ -48,7 +49,7 @@ export default function Register({ prefill }: RegisterProps) {
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
-        
+
         post(route('register'), {
             forceFormData: true,
             transform: (data) => {
@@ -143,6 +144,7 @@ export default function Register({ prefill }: RegisterProps) {
                         <Input
                             id="profile_picture"
                             type="file"
+                            tabIndex={5}
                             accept="image/*"
                             onChange={(e) => {
                                 const file = e.target.files?.[0] ?? null;
@@ -159,8 +161,14 @@ export default function Register({ prefill }: RegisterProps) {
                         <Label htmlFor="company_name">Company Name</Label>
                         <Input
                             id="company_name"
+                            type="text"
+                            // autoFocus
+                            tabIndex={6}
+                            autoComplete="company_name"
                             value={data.company_name}
                             onChange={(e) => setData('company_name', e.target.value)}
+                            disabled={processing}
+                            // readOnly={!!prefill?.company_name}
                             placeholder="Company Name"
                         />
                         <InputError message={errors.company_name} />
@@ -170,6 +178,7 @@ export default function Register({ prefill }: RegisterProps) {
                         <Label htmlFor="company_description">What does your company do?</Label>
                         <Input
                             id="company_description"
+                            tabIndex={7}
                             value={data.company_description}
                             onChange={(e) => setData('company_description', e.target.value)}
                             placeholder="Describe your company"
@@ -181,6 +190,7 @@ export default function Register({ prefill }: RegisterProps) {
                         <Label htmlFor="industry">Select Interested Industry</Label>
                         <select
                             id="industry"
+                            tabIndex={8}
                             value={data.industry}
                             onChange={(e) => setData('industry', e.target.value)}
                             className="rounded border p-2"
