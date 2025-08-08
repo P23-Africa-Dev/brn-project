@@ -83,8 +83,12 @@ class RegisteredUserController extends Controller
                 ]
             ]);
         } catch (\Exception $e) {
-            abort(403, 'Invalid or expired link.');
-            // return redirect()->route('dashboard')->withErrors('Invalid or expired link.');
+            // abort(403, 'Invalid or expired link.');
+            return Inertia::render('auth/error/auth-error-page', [
+                'message' => 'Invalid or expired link.',
+                'buttonText' => 'Join Membership',
+                'buttonLink' => url('http://127.0.0.1:8080/brn-form')
+            ]);
         }
     }
 }

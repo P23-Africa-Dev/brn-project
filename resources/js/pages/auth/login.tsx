@@ -98,8 +98,8 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                 <div className="text-center text-sm text-muted-foreground">
                     Don't have an account?{' '}
-                    <TextLink href={route('register')} tabIndex={5}>
-                        Sign up
+                    <TextLink href={"http://127.0.0.1:8080/brn-form"} tabIndex={5}>
+                        Join Membership
                     </TextLink>
                 </div>
             </form>

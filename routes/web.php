@@ -8,6 +8,8 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+
+
 Route::get('/registration/continue', [RegisteredUserController::class, 'continue'])->name('registration.continue');
 
 Route::middleware(['auth', 'verified'])->group(function () {
