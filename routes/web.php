@@ -10,7 +10,7 @@ Route::get('/', function () {
 
 
 
-Route::get('/registration/continue', [RegisteredUserController::class, 'continue'])->name('registration.continue');
+// Route::get('/registration/continue', [RegisteredUserController::class, 'continue'])->name('registration.continue');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
