@@ -57,8 +57,10 @@ export default function Register({ prefill }: RegisterProps) {
                 Object.entries(data).forEach(([key, value]) => {
                     if (Array.isArray(value)) {
                         value.forEach((v) => formData.append(`${key}[]`, v));
-                    } else if (value !== null) {
-                        formData.append(key, value as any);
+                    } else if (value instanceof File) {
+                        formData.append(key, value);
+                    } else if (typeof value === 'string') {
+                        formData.append(key, value);
                     }
                 });
                 return formData;
@@ -148,7 +150,8 @@ export default function Register({ prefill }: RegisterProps) {
                             accept="image/jpeg,image/png,image/gif"
                             onChange={(e) => {
                                 const file = e.target.files?.[0] ?? null;
-                                if (file && file.size > 5242880) { // 5MB limit
+                                if (file && file.size > 5242880) {
+                                    // 5MB limit
                                     alert('File size should not exceed 5MB');
                                     e.target.value = '';
                                     return;
