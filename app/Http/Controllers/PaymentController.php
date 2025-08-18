@@ -2,75 +2,152 @@
 
 namespace App\Http\Controllers;
 
-use Flutterwave\Flutterwave;
+use App\Services\FlutterwaveService;
+use App\Services\CurrencyService;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-// use Flutterwave\Service\Rave;
-// use Flutterwave\Service\Transactions;
-// use App\Services\FlutterwaveService;
-
+use Inertia\Inertia;
 
 class PaymentController extends Controller
 {
-    public function initialize(Request $request)
+    protected $flutterwaveService;
+    protected $currencyService;
+
+    public function __construct(
+        FlutterwaveService $flutterwaveService,
+        CurrencyService $currencyService
+    ) {
+        $this->flutterwaveService = $flutterwaveService;
+        $this->currencyService = $currencyService;
+    }
+
+    public function index()
     {
-        // $reference = Flutterwave::generateReference();
-        $reference = 'FLW-' . uniqid() . '-' . time();
-        $amount = $request->amount ?? 1000;
+        $userCurrency = $this->currencyService->getUserCurrency();
 
-        // Get user’s currency (priority: request > user profile > env default)
-        $currency = $request->currency
-            ?? (Auth::check() ? Auth::user()->currency : null)
-            ?? config('services.flutterwave.currency', 'NGN');
+        return Inertia::render('Payment/Index', [
+            'publicKey' => config('flutterwave.publicKey'),
+            'userCurrency' => $userCurrency,
+            'supportedCurrencies' => config('flutterwave.supported_currencies'),
+        ]);
+    }
 
-        $payload = [
-            'tx_ref' => $reference,
-            'amount' => $amount,
-            'currency' => strtoupper($currency),
-            'redirect_url' => config('services.flutterwave.redirect_url'),
+    public function initializePayment(Request $request)
+    {
+        $validated = $request->validate([
+            'amount' => 'required|numeric|min:1',
+            'currency' => 'required|string|in:' . implode(',', config('flutterwave.supported_currencies')),
+            'email' => 'required|email',
+            'name' => 'required|string',
+            'phone' => 'nullable|string',
+            'description' => 'nullable|string',
+        ]);
+
+        $txRef = 'FLW-' . uniqid() . time();
+
+        // Store transaction in database
+        $transaction = Transaction::create([
+            'user_id' => auth()->id(),
+            'tx_ref' => $txRef,
+            'amount' => $validated['amount'],
+            'currency' => $validated['currency'],
+            'status' => 'pending',
+            'email' => $validated['email'],
+            'meta' => json_encode($request->only(['description', 'phone', 'name'])),
+        ]);
+
+        $paymentData = [
+            'tx_ref' => $txRef,
+            'amount' => $validated['amount'],
+            'currency' => $validated['currency'],
+            'redirect_url' => route('payment.callback'),
             'customer' => [
-                'email' => $request->email ?? (Auth::check() ? Auth::user()->email : null),
-                'name'  => $request->name ?? (Auth::check() ? Auth::user()->name : null),
+                'email' => $validated['email'],
+                'name' => $validated['name'],
+                'phone' => $validated['phone'] ?? '',
             ],
-            'customizations' => [
-                'title' => 'My BRN App Payment',
-                'description' => 'Payment for software premium usage',
+            'meta' => [
+                'transaction_id' => $transaction->id,
+                'user_id' => auth()->id(),
             ],
         ];
 
-        try {
-            // $payment = Flutterwave::initializePayment($payload);
-            $rave = new Rave(config('services.flutterwave.secret_key'), env('APP_ENV', 'development'));
+        $response = $this->flutterwaveService->initializePayment($paymentData);
 
-            $payment = $rave->payment->initialize($payload);
-
-            if ($payment['status'] === 'success') {
-                return redirect($payment['data']['link']);
-            }
-
-            return back()->with('error', 'Unable to initiate payment.');
-        } catch (\Exception $e) {
-            Log::error("Flutterwave init error: " . $e->getMessage());
-            return back()->with('error', 'Something went wrong.');
+        if ($response['status'] === 'success') {
+            return response()->json([
+                'status' => 'success',
+                'data' => [
+                    'link' => $response['data']['link'],
+                    'tx_ref' => $txRef,
+                ]
+            ]);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => $response['message']
+        ], 400);
     }
 
-    public function callback(Request $request)
+    public function handleCallback(Request $request)
     {
-        $status = $request->status;
-        $transactionId = $request->transaction_id;
+        $status = $request->query('status');
+        $txRef = $request->query('tx_ref');
+        $transactionId = $request->query('transaction_id');
 
-        if ($status === 'successful') {
-            $transactions = new Transactions();
-            $response = $transactions->verify($transactionId);
-
-            if ($response['status'] === 'success') {
-                // Save to DB if needed
-                return redirect('/')->with('success', 'Payment successful!');
-            }
+        if ($status === 'cancelled') {
+            return Inertia::render('Payment/Failed', [
+                'message' => 'Payment was cancelled'
+            ]);
         }
 
-        return redirect('/')->with('error', 'Payment failed or cancelled.');
+        $verification = $this->flutterwaveService->verifyTransaction($transactionId);
+
+        if (
+            $verification['status'] === 'success' &&
+            $verification['data']['status'] === 'successful'
+        ) {
+
+            // Update transaction in database
+            Transaction::where('tx_ref', $txRef)->update([
+                'status' => 'successful',
+                'flw_transaction_id' => $transactionId,
+                'verified_at' => now(),
+            ]);
+
+            return Inertia::render('Payment/Success', [
+                'transaction' => $verification['data']
+            ]);
+        }
+
+        return Inertia::render('Payment/Failed', [
+            'message' => 'Payment verification failed'
+        ]);
+    }
+
+    public function getCurrencyData(Request $request)
+    {
+        $amount = $request->query('amount', 100);
+        $fromCurrency = $request->query('from', 'USD');
+        $toCurrency = $request->query('to');
+
+        if (!$toCurrency) {
+            $toCurrency = $this->currencyService->getUserCurrency();
+        }
+
+        $convertedAmount = $this->currencyService->convertCurrency(
+            $amount,
+            $fromCurrency,
+            $toCurrency
+        );
+
+        return response()->json([
+            'original_amount' => $amount,
+            'original_currency' => $fromCurrency,
+            'converted_amount' => round($convertedAmount, 2),
+            'converted_currency' => $toCurrency,
+            'user_currency' => $this->currencyService->getUserCurrency(),
+        ]);
     }
 }
