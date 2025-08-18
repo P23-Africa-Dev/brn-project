@@ -4,9 +4,9 @@ import { FormEventHandler } from 'react';
 
 import InputError from '@/components/input-error';
 import TextLink from '@/components/text-link';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button-old';
+import { Checkbox } from '@/components/ui/checkbox-old';
+import { Input } from '@/components/ui/input-old';
 import { Label } from '@/components/ui/label';
 import AuthLayout from '@/layouts/auth-layout';
 
@@ -98,7 +98,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                 <div className="text-center text-sm text-muted-foreground">
                     Don't have an account?{' '}
-                    <TextLink href={"http://127.0.0.1:8080/brn-form"} tabIndex={5}>
+                    <TextLink href={'http://127.0.0.1:8080/brn-form'} tabIndex={5}>
                         Join Membership
                     </TextLink>
                 </div>

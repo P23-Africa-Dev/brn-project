@@ -8,6 +8,10 @@ Route::get('/', function () {
     return Inertia::render('welcome');
 })->name('home');
 
+Route::get('/sign-up', function () {
+    return Inertia::render('reg');
+})->name('sign-up');
+
 
 
 // Route::get('/registration/continue', [RegisteredUserController::class, 'continue'])->name('registration.continue');
