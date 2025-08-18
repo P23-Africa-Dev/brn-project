@@ -6,6 +6,7 @@ use App\Services\FlutterwaveService;
 use App\Services\CurrencyService;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class PaymentController extends Controller
@@ -47,7 +48,7 @@ class PaymentController extends Controller
 
         // Store transaction in database
         $transaction = Transaction::create([
-            'user_id' => auth()->id(),
+            'user_id' => Auth::id(),
             'tx_ref' => $txRef,
             'amount' => $validated['amount'],
             'currency' => $validated['currency'],
@@ -68,7 +69,7 @@ class PaymentController extends Controller
             ],
             'meta' => [
                 'transaction_id' => $transaction->id,
-                'user_id' => auth()->id(),
+                'user_id' => Auth::id(),
             ],
         ];
 
