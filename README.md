@@ -24,14 +24,29 @@ A multi-step user onboarding platform built with **Laravel**, **React (TypeScrip
 │   ├── Http/Controllers/
 │   ├── Mail/          # Mailables: BrnApproved, BrnDeclined
 │   ├── Models/        # BrnSubmission.php
-│
+│   │
 ├── resources/
 │   ├── js/            # React (TSX) components
+│   │   ├── components/
+│   │   │   ├── select/
+│   │   │   ├── ui/
+│   │   ├── hooks/
+│   │   ├── layouts/
+│   │   │   ├── app/
+│   │   │   ├── auth/
+│   │   │   ├── settings/
+│   │   ├── lib/
+│   │   ├── pages/
+│   │   │   ├── auth/
+│   │   │   ├── Payment/
+│   │   │   ├── settings/
+│   │   ├── types/
 │   ├── views/         # Blade templates (admin dashboard)
-│
+│   │   
 ├── routes/
 │   ├── web.php        # Laravel routes
-│
+│   ├── auth.php
+│   │   
 ├── public/
 │   ├── images/
 │   ├── js/bootstrap.min.js
