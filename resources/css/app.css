@@ -1,3 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+    font-family: 'GT Walsheim Trial Cn Rg';
+    font-style: normal;
+    font-weight: normal;
+    src:
+        local('GT Walsheim Trial Cn Rg'),
+        url('../../public/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff') format('woff');
+        /* url('../../punblic/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff') format('woff'); */
+}
+
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
@@ -10,6 +22,15 @@
 @theme {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-primary: #0b1727;
+    --color-secondary: #f3f0e9;
+    --color-white: #fff;
+    --color-gray: #e2e6e9;
+    --color-grayLight: #8c9aa6;
+    --color-grayLighter: #c1bbbb;
+    --color-pinkLight: #2abfbb;
+    --font-Gtrials: 'GT Walsheim Trial Cn Rg';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -129,6 +150,21 @@
     --sidebar-border: oklch(0.269 0 0);
     --sidebar-ring: oklch(0.439 0 0);
 }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* @theme {
+  --color-primary: #0b1727;
+  --color-secondary: #f3f0e9;
+  --color-white: #fff;
+  --color-gray: #e2e6e9;
+  --color-grayLight: #8c9aa6;
+  --color-grayLighter: #C1BBBB;
+  --color-pinkLight: #2abfbb;
+  --font-Gtrials: "GT Walsheim Trial Cn Rg";
+} */
 
 @layer base {
     * {
