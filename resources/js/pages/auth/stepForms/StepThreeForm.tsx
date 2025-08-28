@@ -33,7 +33,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
     const selected = field === "great_at" ? greatAtSelected : helpWithSelected;
     if (selected.includes(value)) {
       setValue(field, selected.filter((v) => v !== value));
-    } else if (selected.length < 5) {
+    } else if (selected.length < 3) {
       setValue(field, [...selected, value]);
     }
   };
