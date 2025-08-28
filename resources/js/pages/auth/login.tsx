@@ -67,7 +67,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <div className="max-w-sm">
                         <form onSubmit={submit} className="space-y-7">
                             <div className="relative w-full">
-                                <Label htmlFor="fullName" className="absolute -top-2.5 left-8 dark:bg-gray-800 dark:text-gray-200 bg-white px-3 text-sm text-gray-800">
+                                <Label htmlFor="fullName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-800">
                                     Email
                                 </Label>
                                 <Input

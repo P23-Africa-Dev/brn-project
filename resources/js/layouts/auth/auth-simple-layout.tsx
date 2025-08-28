@@ -9,7 +9,7 @@ interface AuthLayoutProps {
 export default function AuthSimpleLayout({ topContent, bottomContent, children }: PropsWithChildren<AuthLayoutProps>) {
     return (
         <>
-            <div className="flex h-screen w-full">
+            <div className="flex h-screen w-full bg-background">
                 {/* Left Side*/}
                 <div
                     className="fixed z-10 hidden h-full w-5/12 bg-center text-white lg:block"
@@ -28,6 +28,7 @@ export default function AuthSimpleLayout({ topContent, bottomContent, children }
                     </div>
 
                     <div className="flex h-screen flex-col justify-between py-10">
+                        
                         {/* Top content */}
                         {topContent}
 
