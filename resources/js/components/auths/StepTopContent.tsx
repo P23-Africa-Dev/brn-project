@@ -28,7 +28,7 @@ const StepTopContent: React.FC<StepTopContentProps> = ({
     <div className="pl-10 xl:pl-0">
       <h3
         className={twMerge(
-          "max-w-[240px] leading-12 text-3xl md:text-4xl font-semibold text-secondary mb-3",
+          "max-w-[230px] leading-12 text-3xl md:text-4xl font-semibold text-secondary mb-3",
           headingClassName
         )}
       >
