@@ -7,7 +7,7 @@ import Loader from '@/components/auths/Loader';
 import StepBottomContent from '@/components/auths/StepBottomContent';
 import StepTopContent from '@/components/auths/StepTopContent';
 import AuthLayout from '@/layouts/auth-layout';
-import StepFourForm from './stepForms/StepFourForm'; 
+import StepFourForm from './stepForms/StepFourForm';
 import StepOneForm from './stepForms/StepOneForm';
 import StepThreeForm from './stepForms/StepThreeForm';
 import StepTwoForm from './stepForms/StepTwoForm';
@@ -34,6 +34,30 @@ type RegisterProps = {
         company_name?: string;
     };
 };
+
+const topContentPerStep = [
+    {
+        title: 'Let’s get you started!',
+        description: 'Fill in your details to create your account.',
+    },
+    {
+        title: 'Company Snapshot',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+    },
+    {
+        title: 'Almost There!',
+        spanElement: 'Superpowers',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+        headingClassName: 'max-w-[300px]  font-light',
+    },
+    {
+        title: 'We are Here!',
+        spanElement: 'Profile Visibility',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
+        headingClassName: 'max-w-[300px]  font-light',
+
+    },
+];
 
 export default function Register({ prefill }: RegisterProps) {
     const [step, setStep] = useState(1);
@@ -101,8 +125,10 @@ export default function Register({ prefill }: RegisterProps) {
                 <StepTopContent
                     steps={steps}
                     currentStep={step}
-                    title="Let’s get you started!"
-                    description="Fill in your details to create your account."
+                    title={topContentPerStep[step - 1].title}
+                    spanElement={topContentPerStep[step - 1].spanElement}
+                    headingClassName={topContentPerStep[step - 1].headingClassName}
+                    description={topContentPerStep[step - 1].description}
                 />
             }
             bottomContent={<StepBottomContent />}
