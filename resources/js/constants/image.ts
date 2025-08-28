@@ -1,25 +1,24 @@
-// src/constants/images.ts
-// import stepFormsBg from "../assets/stepForms-bg.png";
-// import stepFormsPattern from "../assets/stepForms-pattern.png";
-// import stepFormsInnerPattern from "../assets/stepForms-inner-bg.png";
-// import uploadBg from "../assets/upload.png";
-// import badge from "../assets/badge.png";
-// import badgeMark from "../assets/badge-mark.png";
-// import spinner from "../assets/spinerr.png";
-// import formBG from "../assets/formBg.png";
+import badgeMark from '../../../public/assets/badge-mark.png';
+import badge from '../../../public/assets/badge.png';
+import formBG from '../../../public/assets/formBg.png';
+import spinner from '../../../public/assets/spinerr.png';
+import stepFormsBg from '../../../public/assets/stepForms-bg.png';
+import stepFormsInnerPattern from '../../../public/assets/stepForms-inner-bg.png';
+import stepFormsPattern from '../../../public/assets/stepForms-pattern.png';
+import uploadBg from '../../../public/assets/upload.png';
 
-import errorBg from "../../../public/assets/error-bg.png";
-// Export all images in an object
+import errorBg from '../../../public/assets/error-bg.png';
+
 const images = {
-//   uploadBg,
-//   stepFormsBg,
-//   badge,
-//   badgeMark,
-//   spinner,
-//   stepFormsPattern,
-//   formBG,
-//   stepFormsInnerPattern
-  errorBg
+    uploadBg,
+    stepFormsBg,
+    badge,
+    badgeMark,
+    spinner,
+    stepFormsPattern,
+    formBG,
+    stepFormsInnerPattern,
+    errorBg,
 };
 
 export default images;

@@ -1,34 +1,55 @@
-import AppLogoIcon from '@/components/app-logo-icon';
-import { Link } from '@inertiajs/react';
-import { type PropsWithChildren } from 'react';
+import images from '@/constants/image';
+import { ReactNode, type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
-    name?: string;
-    title?: string;
-    description?: string;
+    topContent?: ReactNode;
+    bottomContent?: ReactNode;
 }
 
-export default function AuthSimpleLayout({ children, title, description }: PropsWithChildren<AuthLayoutProps>) {
+export default function AuthSimpleLayout({ topContent, bottomContent, children }: PropsWithChildren<AuthLayoutProps>) {
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
-            <div className="w-full max-w-sm">
-                <div className="flex flex-col gap-8">
-                    <div className="flex flex-col items-center gap-4">
-                        <Link href={route('home')} className="flex flex-col items-center gap-2 font-medium">
-                            <div className="mb-1 flex h-9 w-9 items-center justify-center rounded-md">
-                                <AppLogoIcon className="size-9 fill-current text-[var(--foreground)] dark:text-white" />
-                            </div>
-                            <span className="sr-only">{title}</span>
-                        </Link>
-
-                        <div className="space-y-2 text-center">
-                            <h1 className="text-xl font-medium">{title}</h1>
-                            <p className="text-center text-sm text-muted-foreground">{description}</p>
-                        </div>
+        <>
+            <div className="flex h-screen w-full">
+                {/* Left Side*/}
+                <div
+                    className="fixed z-10 hidden h-full w-5/12 bg-center text-white lg:block"
+                    style={{
+                        backgroundImage: `url(${images.stepFormsBg})`,
+                    }}
+                >
+                    {/* Step Form Inner right pattern */}
+                    <div
+                        className="absolute top-0 -right-12 z-0 h-screen w-[80px] bg-cover bg-center text-white"
+                        style={{
+                            backgroundImage: `url(${images.stepFormsInnerPattern})`,
+                        }}
+                    >
+                        <div className="h-screen w-full bg-gradient-to-r from-primary/60 from-12% via-primary/0 via-30%"></div>
                     </div>
+
+                    <div className="flex h-screen flex-col justify-between py-10">
+                        {/* Top content */}
+                        {topContent}
+
+                        {/* Bottom content */}
+                        {bottomContent}
+                    </div>
+                </div>
+
+                {/* Right Side (Scrollable) */}
+                <div
+                    style={{
+                        backgroundImage: `url(${images.formBG})`,
+                    }}
+                    className="z-10 flex w-full flex-col items-center justify-center overflow-y-scroll bg-white bg-cover bg-center py-10 lg:ml-[41.36667%] lg:w-7/12 lg:flex-row lg:items-start lg:overflow-y-auto lg:py-0"
+                >
+                    <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">
+                    
                     {children}
+                    
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
