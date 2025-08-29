@@ -151,7 +151,7 @@ export default function Register({ prefill }: RegisterProps) {
                 }
             });
 
-            await axios.post('/register', payload, {
+            await axios.post(route('registration.continue'), payload, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
