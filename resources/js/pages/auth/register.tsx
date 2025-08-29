@@ -1,4 +1,3 @@
-
 'use client';
 
 import Loader from '@/components/auths/Loader';
@@ -11,8 +10,6 @@ import StepOneForm from './stepForms/StepOneForm';
 import StepTwoForm from './stepForms/StepTwoForm';
 import StepThreeForm from './stepForms/StepThreeForm';
 import StepFourForm from './stepForms/StepFourForm';
-
-
 
 type RegisterForm = {
     name: string;
@@ -55,9 +52,6 @@ const topContentPerStep = [
         headingClassName: 'max-w-[300px] font-light',
     },
 ];
-
-
-
 
 const mobileTopContentPerStep = [
     {
@@ -175,11 +169,12 @@ export default function Register({ prefill }: RegisterProps) {
             const payload = new FormData();
             Object.entries(finalData).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach((v) => payload.append(`${key}[]`, v));
-                } else if (value instanceof File) {
-                    payload.append(key, value);
-                } else if (value !== null && value !== undefined) {
-                    payload.append(key, String(value));
+                    value.forEach((v) => {
+                        // convert boolean to string
+                        payload.append(`${key}[]`, typeof v === 'boolean' ? String(v) : v);
+                    });
+                } else if (value !== null) {
+                    payload.append(key, typeof value === 'boolean' ? String(value) : (value as any));
                 }
             });
 
@@ -202,14 +197,13 @@ export default function Register({ prefill }: RegisterProps) {
     };
 
     if (loading) return <Loader />;
-   
 
     return (
         <AuthLayout
             mobileTopContent={
                 <>
-                    <div className="absolute top-7 left-10 py-2">
-                        <div className="bg-transparent ">
+                    <div className="absolute left-10 top-7 py-2">
+                        <div className="bg-transparent">
                             <h2 className={`mb-3 ${mobileTopContentPerStep[step - 1].headingClassName}`}>
                                 {mobileTopContentPerStep[step - 1].title}
                             </h2>
@@ -226,7 +220,7 @@ export default function Register({ prefill }: RegisterProps) {
                                         key={stepNumber}
                                         disabled
                                         className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-sm font-semibold transition-all ${
-                                            isActive ? 'bg-white text-primary' : 'bg-transparent text-white'
+                                            isActive ? 'text-primary bg-white' : 'bg-transparent text-white'
                                         }`}
                                     >
                                         {stepNumber}
@@ -318,6 +312,5 @@ export default function Register({ prefill }: RegisterProps) {
                 />
             )}
         </AuthLayout>
-       
     );
 }
