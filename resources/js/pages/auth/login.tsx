@@ -52,10 +52,10 @@ export default function Login({ status, canResetPassword }: LoginProps) {
         <AuthLayout
             mobileTopContent={
                 <>
-                    <div className="absolute top-20 left-10">
-                        <div className="bg-transparent pr-10">
-                            <h2 className="mb-3 text-3xl font-bold text-white">Welcome Back!</h2>
-                            <p className="max-w-sm pr-5 text-[17px] font-light text-white">
+                    <div className="absolute left-10 top-7 py-2">
+                        <div className="bg-transparent">
+                            <h2 className="text-primary mb-1 text-3xl font-extrabold">Your Next Connection Awaits You!</h2>
+                            <p className="text-primary max-w-sm pr-5 text-[17px] font-normal">
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                             </p>
                         </div>
@@ -67,18 +67,16 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             }
             bottomContent={<StepBottomContent />}
         >
-            <div className="flex w-full justify-center lg:w-4/4 lg:p-8">
+            <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">
                 <div>
-                    <div className="mb-10 block">
-                        <h2 className="mb-1 text-2xl font-extrabold text-primary md:text-primary lg:max-w-md lg:text-3xl">
-                            Your Next Connection Awaits You!
-                        </h2>
-                        <p className="max-w-sm pr-5 text-sm font-normal text-primary lg:text-[17px]">
+                    <div className="mb-10">
+                        <h2 className="text-primary mb-1 text-3xl font-extrabold">Your Next Connection Awaits You!</h2>
+                        <p className="text-primary max-w-sm pr-5 text-[17px] font-normal">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                         </p>
                     </div>
 
-                    <div className="mx-auto w-full lg:mx-0 lg:max-w-sm">
+                    <div className="max-w-sm">
                         <form onSubmit={submit} className="space-y-7">
                             <div className="relative w-full">
                                 <Label htmlFor="fullName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-800">
@@ -93,7 +91,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoComplete="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none"
+                                    className="border-primary/40 w-full rounded-2xl border-2 py-5 pl-11 font-semibold text-gray-900 outline-none ring focus:ring-0"
                                 />
                             </div>
 
@@ -109,13 +107,13 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoComplete="current-password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
-                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none"
+                                    className="border-primary/40 w-full rounded-2xl border-2 py-5 pl-11 font-semibold text-gray-900 outline-none ring"
                                 />
                             </div>
 
                             <div className="w-full text-center">{showError && <InputError message="Email or Password is wrong" />}</div>
 
-                            <div className="grid grid-cols-2 text-sm font-medium text-primary md:px-2">
+                            <div className="text-primary flex items-center justify-between px-2 text-sm font-medium">
                                 <label className="flex cursor-pointer items-center gap-2">
                                     <Checkbox
                                         id="remember"
@@ -123,12 +121,12 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         checked={data.remember}
                                         onClick={() => setData('remember', !data.remember)}
                                         tabIndex={3}
-                                        className="h-4 w-4 accent-primary"
+                                        className="accent-primary h-4 w-4"
                                     />
                                     Remember for 30 days
                                 </label>
                                 {canResetPassword && (
-                                    <TextLink href={route('password.request')} className="font-semibold text-primary italic lg:whitespace-nowrap">
+                                    <TextLink href={route('password.request')} className="text-primary font-semibold italic">
                                         Forgot Password
                                     </TextLink>
                                 )}
@@ -136,7 +134,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                             <Button
                                 type="submit"
-                                className="mt-10 w-full cursor-pointer rounded-2xl bg-primary py-6 font-semibold text-white"
+                                className="bg-primary mt-10 w-full cursor-pointer rounded-2xl py-6 font-semibold text-white"
                                 tabIndex={4}
                                 disabled={processing}
                             >
@@ -146,9 +144,9 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                             {/* Register Now link */}
                             <div className="mt-0 flex justify-center">
-                                <p className="text-sm font-light text-primary">
+                                <p className="text-primary text-sm font-light">
                                     Don’t have an account?{' '}
-                                    <TextLink tabIndex={5} href={'http://127.0.0.1:8080/brn-form'} className="font-bold text-primary italic">
+                                    <TextLink tabIndex={5} href={'http://127.0.0.1:8080/brn-form'} className="text-primary font-bold italic">
                                         Register Now
                                     </TextLink>
                                 </p>

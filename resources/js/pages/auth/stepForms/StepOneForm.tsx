@@ -118,8 +118,13 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Profile Picture Upload */}
                     {/* Profile Picture Upload */}
+<<<<<<< HEAD
                     <div className="flex w-full items-center space-x-4 px-2">
                         <label className="relative flex h-[90px] w-[130px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100">
+=======
+                    <div className="flex w-full items-center space-x-6 px-2">
+                        <label className="relative flex h-[90px] w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100">
+>>>>>>> 36645af5eab03f27f83966fc45945447b68b41a6
                             {/* Hidden File Input */}
                             <input
                                 type="file"
@@ -156,6 +161,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Submit */}
+<<<<<<< HEAD
                     <div className="flex flex-col items-center">
                         <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
@@ -174,6 +180,12 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 </a>
                             </span>
                         </div>
+=======
+                    <div className="flex items-center">
+                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 font-semibold text-white text-lg hover:bg-pinkLight/90">
+                            Proceed
+                        </Button>
+>>>>>>> 36645af5eab03f27f83966fc45945447b68b41a6
                     </div>
                 </form>
             </div>

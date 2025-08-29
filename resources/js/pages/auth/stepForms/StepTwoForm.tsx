@@ -1,6 +1,9 @@
 'use client';
 
+<<<<<<< HEAD
 import { Button } from '@/components/ui/button';
+=======
+>>>>>>> 36645af5eab03f27f83966fc45945447b68b41a6
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StepTwoData, stepTwoSchema } from '@/constants/formSchema';
 import images from '@/constants/image';
@@ -168,6 +171,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                     )}
 
                     {/* Submit */}
+<<<<<<< HEAD
                   <div className="flex flex-col items-center">
                         <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
@@ -187,6 +191,11 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             </span>
                         </div>
                     </div>
+=======
+                    <button type="submit" className="w-full rounded-lg bg-pinkLight py-3 font-semibold text-white hover:bg-pinkLight/90">
+                        Proceed
+                    </button>
+>>>>>>> 36645af5eab03f27f83966fc45945447b68b41a6
                 </form>
             </div>
         </div>
