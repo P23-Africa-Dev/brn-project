@@ -118,8 +118,8 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Profile Picture Upload */}
                     {/* Profile Picture Upload */}
-                    <div className="flex w-full items-center space-x-6 px-2">
-                        <label className="relative flex h-[90px] w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100">
+                    <div className="flex w-full items-center space-x-4 px-2">
+                        <label className="relative flex h-[90px] w-[130px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100">
                             {/* Hidden File Input */}
                             <input
                                 type="file"
@@ -156,10 +156,24 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Submit */}
-                    <div className="flex items-center">
-                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 font-semibold text-white text-lg hover:bg-pinkLight/90">
+                    <div className="flex flex-col items-center">
+                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
                         </Button>
+
+                        <div className="  mt-4 text-left lg:px-0  text-primary">
+                            <p className=" text-sm  ">
+                                Already have an account?{' '}
+                                <a href="/login" className="font-bold text-primary italic hover:underline">
+                                    Sign In
+                                </a>
+                            </p>
+                            <span className=" text-primary text-sm ">
+                                <a href="/help" className="font-bold text-primary italic hover:underline">
+                                    Need Help?
+                                </a>
+                            </span>
+                        </div>
                     </div>
                 </form>
             </div>

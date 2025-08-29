@@ -50,21 +50,35 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
     return (
         <AuthLayout
+            mobileTopContent={
+                <>
+                    <div className="absolute top-20 left-10">
+                        <div className="bg-transparent pr-10">
+                            <h2 className="mb-3 text-3xl font-bold text-white">Welcome Back!</h2>
+                            <p className="max-w-sm pr-5 text-[17px] font-light text-white">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                            </p>
+                        </div>
+                    </div>
+                </>
+            }
             topContent={
                 <StepTopContent title="Welcome!" description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor" />
             }
             bottomContent={<StepBottomContent />}
         >
-            <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">
+            <div className="flex w-full justify-center lg:w-4/4 lg:p-8">
                 <div>
-                    <div className="mb-10">
-                        <h2 className="mb-1 text-3xl font-extrabold text-primary">Your Next Connection Awaits You!</h2>
-                        <p className="max-w-sm pr-5 text-[17px] font-normal text-primary">
+                    <div className="mb-10 block">
+                        <h2 className="mb-1 text-2xl font-extrabold text-primary md:text-primary lg:max-w-md lg:text-3xl">
+                            Your Next Connection Awaits You!
+                        </h2>
+                        <p className="max-w-sm pr-5 text-sm font-normal text-primary lg:text-[17px]">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
                         </p>
                     </div>
 
-                    <div className="max-w-sm">
+                    <div className="mx-auto w-full lg:mx-0 lg:max-w-sm">
                         <form onSubmit={submit} className="space-y-7">
                             <div className="relative w-full">
                                 <Label htmlFor="fullName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-800">
@@ -79,7 +93,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoComplete="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none focus:ring-0"
+                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none"
                                 />
                             </div>
 
@@ -101,7 +115,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
 
                             <div className="w-full text-center">{showError && <InputError message="Email or Password is wrong" />}</div>
 
-                            <div className="flex items-center justify-between px-2 text-sm font-medium text-primary">
+                            <div className="grid grid-cols-2 text-sm font-medium text-primary md:px-2">
                                 <label className="flex cursor-pointer items-center gap-2">
                                     <Checkbox
                                         id="remember"
@@ -114,7 +128,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     Remember for 30 days
                                 </label>
                                 {canResetPassword && (
-                                    <TextLink href={route('password.request')} className="font-semibold text-primary italic">
+                                    <TextLink href={route('password.request')} className="font-semibold text-primary italic lg:whitespace-nowrap">
                                         Forgot Password
                                     </TextLink>
                                 )}

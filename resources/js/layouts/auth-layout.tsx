@@ -4,14 +4,16 @@ export default function AuthLayout({
     children,
     topContent,
     bottomContent,
+    mobileTopContent,
     ...props
 }: {
     children: React.ReactNode;
     topContent: React.ReactNode;
     bottomContent: React.ReactNode;
+    mobileTopContent: React.ReactNode;
 }) {
     return (
-        <AuthLayoutTemplate topContent={topContent} bottomContent={bottomContent} {...props}>
+        <AuthLayoutTemplate mobileTopContent={mobileTopContent} topContent={topContent} bottomContent={bottomContent} {...props}>
             {children}
         </AuthLayoutTemplate>
     );

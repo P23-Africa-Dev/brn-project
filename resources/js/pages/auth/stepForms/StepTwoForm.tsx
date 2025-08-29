@@ -1,5 +1,6 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StepTwoData, stepTwoSchema } from '@/constants/formSchema';
 import images from '@/constants/image';
@@ -167,9 +168,25 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                     )}
 
                     {/* Submit */}
-                    <button type="submit" className="w-full rounded-lg bg-pinkLight py-3 font-semibold text-white hover:bg-pinkLight/90">
-                        Proceed
-                    </button>
+                  <div className="flex flex-col items-center">
+                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
+                            Proceed
+                        </Button>
+
+                        <div className="  mt-4 text-left lg:px-0  text-primary">
+                            <p className=" text-sm  ">
+                                Already have an account?{' '}
+                                <a href="/login" className="font-bold text-primary italic hover:underline">
+                                    Sign In
+                                </a>
+                            </p>
+                            <span className=" text-primary text-sm ">
+                                <a href="/help" className="font-bold text-primary italic hover:underline">
+                                    Need Help?
+                                </a>
+                            </span>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

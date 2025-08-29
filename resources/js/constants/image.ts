@@ -6,6 +6,8 @@ import stepFormsBg from '../../../public/assets/stepForms-bg.png';
 import stepFormsInnerPattern from '../../../public/assets/stepForms-inner-bg.png';
 import stepFormsPattern from '../../../public/assets/stepForms-pattern.png';
 import uploadBg from '../../../public/assets/upload.png';
+import mobilePattern from '../../../public/assets/mobile pattern.png';
+import mobileBackPattern from '../../../public/assets/mobile-back-pattern.png';
 
 import errorBg from '../../../public/assets/error-bg.png';
 
@@ -19,6 +21,9 @@ const images = {
     formBG,
     stepFormsInnerPattern,
     errorBg,
+    mobilePattern,
+    mobileBackPattern
+
 };
 
 export default images;

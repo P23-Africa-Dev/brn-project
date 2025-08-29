@@ -4,12 +4,24 @@ import { ReactNode, type PropsWithChildren } from 'react';
 interface AuthLayoutProps {
     topContent?: ReactNode;
     bottomContent?: ReactNode;
+    mobileTopContent?: ReactNode;
 }
 
-export default function AuthSimpleLayout({ topContent, bottomContent, children }: PropsWithChildren<AuthLayoutProps>) {
+export default function AuthSimpleLayout({ mobileTopContent, topContent, bottomContent, children }: PropsWithChildren<AuthLayoutProps>) {
     return (
         <>
-            <div className="flex h-screen w-full">
+            <div className="z-0 h-screen w-full md:hidden">
+                <div className="relative h-[40vh]">
+                    <img src={images.mobilePattern} className="absolute h-auto w-full object-contain" alt="" />
+                </div>
+                {/* Top content */}
+                {mobileTopContent}
+                <div className="relative z-10 px-10">
+                    <div className="flex w-full justify-center text-white">{children}</div>
+                </div>
+            </div>
+
+            <div className="hidden h-screen w-full md:flex">
                 {/* Left Side*/}
                 <div
                     className="fixed z-10 hidden h-full w-5/12 bg-center text-white lg:block"
@@ -43,11 +55,7 @@ export default function AuthSimpleLayout({ topContent, bottomContent, children }
                     }}
                     className="z-10 flex w-full flex-col items-center justify-center overflow-y-scroll bg-white bg-cover bg-center py-10 lg:ml-[41.36667%] lg:w-7/12 lg:flex-row lg:items-start lg:overflow-y-auto lg:py-0"
                 >
-                    <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">
-                    
-                    {children}
-                    
-                    </div>
+                    <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">{children}</div>
                 </div>
             </div>
         </>
