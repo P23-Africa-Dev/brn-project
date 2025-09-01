@@ -10,6 +10,7 @@ import mobilePattern from '../../../public/assets/mobile pattern.png';
 import mobileBackPattern from '../../../public/assets/mobile-back-pattern.png';
 
 import errorBg from '../../../public/assets/error-bg.png';
+import dropDownArrow from '../../../public/assets/dropdown-arrow.png';
 
 const images = {
     uploadBg,
@@ -22,7 +23,8 @@ const images = {
     stepFormsInnerPattern,
     errorBg,
     mobilePattern,
-    mobileBackPattern
+    mobileBackPattern,
+    dropDownArrow
 
 };
 

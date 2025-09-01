@@ -1,15 +1,16 @@
 'use client';
 
+import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
 import Loader from '@/components/auths/Loader';
-import StepBottomContent from '@/components/auths/StepBottomContent';
+import MobileTopContent from '@/components/auths/MobileContent';
 import StepTopContent from '@/components/auths/StepTopContent';
 import AuthLayout from '@/layouts/auth-layout';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import StepOneForm from './stepForms/StepOneForm';
-import StepTwoForm from './stepForms/StepTwoForm';
-import StepThreeForm from './stepForms/StepThreeForm';
 import StepFourForm from './stepForms/StepFourForm';
+import StepOneForm from './stepForms/StepOneForm';
+import StepThreeForm from './stepForms/StepThreeForm';
+import StepTwoForm from './stepForms/StepTwoForm';
 
 type RegisterForm = {
     name: string;
@@ -37,7 +38,7 @@ type RegisterProps = {
 const STORAGE_KEY = 'register_form';
 
 const topContentPerStep = [
-    { title: 'Let’s get you started!', description: 'Fill in your details to create your account.' },
+    { title: 'Let’s get you started!', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
     { title: 'Company Snapshot', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
     {
         title: 'Almost There!',
@@ -136,12 +137,14 @@ export default function Register({ prefill }: RegisterProps) {
         };
     });
 
+    const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
+
+
     // ✅ Persist formData in localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     }, [formData]);
 
-    const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
 
     const goToStep = (newStep: number) => {
         setStep(newStep);
@@ -202,50 +205,25 @@ export default function Register({ prefill }: RegisterProps) {
         <AuthLayout
             mobileTopContent={
                 <>
-                    <div className="absolute left-10 top-7 py-2">
-                        <div className="bg-transparent">
-                            <h2 className={`mb-3 ${mobileTopContentPerStep[step - 1].headingClassName}`}>
-                                {mobileTopContentPerStep[step - 1].title}
-                            </h2>
-                            <p className={mobileTopContentPerStep[step - 1].paragraphClassName}>{mobileTopContentPerStep[step - 1].description}</p>
-                        </div>
-
-                        <div className="mt-5 flex items-center space-x-3 pb-4 xl:pl-0">
-                            {steps.map((_, index) => {
-                                const stepNumber = index + 1;
-                                const isActive = step >= stepNumber;
-
-                                return (
-                                    <button
-                                        key={stepNumber}
-                                        disabled
-                                        className={`flex h-10 w-10 items-center justify-center rounded-full border-2 border-white text-sm font-semibold transition-all ${
-                                            isActive ? 'text-primary bg-white' : 'bg-transparent text-white'
-                                        }`}
-                                    >
-                                        {stepNumber}
-                                    </button>
-                                );
-                            })}
-                        </div>
-
-                        <div className="text-sm font-extralight text-white xl:pl-0">
-                            Step {step}/{steps.length}
-                        </div>
-                    </div>
+                    <MobileTopContent steps={steps} step={step} content={mobileTopContentPerStep} />
                 </>
             }
-            topContent={
-                <StepTopContent
-                    steps={steps}
-                    currentStep={step}
-                    title={topContentPerStep[step - 1].title}
-                    spanElement={topContentPerStep[step - 1].spanElement}
-                    headingClassName={topContentPerStep[step - 1].headingClassName}
-                    description={topContentPerStep[step - 1].description}
+            LeftDesktopContent={
+                <LeftDesktopContent
+                    topContentLayout={
+                        <>
+                            <StepTopContent
+                                steps={steps}
+                                currentStep={step}
+                                title={topContentPerStep[step - 1].title}
+                                spanElement={topContentPerStep[step - 1].spanElement}
+                                headingClassName={topContentPerStep[step - 1].headingClassName}
+                                description={topContentPerStep[step - 1].description}
+                            />
+                        </>
+                    }
                 />
             }
-            bottomContent={<StepBottomContent />}
         >
             {step === 1 && (
                 <StepOneForm

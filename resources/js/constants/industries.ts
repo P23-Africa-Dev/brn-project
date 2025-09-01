@@ -1,4 +1,4 @@
-// constants/industries.ts
+// constants/industries.ts for Step 2 Form
 export const industriesWithCategories = {
   "Business & Professional Services": [
     "Consulting",
