@@ -42,7 +42,7 @@ export default function AppSidebar() {
   return (
     <div>
       <div
-        className="sticky top-0 left-0 w-[64] h-screen text-white rounded-r-[48px] overflow-hidden"
+        className="hidden md:block sticky top-0 left-0 w-[64] h-screen text-white rounded-r-[48px] overflow-hidden"
         style={{
           background:
             "linear-gradient(180deg, #031C5B 0%, #0B1727 50%, #031C5B 100%)",
