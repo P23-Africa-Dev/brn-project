@@ -21,6 +21,7 @@
         "prettier": "^3.4.2",
         "prettier-plugin-organize-imports": "^4.1.0",
         "prettier-plugin-tailwindcss": "^0.6.11",
+        "tailwind-scrollbar-hide": "^4.0.0",
         "typescript-eslint": "^8.23.0"
     },
     "dependencies": {
@@ -54,6 +55,7 @@
         "react": "^19.0.0",
         "react-dom": "^19.0.0",
         "react-hook-form": "^7.62.0",
+        "swiper": "^11.2.10",
         "tailwind-merge": "^3.0.1",
         "tailwindcss": "^4.0.0",
         "tailwindcss-animate": "^1.0.7",
