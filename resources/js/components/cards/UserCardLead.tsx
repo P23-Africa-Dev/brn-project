@@ -1,8 +1,8 @@
 'use client';
 
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Link, MapPin, Star } from 'lucide-react';
+// import { Badge } from '@/components/ui/badge';
+// import { Card, CardContent } from '@/components/ui/card';
+import { Star } from 'lucide-react';
 import React from 'react';
 
 interface UserCardProps {

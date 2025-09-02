@@ -172,12 +172,11 @@ export default function Register({ prefill }: RegisterProps) {
             const payload = new FormData();
             Object.entries(finalData).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach((v) => {
-                        // convert boolean to string
-                        payload.append(`${key}[]`, typeof v === 'boolean' ? String(v) : v);
-                    });
-                } else if (value !== null) {
-                    payload.append(key, typeof value === 'boolean' ? String(value) : (value as any));
+                    value.forEach((v) => payload.append(`${key}[]`, v));
+                } else if (value instanceof File) {
+                    payload.append(key, value);
+                } else if (value !== null && value !== undefined) {
+                    payload.append(key, String(value));
                 }
             });
 

@@ -1,6 +1,6 @@
 import SmartMatchesSection from '@/components/cards/SmartCard';
 import UserCard from '@/components/cards/UserCard';
-import UserCardLead from '@/components/cards/USerCardLead';
+import UserCardLead from '@/components/cards/UserCardLead';
 import { Button } from '@/components/ui/button';
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -19,13 +19,13 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface SmartMatch {
-    name: string;
-    title: string;
-    company: string;
-    rating: number;
-    imageSrc: string;
-}
+// interface SmartMatch {
+//     name: string;
+//     title: string;
+//     company: string;
+//     rating: number;
+//     imageSrc: string;
+// }
 
 export default function Dashboard() {
     const dummyCards = [
