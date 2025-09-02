@@ -6,8 +6,8 @@ export const stepTwoSchema = z.object({
   industry: z.string().min(1, "Select an industry"),
   categories: z
     .array(z.string())
-    .min(1, "Select at least 3 categories")
-    .max(3, "You can select up to 3 categories"),
+    .min(3, "Select at least 3 categories")
+    .max(3, "You can only select up to 3 categories"),
 });
 
 export type StepTwoData = z.infer<typeof stepTwoSchema>;
@@ -18,12 +18,14 @@ export type StepTwoData = z.infer<typeof stepTwoSchema>;
 export const stepThreeSchema = z.object({
   great_at: z
     .array(z.string())
-    .max(5, "You can select up to 5 tags")
-    .nonempty("Select at least 5 tag"),
+    .min(3, "You can select up to 3 tags")
+    .max(3, "You can only select up to 3 categories")
+    .nonempty("Select at least 3 tag"),
   can_help_with: z
     .array(z.string())
-    .max(5, "You can select up to 5 tags")
-    .nonempty("Select at least 5 tags"),
+    .min(3, "You can select up to 3 tags")
+    .max(3, "You can only select up to 3 categories")
+    .nonempty("Select at least 3 tags"),
 });
 
 export type StepThreeData = z.infer<typeof stepThreeSchema>;

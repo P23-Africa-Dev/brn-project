@@ -1,12 +1,12 @@
 'use client';
 
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-
+import LeftDesktopContent from '@/components/auths/LeftDesktopContent';
 import Loader from '@/components/auths/Loader';
-import StepBottomContent from '@/components/auths/StepBottomContent';
+import MobileTopContent from '@/components/auths/MobileContent';
 import StepTopContent from '@/components/auths/StepTopContent';
 import AuthLayout from '@/layouts/auth-layout';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import StepFourForm from './stepForms/StepFourForm';
 import StepOneForm from './stepForms/StepOneForm';
 import StepThreeForm from './stepForms/StepThreeForm';
@@ -38,7 +38,7 @@ type RegisterProps = {
 const STORAGE_KEY = 'register_form';
 
 const topContentPerStep = [
-    { title: 'Let’s get you started!', description: 'Fill in your details to create your account.' },
+    { title: 'Let’s get you started!', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
     { title: 'Company Snapshot', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor' },
     {
         title: 'Almost There!',
@@ -51,6 +51,33 @@ const topContentPerStep = [
         spanElement: 'Profile Visibility',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor',
         headingClassName: 'max-w-[300px] font-light',
+    },
+];
+
+const mobileTopContentPerStep = [
+    {
+        title: 'First, the essential',
+        description: 'This helps members recognise and trust you.',
+        headingClassName: 'text-3xl font-bold text-white',
+        paragraphClassName: 'max-w-sm pr-5 text-[17px] font-light text-white',
+    },
+    {
+        title: 'Tell us about your company',
+        description: 'We’ll use this to find your perfect matches',
+        headingClassName: 'text-3xl font-bold text-white',
+        paragraphClassName: 'max-w-sm pr-5 text-[16px] font-light text-gray-200',
+    },
+    {
+        title: 'What is your secret sauce',
+        description: 'Members will search for this skills!',
+        headingClassName: 'text-3xl font-bold text-white',
+        paragraphClassName: 'max-w-sm pr-5 text-base font-light text-gray-300',
+    },
+    {
+        title: 'Control your visibility',
+        description: 'You can change these anytime',
+        headingClassName: 'text-3xl font-bold text-white pr-23',
+        paragraphClassName: 'max-w-sm pr-5 text-[16px] font-light text-gray-200',
     },
 ];
 
@@ -110,12 +137,14 @@ export default function Register({ prefill }: RegisterProps) {
         };
     });
 
+    const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
+
+
     // ✅ Persist formData in localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     }, [formData]);
 
-    const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
 
     const goToStep = (newStep: number) => {
         setStep(newStep);
@@ -143,11 +172,12 @@ export default function Register({ prefill }: RegisterProps) {
             const payload = new FormData();
             Object.entries(finalData).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach((v) => payload.append(`${key}[]`, v));
-                } else if (value instanceof File) {
-                    payload.append(key, value);
-                } else if (value !== null && value !== undefined) {
-                    payload.append(key, String(value));
+                    value.forEach((v) => {
+                        // convert boolean to string
+                        payload.append(`${key}[]`, typeof v === 'boolean' ? String(v) : v);
+                    });
+                } else if (value !== null) {
+                    payload.append(key, typeof value === 'boolean' ? String(value) : (value as any));
                 }
             });
 
@@ -173,17 +203,27 @@ export default function Register({ prefill }: RegisterProps) {
 
     return (
         <AuthLayout
-            topContent={
-                <StepTopContent
-                    steps={steps}
-                    currentStep={step}
-                    title={topContentPerStep[step - 1].title}
-                    spanElement={topContentPerStep[step - 1].spanElement}
-                    headingClassName={topContentPerStep[step - 1].headingClassName}
-                    description={topContentPerStep[step - 1].description}
+            mobileTopContent={
+                <>
+                    <MobileTopContent steps={steps} step={step} content={mobileTopContentPerStep} />
+                </>
+            }
+            LeftDesktopContent={
+                <LeftDesktopContent
+                    topContentLayout={
+                        <>
+                            <StepTopContent
+                                steps={steps}
+                                currentStep={step}
+                                title={topContentPerStep[step - 1].title}
+                                spanElement={topContentPerStep[step - 1].spanElement}
+                                headingClassName={topContentPerStep[step - 1].headingClassName}
+                                description={topContentPerStep[step - 1].description}
+                            />
+                        </>
+                    }
                 />
             }
-            bottomContent={<StepBottomContent />}
         >
             {step === 1 && (
                 <StepOneForm
@@ -244,7 +284,7 @@ export default function Register({ prefill }: RegisterProps) {
                             {
                                 visibilitySettings: data.visibilitySettings,
                             },
-                            true,
+                            true, // final step
                         )
                     }
                 />

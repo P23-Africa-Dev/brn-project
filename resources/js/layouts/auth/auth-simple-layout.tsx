@@ -2,53 +2,35 @@ import images from '@/constants/image';
 import { ReactNode, type PropsWithChildren } from 'react';
 
 interface AuthLayoutProps {
-    topContent?: ReactNode;
-    bottomContent?: ReactNode;
+    LeftDesktopContent?: ReactNode;
+    mobileTopContent?: ReactNode;
 }
 
-export default function AuthSimpleLayout({ topContent, bottomContent, children }: PropsWithChildren<AuthLayoutProps>) {
+export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent,  children }: PropsWithChildren<AuthLayoutProps>) {
     return (
         <>
-            <div className="flex h-screen w-full bg-background">
-                {/* Left Side*/}
-                <div
-                    className="fixed z-10 hidden h-full w-5/12 bg-center text-white lg:block"
-                    style={{
-                        backgroundImage: `url(${images.stepFormsBg})`,
-                    }}
-                >
-                    {/* Step Form Inner right pattern */}
-                    <div
-                        className="absolute top-0 -right-12 z-0 h-screen w-[80px] bg-cover bg-center text-white"
-                        style={{
-                            backgroundImage: `url(${images.stepFormsInnerPattern})`,
-                        }}
-                    >
-                        <div className="h-screen w-full bg-gradient-to-r from-primary/60 from-12% via-primary/0 via-30%"></div>
-                    </div>
+            <div className="h-screen w-full items-start md:flex dark:bg-white">
+                {/* Left Desktop Side*/}
+                 {LeftDesktopContent}
 
-                    <div className="flex h-screen flex-col justify-between py-10">
-                        
-                        {/* Top content */}
-                        {topContent}
-
-                        {/* Bottom content */}
-                        {bottomContent}
+                {/* Mobile Pattern Screen */}
+                <div className="h-[300px] sm:h-[600px] md:hidden dark:bg-white">
+                    <div className="z-0 h-screen">
+                        <div className="relative">
+                            <img src={images.mobilePattern} className="absolute h-auto w-full object-contain" alt="" />
+                        </div>
+                        {/* Mobile Topcontent */}
+                        {mobileTopContent}
                     </div>
                 </div>
-
-                {/* Right Side (Scrollable) */}
+                {/* Right Side Desktop and Mobile (Scrollable) */}
                 <div
                     style={{
                         backgroundImage: `url(${images.formBG})`,
                     }}
-                    className="z-10 flex w-full flex-col items-center justify-center overflow-y-scroll bg-white bg-cover bg-center py-10 lg:ml-[41.36667%] lg:w-7/12 lg:flex-row lg:items-start lg:overflow-y-auto lg:py-0"
+                    className="flex w-full  md:w-2/4 h-screen  md:justify-end xl:w-full xl:justify-center"
                 >
-                    <div className="flex w-full justify-center p-8 md:w-5/6 lg:w-3/4">
-                    
-                    {children}
-                    
-                    </div>
+                    <div className="w-full p-8 lg:overflow-y-auto ">{children}</div>
                 </div>
             </div>
         </>

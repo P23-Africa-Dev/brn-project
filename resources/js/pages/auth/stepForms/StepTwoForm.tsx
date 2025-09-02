@@ -1,10 +1,11 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StepTwoData, stepTwoSchema } from '@/constants/formSchema';
 import images from '@/constants/image';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 const industryData: Record<string, string[]> = {
@@ -49,33 +50,50 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
     const selectedIndustry = watch('industry');
     const selectedCategories = watch('categories') || [];
 
-    // Initialize categories if defaultValues exist
+    // 🟢 Store categories for each industry
+    const [industrySelections, setIndustrySelections] = useState<Record<string, string[]>>({});
+    const [openIndustrySelect, setOpenIndustrySelect] = useState(false);
+
+    // Load defaults
     useEffect(() => {
         if (defaultValues.industry) {
-            const defaultCats = defaultValues.categories?.length ? defaultValues.categories : industryData[defaultValues.industry]?.slice(0, 3) || [];
             setValue('industry', defaultValues.industry);
-            setValue('categories', defaultCats);
+            setValue('categories', defaultValues.categories || []);
+            setIndustrySelections((prev) => ({
+                ...prev,
+                [defaultValues.industry!]: defaultValues.categories || [],
+            }));
         }
     }, [defaultValues, setValue]);
 
-    // Update categories when industry changes
+    // 🟢 When industry changes, restore saved categories
     useEffect(() => {
         if (selectedIndustry) {
-            const firstCategories = industryData[selectedIndustry]?.slice(0, 3) || [];
-            setValue('categories', firstCategories);
-        } else {
-            setValue('categories', []);
+            const saved = industrySelections[selectedIndustry] || [];
+            setValue('categories', saved);
         }
-    }, [selectedIndustry, setValue]);
+    }, [selectedIndustry, industrySelections, setValue]);
 
+    // Toggle category and update map
     const toggleCategory = (category: string) => {
+        let updated: string[];
+
         if (selectedCategories.includes(category)) {
-            setValue(
-                'categories',
-                selectedCategories.filter((c) => c !== category),
-            );
+            updated = selectedCategories.filter((c) => c !== category);
         } else if (selectedCategories.length < 3) {
-            setValue('categories', [...selectedCategories, category]);
+            updated = [...selectedCategories, category];
+        } else {
+            updated = [...selectedCategories];
+        }
+
+        setValue('categories', updated);
+
+        // save for this industry
+        if (selectedIndustry) {
+            setIndustrySelections((prev) => ({
+                ...prev,
+                [selectedIndustry]: updated,
+            }));
         }
     };
 
@@ -86,18 +104,19 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
     const categoriesForIndustry = selectedIndustry ? industryData[selectedIndustry] || [] : [];
 
     return (
-        <div className="">
+        <div className="relative z-10 mx-auto max-w-md">
             {/* Heading */}
             <div className="mb-10">
-                <h2 className="mb-1 text-3xl font-extrabold text-primary">Tell us about your company</h2>
-                <p className="pr-10 text-[17px] font-normal text-primary">We’ll use this to find your perfect matches.</p>
+                <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">Tell us about your company</h2>
+                <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">We’ll use this to find your perfect matches.</p>
             </div>
 
-            <div className="max-w-lg">
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+            {/* Form */}
+            <div className="">
+                <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-8">
                     {/* Company Name */}
                     <div className="relative w-full">
-                        <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
+                        <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white  px-3 text-sm text-gray-500">
                             Company Name
                         </label>
                         <input
@@ -121,16 +140,28 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                         {errors.companyDo && <p className="text-sm text-red-500">{errors.companyDo.message}</p>}
                     </div>
 
-                    {/* Industry using Shadcn Select */}
                     <div className="relative w-full">
                         <label htmlFor="industry" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
                             Select Industry
                         </label>
-                        <Select value={selectedIndustry} onValueChange={(value) => setValue('industry', value)}>
-                            <SelectTrigger className="w-full">
-                                <SelectValue className="w-full" placeholder="Choose an industry" />
+                        <Select
+                            value={selectedIndustry}
+                            onValueChange={(value) => setValue('industry', value)}
+                            onOpenChange={(open) => setOpenIndustrySelect(open)}
+                        >
+                            <SelectTrigger className="flex w-full  justify-between border-2 whitespace-nowrap">
+                                <SelectValue className="w-full whitespace-nowrap" placeholder="Choose an industry" />
+                                {openIndustrySelect ? (
+                                    <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-180 transform text-gray-400">
+                                        <img src={images.dropDownArrow} alt="" />
+                                    </span>
+                                ) : (
+                                    <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 transform text-gray-400">
+                                        <img src={images.dropDownArrow} alt="" />
+                                    </span>
+                                )}
                             </SelectTrigger>
-                            <SelectContent className="w-full">
+                            <SelectContent className="w-full dark:bg-white dark:text-black">
                                 {Object.keys(industryData).map((ind) => (
                                     <SelectItem className="block w-full" key={ind} value={ind}>
                                         {ind}
@@ -141,35 +172,54 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                         {errors.industry && <p className="text-sm text-red-500">{errors.industry.message}</p>}
                     </div>
 
-                    {/* Categories with images and style */}
+                    {/* Categories */}
                     {selectedIndustry && (
-                        <div className='mx-5'>
-                            <p className="mb-1 text-sm font-medium">Select up to 3 categories</p>
+                        <div className="mx-5 md:-mt-0">
+                            <p className="pl-1 text-sm text-grayLight">Select from 3 broad categories</p>
                             <div className="flex flex-wrap gap-3 px-1 py-2">
-                                {categoriesForIndustry.map((cat) => (
-                                    <button
-                                        type="button"
-                                        key={cat}
-                                        onClick={() => toggleCategory(cat)}
-                                        className={`flex items-center space-x-2  text-[#0B1727]/70 font-Gtrials rounded-3xl px-4 py-3 text-sm shadow-sm transition-all duration-200 ${
-                                            selectedCategories.includes(cat)
-                                                ? ' bg-transparent text-[#0B1727]/80'
-                                                : ' border-gray-300 bg-white'
-                                        }`}
-                                    >
-                                        <img src={selectedCategories.includes(cat) ? images.badgeMark : images.badge} alt="" className="h-5 w-5" />
-                                        <span>{cat}</span>
-                                    </button>
-                                ))} 
+                                {categoriesForIndustry.map((cat) => {
+                                    const isSelected = selectedCategories.includes(cat);
+                                    const disableRest = selectedCategories.length >= 3 && !isSelected;
+
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={cat}
+                                            onClick={() => toggleCategory(cat)}
+                                            className={`flex items-center space-x-2 rounded-3xl px-4 py-3 font-Gtrials text-sm text-[#0B1727]/70 shadow-sm transition-all duration-200 ${
+                                                isSelected ? 'bg-transparent text-[#0B1727]/80' : 'border-gray-300 bg-white'
+                                            } ${disableRest ? 'pointer-events-none opacity-40' : ''}`}
+                                        >
+                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
+                                            <span>{cat}</span>
+                                        </button>
+                                    );
+                                })}
                             </div>
                             {errors.categories && <p className="mt-1 text-sm text-red-500">{errors.categories.message}</p>}
                         </div>
                     )}
 
                     {/* Submit */}
-                    <button type="submit" className="w-full rounded-lg bg-pinkLight py-3 font-semibold text-white hover:bg-pinkLight/90">
-                        Proceed
-                    </button>
+                    <div className="flex flex-col items-center">
+                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
+                            Proceed
+                        </Button>
+
+                        <div className="mt-4 text-left text-primary lg:hidden lg:px-0">
+                            <p className="text-sm">
+                                Already have an account?{' '}
+                                <a href="/login" className="font-bold text-primary italic hover:underline">
+                                    Sign In
+                                </a>
+                            </p>
+                            <span className="text-sm text-primary">
+                                <a href="/help" className="font-bold text-primary italic hover:underline">
+                                    Need Help?
+                                </a>
+                            </span>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>

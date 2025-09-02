@@ -2,16 +2,16 @@ import AuthLayoutTemplate from '@/layouts/auth/auth-simple-layout';
 
 export default function AuthLayout({
     children,
-    topContent,
-    bottomContent,
+    LeftDesktopContent,
+    mobileTopContent,
     ...props
 }: {
     children: React.ReactNode;
-    topContent: React.ReactNode;
-    bottomContent: React.ReactNode;
+    LeftDesktopContent?: React.ReactNode;
+    mobileTopContent?: React.ReactNode;
 }) {
     return (
-        <AuthLayoutTemplate topContent={topContent} bottomContent={bottomContent} {...props}>
+        <AuthLayoutTemplate mobileTopContent={mobileTopContent} LeftDesktopContent={LeftDesktopContent}  {...props}>
             {children}
         </AuthLayoutTemplate>
     );
