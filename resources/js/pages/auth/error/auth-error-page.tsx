@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button-old';
+import { Button } from '@/components/ui/button';
 import images from '@/constants/image';
 
 interface Props {
@@ -15,7 +15,6 @@ export default function AuthErrorPage({ buttonLink }: Props) {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-white p-4">
             <div className="max-w-md space-y-4 text-center">
-
                 <div className="flex w-full items-center justify-center">
                     <img src={images.errorBg} alt="" />
                 </div>
