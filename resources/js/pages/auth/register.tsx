@@ -159,9 +159,9 @@ export default function Register({ prefill }: RegisterProps) {
             localStorage.removeItem(STORAGE_KEY);
 
             window.location.href = '/dashboard';
-        } catch (err: any) {
+        } catch (err: unknown) {
             setLoading(false);
-            if (err.response?.status === 422) {
+            if (axios.isAxiosError(err) && err.response?.status === 422) {
                 alert('Validation error: ' + JSON.stringify(err.response.data.errors));
             } else {
                 alert('Something went wrong, please try again.');

@@ -21,10 +21,15 @@ const sampleTags = [
 ];
 
 export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps) {
-  const { register, handleSubmit, watch, setValue, formState: { errors } } = useForm<StepThreeData>({
+const {
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+} = useForm<StepThreeData>({
     resolver: zodResolver(stepThreeSchema),
     defaultValues: defaultValues as StepThreeData,
-  });
+});
 
   const greatAtSelected = watch("great_at") || [];
   const helpWithSelected = watch("can_help_with") || [];

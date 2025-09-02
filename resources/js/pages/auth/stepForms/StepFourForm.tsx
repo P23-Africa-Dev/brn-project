@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 
 interface StepFourProps {
-  onNext: (data: any) => void;
+    onNext: (data: { visibilitySettings: boolean[] }) => void;
 }
 
 const VISIBILITY_OPTIONS = [

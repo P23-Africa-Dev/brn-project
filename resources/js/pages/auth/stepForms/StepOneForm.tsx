@@ -20,7 +20,7 @@ type Step1Props = {
         password: string;
         password_confirmation: string;
     };
-    onNext: (data: any) => void;
+    onNext: (data: Step1FormData & { profile_picture: File | null }) => void;
 };
 
 export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
@@ -30,15 +30,9 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
         register,
         handleSubmit,
         formState: { errors },
-        resetField,
     } = useForm<Step1FormData>({
         defaultValues,
     });
-
-    const handleCancelUpload = () => {
-        setPreview(null);
-        resetField('profile_picture');
-    };
 
     const onSubmit = (data: Step1FormData) => {
         onNext({
@@ -117,10 +111,8 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Profile Picture Upload */}
-                    {/* Profile Picture Upload */}
                     <div className="flex w-full items-center space-x-6 px-2">
                         <label className="relative flex h-[90px] w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-full bg-gray-100">
-                            {/* Hidden File Input */}
                             <input
                                 type="file"
                                 accept="image/*"
@@ -135,8 +127,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 })}
                                 className="absolute inset-0 h-full w-full cursor-pointer opacity-0"
                             />
-
-                            {/* Preview or Placeholder */}
                             {!preview ? (
                                 <div className="flex w-full flex-col items-center justify-center">
                                     <img src={images.uploadBg} alt="placeholder" className="h-5 w-5 object-cover" />
@@ -146,8 +136,6 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 <img src={preview} alt="Preview" className="h-full w-full object-cover" />
                             )}
                         </label>
-
-                        {/* Info + Error */}
                         <div>
                             <h4 className="font-semibold text-primary">Add a profile picture</h4>
                             <p className="text-xs text-grayLight">Builds trust, personalizes experience, and enhances engagement.</p>
@@ -157,7 +145,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Submit */}
                     <div className="flex items-center">
-                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 font-semibold text-white text-lg hover:bg-pinkLight/90">
+                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
                         </Button>
                     </div>
