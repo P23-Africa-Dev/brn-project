@@ -28,6 +28,15 @@ class User extends Authenticatable
         'categories',
         'great_at',
         'can_help_with',
+
+        'phone',
+        'linkedin',
+        'country',
+        'position',
+        'years_of_operation',
+        'number_of_employees',
+        'selected_outcome',
+        'goals',
     ];
 
     /**

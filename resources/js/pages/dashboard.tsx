@@ -9,6 +9,7 @@ import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
+import { string } from 'zod';
 
 // import required modules
 
@@ -35,13 +36,22 @@ const breadcrumbs: BreadcrumbItem[] = [
         company_name?: string;
         company_description?: string;
         industry?: string;
-        categories?: string | 'Johannesburg, South Africa';
+        categories?: string;
         great_at?: string;
         can_help_with?: string;
         rating: 4.6;
         email_verified_at: string | null;
         created_at: string;
         updated_at: string;
+
+        phone: string;
+        linkedin: string;
+        country: string;
+        position: string;
+        years_of_operation: string;
+        number_of_employees: string;
+        selected_outcome: string;
+        goals: string;
     };
 
     interface Props extends PageProps {
@@ -49,56 +59,56 @@ const breadcrumbs: BreadcrumbItem[] = [
     }
 
 function Dashboard({ auth, users }: Props) {
-    const dummyCards = [
-        {
-            name: 'Thabo Molefe',
-            location: 'Johannesburg, South Africa',
-            title: 'CFO',
-            industry: 'Renewable Energy',
-            rating: 4.6,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Amina Diop',
-            location: 'Dakar, Senegal',
-            title: 'COO',
-            industry: 'Francophone Africa Startups',
-            rating: 4.6,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Suresh Kumar',
-            location: 'Mumbai, India',
-            title: 'CTO',
-            industry: 'Fintech',
-            rating: 4.8,
-            imageSrc: `${images.man4}`,
-        },
-        {
-            name: 'Maria Garcia',
-            location: 'Mexico City, Mexico',
-            title: 'CEO',
-            industry: 'E-commerce',
-            rating: 4.5,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Chen Wei',
-            location: 'Beijing, China',
-            title: 'VP of Sales',
-            industry: 'Artificial Intelligence',
-            rating: 4.7,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Fatima Al-Hamad',
-            location: 'Dubai, UAE',
-            title: 'Head of Marketing',
-            industry: 'Luxury Goods',
-            rating: 4.9,
-            imageSrc: `${images.man3}`,
-        },
-    ];
+    // const dummyCards = [
+    //     {
+    //         name: 'Thabo Molefe',
+    //         location: 'Johannesburg, South Africa',
+    //         title: 'CFO',
+    //         industry: 'Renewable Energy',
+    //         rating: 4.6,
+    //         imageSrc: `${images.man2}`,
+    //     },
+    //     {
+    //         name: 'Amina Diop',
+    //         location: 'Dakar, Senegal',
+    //         title: 'COO',
+    //         industry: 'Francophone Africa Startups',
+    //         rating: 4.6,
+    //         imageSrc: `${images.man3}`,
+    //     },
+    //     {
+    //         name: 'Suresh Kumar',
+    //         location: 'Mumbai, India',
+    //         title: 'CTO',
+    //         industry: 'Fintech',
+    //         rating: 4.8,
+    //         imageSrc: `${images.man4}`,
+    //     },
+    //     {
+    //         name: 'Maria Garcia',
+    //         location: 'Mexico City, Mexico',
+    //         title: 'CEO',
+    //         industry: 'E-commerce',
+    //         rating: 4.5,
+    //         imageSrc: `${images.man3}`,
+    //     },
+    //     {
+    //         name: 'Chen Wei',
+    //         location: 'Beijing, China',
+    //         title: 'VP of Sales',
+    //         industry: 'Artificial Intelligence',
+    //         rating: 4.7,
+    //         imageSrc: `${images.man2}`,
+    //     },
+    //     {
+    //         name: 'Fatima Al-Hamad',
+    //         location: 'Dubai, UAE',
+    //         title: 'Head of Marketing',
+    //         industry: 'Luxury Goods',
+    //         rating: 4.9,
+    //         imageSrc: `${images.man3}`,
+    //     },
+    // ];
 
     const dummyLeads = [
         {
@@ -336,7 +346,7 @@ function Dashboard({ auth, users }: Props) {
                             {/* Cards Container */}
 
                             <div className="scrollbar-hide max-h-[60vh] space-y-4 overflow-y-auto pr-2">
-                                {dummyCards.map((card, index) => (
+                                {/* {dummyCards.map((card, index) => (
                                     <UserCard
                                         key={index}
                                         name={card.name}
@@ -346,16 +356,16 @@ function Dashboard({ auth, users }: Props) {
                                         rating={card.rating}
                                         imageSrc={card.imageSrc}
                                     />
-                                ))}
+                                ))} */}
                                 {users.map((user) => (
                                     <UserCard
                                         key={user.id}
                                         name={user.name}
-                                        categories={user.categories}
-                                        company_name={user.company_name}
+                                        location={user.country}
+                                        title={user.position}
                                         industry={user.industry}
-                                        updated_at={user.updated_at}
-                                        profile_picture={user.profile_picture}
+                                        rating="4.6"
+                                        imageSrc={user.profile_picture}
                                     />
                                 ))}
                             </div>

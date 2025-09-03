@@ -39,6 +39,16 @@ export interface User {
     company_name?: string;
     company_description?: string;
     industry?: string;
+
+    phone?: string;
+    linkedin?: string;
+    country?: string;
+    position?: string;
+    years_of_operation?: string;
+    number_of_employees?: string;
+    selected_outcome?: string;
+    goals?: string;
+
     categories?: string;
     great_at?: Array;
     can_help_with?: Array;

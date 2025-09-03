@@ -43,14 +43,14 @@ class RegisteredUserController extends Controller
             'great_at' => 'nullable|array|max:3',
             'can_help_with' => 'nullable|array|max:3',
 
-            'phone' => 'nullable|string',
-            'linkedin' => 'nullable|string',
-            'country' => 'nullable|string',
-            'position' => 'nullable|string',
-            'years_of_operation' => 'nullable|string',
-            'number_of_employees' => 'nullable|string',
-            'selected_outcome' => 'nullable|string',
-            'goals' => 'nullable|string',
+            'phone' => 'nullable|string|max:255',
+            'linkedin' => 'nullable|string|max:255',
+            'country' => 'nullable|string|max:255',
+            'position' => 'nullable|string|max:255',
+            'years_of_operation' => 'nullable|string|max:255',
+            'number_of_employees' => 'nullable|string|max:255',
+            'selected_outcome' => 'nullable|string|max:255',
+            'goals' => 'nullable|string|max:255',
         ]);
 
         $profilePicPath = $request->hasFile('profile_picture')

@@ -10,7 +10,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $users = User::all();
+        $users = User::latest()->get();
 
         return Inertia::render('dashboard', [
             'users' => $users,

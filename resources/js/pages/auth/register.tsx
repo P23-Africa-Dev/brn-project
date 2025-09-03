@@ -296,7 +296,7 @@ export default function Register({ prefill }: RegisterProps) {
                                 company_description: data.companyDo,
                                 industry: data.industry,
                                 categories: data.categories,
-
+                                
                                 phone: data.phone,
                                 linkedin: data.linkedin,
                                 country: data.country,
