@@ -49,6 +49,13 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    public function getProfilePictureAttribute($value)
+    {
+        return $value
+            ? asset('storage/' . $value)   // returns full URL like http://127.0.0.1:8000/storage/profile.jpg
+            : asset('images/default-avatar.png'); // fallback image
+    }
+
     /**
      * Get the attributes that should be cast.
      *
