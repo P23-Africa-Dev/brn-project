@@ -42,6 +42,15 @@ class RegisteredUserController extends Controller
             'categories' => 'nullable|array',
             'great_at' => 'nullable|array|max:3',
             'can_help_with' => 'nullable|array|max:3',
+
+            'phone' => 'nullable|string',
+            'linkedin' => 'nullable|string',
+            'country' => 'nullable|string',
+            'position' => 'nullable|string',
+            'years_of_operation' => 'nullable|string',
+            'number_of_employees' => 'nullable|string',
+            'selected_outcome' => 'nullable|string',
+            'goals' => 'nullable|string',
         ]);
 
         $profilePicPath = $request->hasFile('profile_picture')
@@ -59,6 +68,15 @@ class RegisteredUserController extends Controller
             'categories' => $request->categories,
             'great_at' => $request->great_at,
             'can_help_with' => $request->can_help_with,
+
+            'phone' => $request->phone,
+            'linkedin' => $request->linkedin,
+            'country' => $request->country,
+            'position' => $request->position,
+            'years_of_operation' => $request->years_of_operation,
+            'number_of_employees' => $request->number_of_employees,
+            'selected_outcome' => $request->selected_outcome,
+            'goals' => $request->goals,
         ]);
 
         event(new Registered($user));
@@ -80,6 +98,14 @@ class RegisteredUserController extends Controller
                     'name' => $userData['name'] ?? '',
                     'email' => $userData['email'] ?? '',
                     'company_name' => $userData['company_name'] ?? '',
+                    'phone' => $userData['phone'] ?? '',
+                    'linkedin' => $userData['linkedin'] ?? '',
+                    'country' => $userData['country'] ?? '',
+                    'position' => $userData['position'] ?? '',
+                    'years_of_operation' => $userData['years_of_operation'] ?? '',
+                    'number_of_employees' => $userData['number_of_employees'] ?? '',
+                    'selected_outcome' => $userData['selected_outcome'] ?? '',
+                    'goals' => $userData['goals'] ?? '',
                 ]
             ]);
         } catch (\Exception $e) {

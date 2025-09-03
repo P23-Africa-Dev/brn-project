@@ -116,16 +116,73 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                 <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-8">
                     {/* Company Name */}
                     <div className="relative w-full">
-                        <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white  px-3 text-sm text-gray-500">
+                        <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
                             Company Name
                         </label>
                         <input
                             type="text"
                             {...register('companyName')}
+                            readOnly
                             className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
                         />
                         {errors.companyName && <p className="text-sm text-red-500">{errors.companyName.message}</p>}
                     </div>
+
+                    <input
+                        type="text"
+                        {...register('phone')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('linkedin')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('country')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('position')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('years_of_operation')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('number_of_employees')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('selected_outcome')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
+
+                    <input
+                        type="text"
+                        {...register('goals')}
+                        hidden
+                        className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                    />
 
                     {/* Company Do */}
                     <div className="relative w-full">
@@ -149,7 +206,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             onValueChange={(value) => setValue('industry', value)}
                             onOpenChange={(open) => setOpenIndustrySelect(open)}
                         >
-                            <SelectTrigger className="flex w-full  justify-between border-2 whitespace-nowrap">
+                            <SelectTrigger className="flex w-full justify-between border-2 whitespace-nowrap">
                                 <SelectValue className="w-full whitespace-nowrap" placeholder="Choose an industry" />
                                 {openIndustrySelect ? (
                                     <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-180 transform text-gray-400">

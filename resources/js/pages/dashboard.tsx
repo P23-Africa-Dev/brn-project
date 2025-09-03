@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
 
 // import required modules
@@ -27,7 +27,28 @@ const breadcrumbs: BreadcrumbItem[] = [
 //     imageSrc: string;
 // }
 
-export default function Dashboard() {
+    type User = {
+        id: number;
+        name: string;
+        email: string;
+        profile_picture?: string;
+        company_name?: string;
+        company_description?: string;
+        industry?: string;
+        categories?: string | 'Johannesburg, South Africa';
+        great_at?: string;
+        can_help_with?: string;
+        rating: 4.6;
+        email_verified_at: string | null;
+        created_at: string;
+        updated_at: string;
+    };
+
+    interface Props extends PageProps {
+        users: User[];
+    }
+
+function Dashboard({ auth, users }: Props) {
     const dummyCards = [
         {
             name: 'Thabo Molefe',
@@ -124,9 +145,15 @@ export default function Dashboard() {
             {/* <Head title="Dashboard" /> */}
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="hidden md:block">
-                    <h3 className="text-3xl font-medium dark:text-white">
-                        Good Morning <span className="font-bold">Kwame</span>{' '}
-                    </h3>
+                    {auth.user ? (
+                        <h3 className="text-3xl font-medium dark:text-white">
+                            Good Morning <span className="font-bold">{auth.user.name}</span>{' '}
+                        </h3>
+                    ) : (
+                        <h3 className="text-3xl font-medium dark:text-white">
+                            Good Morning <span className="font-bold">Kwame</span>{' '}
+                        </h3>
+                    )}
                 </div>
                 {/* FIRST ROW */}
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -320,12 +347,23 @@ export default function Dashboard() {
                                         imageSrc={card.imageSrc}
                                     />
                                 ))}
+                                {users.map((user) => (
+                                    <UserCard
+                                        key={user.id}
+                                        name={user.name}
+                                        categories={user.categories}
+                                        company_name={user.company_name}
+                                        industry={user.industry}
+                                        updated_at={user.updated_at}
+                                        profile_picture={user.profile_picture}
+                                    />
+                                ))}
                             </div>
                         </div>
                     </div>
 
                     {/* Second child spans 1 column */}
-                    <div className="relative col-span-2 aspect-auto overflow-hidden shadow-md rounded-xl ">
+                    <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
                         <div className="p-6">
                             <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
@@ -384,3 +422,5 @@ export default function Dashboard() {
         </AppLayout>
     );
 }
+
+export default Dashboard;

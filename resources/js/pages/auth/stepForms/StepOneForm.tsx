@@ -60,6 +60,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                         <input
                             id="name"
                             type="text"
+                            readOnly
                             {...register('name', { required: 'Name is required' })}
                             className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
                         />
@@ -74,6 +75,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                         <input
                             id="email"
                             type="email"
+                            readOnly
                             {...register('email', { required: 'Email is required' })}
                             className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
                         />
