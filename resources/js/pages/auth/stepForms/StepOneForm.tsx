@@ -90,7 +90,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Email */}
                     <div className="relative w-full">
-                        <label htmlFor="email" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm text-gray-500">
+                        <label htmlFor="email" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm ">
                             Email
                         </label>
                         <input
@@ -104,7 +104,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm text-gray-500">
+                        <label htmlFor="password" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm ">
                             Password
                         </label>
                         <input
@@ -120,7 +120,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
 
                     {/* Confirm Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password_confirmation" className="absolute text-[#0B1727] -top-2.5 left-8 bg-white px-4 text-sm text-gray-500">
+                        <label htmlFor="password_confirmation" className="absolute text-[#0B1727] -top-2.5 left-8 bg-white px-4 text-sm ">
                             Confirm Password
                         </label>
                         <input
