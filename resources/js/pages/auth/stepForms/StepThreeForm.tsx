@@ -22,15 +22,15 @@ const sampleTags = [
 ];
 
 export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps) {
-    const {
-        handleSubmit,
-        watch,
-        setValue,
-        formState: { errors },
-    } = useForm<StepThreeData>({
-        resolver: zodResolver(stepThreeSchema),
-        defaultValues: defaultValues as StepThreeData,
-    });
+const {
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors },
+} = useForm<StepThreeData>({
+    resolver: zodResolver(stepThreeSchema),
+    defaultValues: defaultValues as StepThreeData,
+});
 
     const greatAtSelected = watch('great_at') || [];
     const helpWithSelected = watch('can_help_with') || [];
@@ -81,7 +81,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
                                                 isSelected ? 'bg-transparent font-bold text-[#0B1727]' : ' font-semibold text-[#0B1727]/60'
                                             } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
                                         >
-                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
+                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-7 w-7" />
                                             <span>{tag.label}</span>
                                         </button>
                                     );
@@ -110,7 +110,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
                                                 isSelected ? 'bg-transparent font-bold text-[#0B1727]' : ' font-semibold text-[#0B1727]/60'
                                             } ${disableRest ? 'pointer-events-none opacity-60 blur-[1px]' : ''}`}
                                         >
-                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
+                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-7 w-7" />
                                             <span>{tag.label}</span>
                                         </button>
                                     );

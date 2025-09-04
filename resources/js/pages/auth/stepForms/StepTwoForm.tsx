@@ -118,32 +118,32 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                     <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-8">
                         {/* Company Name */}
                         <div className="relative w-full">
-                            <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
+                            <label htmlFor="companyName" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-[#0B1727]/70 ">
                                 Company Name
                             </label>
                             <input
                                 type="text"
                                 {...register('companyName')}
-                                className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                             />
                             {errors.companyName && <p className="text-sm text-red-500">{errors.companyName.message}</p>}
                         </div>
 
                         {/* Company Do */}
                         <div className="relative w-full">
-                            <label htmlFor="companyDo" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
+                            <label htmlFor="companyDo" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-[#0B1727]/70">
                                 What does your company do
                             </label>
                             <input
                                 type="text"
                                 {...register('companyDo')}
-                                className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                             />
                             {errors.companyDo && <p className="text-sm text-red-500">{errors.companyDo.message}</p>}
                         </div>
 
                         <div className="relative w-full">
-                            <label htmlFor="industry" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-gray-500">
+                            <label htmlFor="industry" className="absolute -top-2.5 left-8 bg-white px-3 text-sm text-[#0B1727]/70">
                                 Select Industry
                             </label>
                             <Select
@@ -151,8 +151,8 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                 onValueChange={(value) => setValue('industry', value)}
                                 onOpenChange={(open) => setOpenIndustrySelect(open)}
                             >
-                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap">
-                                    <SelectValue className="w-full whitespace-nowrap " placeholder="Choose an industry" />
+                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-2 border-primary/80 py-6 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none">
+                                    <SelectValue className="w-full whitespace-nowrap  " placeholder="Choose an industry" />
                                     {openIndustrySelect ? (
                                         <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-180 transform text-gray-400">
                                             <img src={images.dropDownArrow} alt="" />
@@ -192,24 +192,12 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                                     isSelected ? 'bg-transparent font-bold text-[#0B1727]' : 'font-semibold text-[#0B1727]/60'
                                                 } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
                                             >
-                                                <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
+                                                <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-7 w-7" />
                                                 <span>{cat}</span>
                                             </button>
                                         );
 
-                                        // return (
-                                        //     <button
-                                        //         type="button"
-                                        //         key={cat}
-                                        //         onClick={() => toggleCategory(cat)}
-                                        //         className={`flex items-center space-x-2 rounded-3xl px-4 py-3 font-Gtrials text-sm text-[#0B1727]/70 shadow-sm transition-all duration-200 ${
-                                        //             isSelected ? 'bg-transparent text-[#0B1727]/80' : 'border-gray-300 bg-white'
-                                        //         } ${disableRest ? 'pointer-events-none opacity-40' : ''}`}
-                                        //     >
-                                        //         <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
-                                        //         <span>{cat}</span>
-                                        //     </button>
-                                        // );
+                                     
                                     })}
                                 </div>
                                 {errors.categories && <p className="mt-1 text-sm text-red-500">{errors.categories.message}</p>}

@@ -35,9 +35,31 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    avatar?: string;
+    profile_picture?: string;
+    company_name?: string;
+    company_description?: string;
+    industry?: string;
+
+    phone?: string;
+    linkedin?: string;
+    country?: string;
+    position?: string;
+    years_of_operation?: string;
+    number_of_employees?: string;
+    selected_outcome?: string;
+    goals?: string;
+
+    categories?: string;
+    great_at?: Array;
+    can_help_with?: Array;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
+}
+
+export interface PageProps {
+    auth: {
+        user?: User;
+    };
 }

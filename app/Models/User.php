@@ -28,6 +28,15 @@ class User extends Authenticatable
         'categories',
         'great_at',
         'can_help_with',
+
+        'phone',
+        'linkedin',
+        'country',
+        'position',
+        'years_of_operation',
+        'number_of_employees',
+        'selected_outcome',
+        'goals',
     ];
 
     /**
@@ -39,6 +48,13 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function getProfilePictureAttribute($value)
+    {
+        return $value
+            ? asset('storage/' . $value)   // returns full URL like http://127.0.0.1:8000/storage/profile.jpg
+            : asset('images/default-avatar.png'); // fallback image
+    }
 
     /**
      * Get the attributes that should be cast.

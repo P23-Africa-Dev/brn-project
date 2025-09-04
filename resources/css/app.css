@@ -53,7 +53,7 @@
     --color-secondary: #f3f0e9;
     --color-white: #fff;
     --color-gray: #e2e6e9;
-    --color-darkBlue: #193e47;
+    --color-darkBlue: #193e47; 
     --color-darkGreen: #27e6a7;
     --color-deepBlue: #0b1727;
 
@@ -256,6 +256,7 @@ body {
     }
 }
 
-body {
-    background-color: white;
+body .apexcharts-toolbar{
+    display: none !important;
 }
+

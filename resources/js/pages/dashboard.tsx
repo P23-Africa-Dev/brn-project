@@ -1,14 +1,16 @@
 import SmartMatchesSection from '@/components/cards/SmartCard';
 import UserCard from '@/components/cards/UserCard';
-import UserCardLead from '@/components/cards/USerCardLead';
+import UserCardLead from '@/components/cards/UserCardLead';
+import SplineAreaChart from '@/components/chart/BasicAreaChart';
+import BasicPolarChart from '@/components/chart/BasicPolarChart';
 import { Button } from '@/components/ui/button';
-import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
+// import { string } from 'zod';
 
 // import required modules
 
@@ -19,15 +21,37 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-interface SmartMatch {
+type User = {
+    id: number;
     name: string;
-    title: string;
-    company: string;
-    rating: number;
-    imageSrc: string;
+    email: string;
+    profile_picture?: string;
+    company_name?: string;
+    company_description?: string;
+    industry?: string;
+    categories?: string;
+    great_at?: string;
+    can_help_with?: string;
+    rating: 4.6;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
+
+    phone: string;
+    linkedin: string;
+    country: string;
+    position: string;
+    years_of_operation: string;
+    number_of_employees: string;
+    selected_outcome: string;
+    goals: string;
+};
+
+interface Props extends PageProps {
+    users: User[];
 }
 
-export default function Dashboard() {
+function Dashboard({ auth, users }: Props) {
     const dummyCards = [
         {
             name: 'Thabo Molefe',
@@ -124,15 +148,21 @@ export default function Dashboard() {
             {/* <Head title="Dashboard" /> */}
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
                 <div className="hidden md:block">
-                    <h3 className="text-3xl font-medium dark:text-white">
-                        Good Morning <span className="font-bold">Kwame</span>{' '}
-                    </h3>
+                    {auth.user ? (
+                        <h3 className="text-3xl font-medium dark:text-white">
+                            Good Morning <span className="font-bold">{auth.user.name}</span>{' '}
+                        </h3>
+                    ) : (
+                        <h3 className="text-3xl font-medium dark:text-white">
+                            Good Morning <span className="font-bold">Kwame</span>{' '}
+                        </h3>
+                    )}
                 </div>
                 {/* FIRST ROW */}
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     {/* CHART CONTAINER */}
-                    <div className="relative aspect-auto overflow-hidden rounded-xl shadow-md">
-                        <PlaceholderPattern className="absolute inset-0 size-full stroke-neutral-900/20 dark:stroke-neutral-100/20" />
+                    <div className="relative aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 shadow-lg">
+                        <SplineAreaChart />
                     </div>
 
                     {/* CONNECTIONS CONTAINER */}
@@ -320,17 +350,28 @@ export default function Dashboard() {
                                         imageSrc={card.imageSrc}
                                     />
                                 ))}
+                                {/* {users.map((user) => (
+                                    <UserCard
+                                        key={user.id}
+                                        name={user.name}
+                                        location={user.country}
+                                        title={user.position}
+                                        industry={user.industry}
+                                        rating="4.6"
+                                        imageSrc={user.profile_picture}
+                                    />
+                                ))} */}
                             </div>
                         </div>
                     </div>
 
                     {/* Second child spans 1 column */}
-                    <div className="relative col-span-2 aspect-auto overflow-hidden shadow-md rounded-xl ">
+                    <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
                         <div className="p-6">
                             <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
                             <div>
-                                <img src={images.chart} alt="" />
+                                <BasicPolarChart />
                             </div>
                         </div>
                     </div>
@@ -384,3 +425,5 @@ export default function Dashboard() {
         </AppLayout>
     );
 }
+
+export default Dashboard;

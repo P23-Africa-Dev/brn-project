@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 
 interface StepFourProps {
-    onNext: (data: any) => void;
+    onNext: (data: { visibilitySettings: boolean[] }) => void;
 }
 
 const VISIBILITY_OPTIONS = [
@@ -65,12 +65,12 @@ export default function StepFourForm({ onNext }: StepFourProps) {
                                     type="button"
                                     aria-pressed={toggles[idx]}
                                     onClick={() => handleToggle(idx)}
-                                    className={`ml-10 flex h-8 w-17 items-center rounded-full border-2 border-white transition-colors duration-200 ${
-                                        toggles[idx] ? 'bg-primary' : 'bg-grayLighter'
+                                    className={`ml-10 flex h-8 w-17 items-center rounded-full border-2 border-white  transition-colors duration-200 ${
+                                        toggles[idx] ? 'bg-primary dark:bg-black' : 'bg-grayLighter '
                                     }`}
                                 >
                                     <span
-                                        className={`inline-block h-6 w-10 transform rounded-full bg-white shadow transition-transform duration-200 dark:bg-black ${
+                                        className={`inline-block h-6 w-10 transform rounded-full bg-white shadow transition-transform duration-200 dark:bg-white ${
                                             toggles[idx] ? 'translate-x-5.5' : 'translate-x-0.5'
                                         }`}
                                     />

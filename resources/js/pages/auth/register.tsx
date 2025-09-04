@@ -25,6 +25,15 @@ type RegisterForm = {
     great_at: string[];
     can_help_with: string[];
     visibilitySettings?: boolean[];
+
+    phone: string;
+    linkedin: string;
+    country: string;
+    position: string;
+    years_of_operation: string;
+    number_of_employees: string;
+    selected_outcome: string;
+    goals: string;
 };
 
 type RegisterProps = {
@@ -32,6 +41,15 @@ type RegisterProps = {
         name?: string;
         email?: string;
         company_name?: string;
+
+        phone?: string;
+        linkedin?: string;
+        country?: string;
+        position?: string;
+        years_of_operation?: string;
+        number_of_employees?: string;
+        selected_outcome?: string;
+        goals?: string;
     };
 };
 
@@ -119,6 +137,15 @@ export default function Register({ prefill }: RegisterProps) {
                     categories: [],
                     great_at: [],
                     can_help_with: [],
+
+                    phone: prefill?.phone ?? '',
+                    linkedin: prefill?.linkedin ?? '',
+                    country: prefill?.country ?? '',
+                    position: prefill?.position ?? '',
+                    years_of_operation: prefill?.years_of_operation ?? '',
+                    number_of_employees: prefill?.number_of_employees ?? '',
+                    selected_outcome: prefill?.selected_outcome ?? '',
+                    goals: prefill?.goals ?? '',
                 };
             }
         }
@@ -134,17 +161,24 @@ export default function Register({ prefill }: RegisterProps) {
             categories: [],
             great_at: [],
             can_help_with: [],
+
+            phone: prefill?.phone ?? '',
+            linkedin: prefill?.linkedin ?? '',
+            country: prefill?.country ?? '',
+            position: prefill?.position ?? '',
+            years_of_operation: prefill?.years_of_operation ?? '',
+            number_of_employees: prefill?.number_of_employees ?? '',
+            selected_outcome: prefill?.selected_outcome ?? '',
+            goals: prefill?.goals ?? '',
         };
     });
 
     const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
 
-
     // ✅ Persist formData in localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     }, [formData]);
-
 
     const goToStep = (newStep: number) => {
         setStep(newStep);
@@ -189,9 +223,9 @@ export default function Register({ prefill }: RegisterProps) {
             localStorage.removeItem(STORAGE_KEY);
 
             window.location.href = '/dashboard';
-        } catch (err: any) {
+        } catch (err: unknown) {
             setLoading(false);
-            if (err.response?.status === 422) {
+            if (axios.isAxiosError(err) && err.response?.status === 422) {
                 alert('Validation error: ' + JSON.stringify(err.response.data.errors));
             } else {
                 alert('Something went wrong, please try again.');
@@ -244,6 +278,15 @@ export default function Register({ prefill }: RegisterProps) {
                         companyDo: formData.company_description,
                         industry: formData.industry,
                         categories: formData.categories,
+
+                        phone: formData.phone,
+                        linkedin: formData.linkedin,
+                        country: formData.country,
+                        position: formData.position,
+                        years_of_operation: formData.years_of_operation,
+                        number_of_employees: formData.number_of_employees,
+                        selected_outcome: formData.selected_outcome,
+                        goals: formData.goals,
                     }}
                     onNext={(data) =>
                         nextStep(
@@ -252,6 +295,15 @@ export default function Register({ prefill }: RegisterProps) {
                                 company_description: data.companyDo,
                                 industry: data.industry,
                                 categories: data.categories,
+
+                                phone: data.phone,
+                                linkedin: data.linkedin,
+                                country: data.country,
+                                position: data.position,
+                                years_of_operation: data.years_of_operation,
+                                number_of_employees: data.number_of_employees,
+                                selected_outcome: data.selected_outcome,
+                                goals: data.goals,
                             },
                             false,
                         )

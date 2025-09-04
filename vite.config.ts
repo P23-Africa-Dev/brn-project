@@ -22,4 +22,12 @@ export default defineConfig({
             'ziggy-js': resolve(__dirname, 'vendor/tightenco/ziggy'),
         },
     },
+    optimizeDeps: {
+        include: ['swiper/react', 'swiper/modules'],
+    },
+    build: {
+        rollupOptions: {
+            external: [], // don’t exclude swiper
+        },
+    },
 });

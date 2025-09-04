@@ -5,12 +5,31 @@ import images from '@/constants/image';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
+// type Step1FormData = {
+//   name: string;
+//   email: string;
+//   password: string;
+//   password_confirmation: string;
+//   profile_picture: FileList; // stays FileList here
+// };
+
+// type Step1Props = {
+//   defaultValues: {
+//     name: string;
+//     email: string;
+//     password: string;
+//     password_confirmation: string;
+//   };
+//   onNext: (data: Step1FormData & { profile_picture: File | null }) => void;
+// };
+
+// StepOneForm
 type Step1FormData = {
     name: string;
     email: string;
     password: string;
     password_confirmation: string;
-    profile_picture: FileList;
+    profile_picture: FileList; // keep raw here for react-hook-form
 };
 
 type Step1Props = {
@@ -20,7 +39,7 @@ type Step1Props = {
         password: string;
         password_confirmation: string;
     };
-    onNext: (data: any) => void;
+    onNext: (data: Omit<Step1FormData, 'profile_picture'> & { profile_picture: File | null }) => void;
 };
 
 export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
@@ -30,39 +49,22 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
         register,
         handleSubmit,
         watch,
-        clearErrors,
         formState: { errors },
-        resetField,
     } = useForm<Step1FormData>({
         defaultValues,
     });
 
     const password = watch('password');
 
-    // const handleCancelUpload = () => {
-    //     setPreview(null);
-    //     resetField('profile_picture');
-    // };
-
-    // useEffect(() => {
-    //     if (Object.keys(errors).length > 0) {
-    //         const timer = setTimeout(() => {
-    //             clearErrors();
-    //         }, 2000); // 3s
-
-    //         return () => clearTimeout(timer); // cleanup on unmount/re-run
-    //     }
-    // }, [errors, clearErrors]);
-
     const onSubmit = (data: Step1FormData) => {
         onNext({
             ...data,
-            profile_picture: data.profile_picture[0] || null,
+            profile_picture: data.profile_picture?.[0] || null, // extract first file safely
         });
     };
 
     return (
-        <div className="w-full border p-8 lg:overflow-y-auto ">
+        <div className="w-full border p-8 lg:overflow-y-auto">
             <div className="relative z-10 mx-auto max-w-md">
                 {/* Heading */}
                 <div className="mb-10">
@@ -74,35 +76,35 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-7">
                     {/* Name */}
                     <div className="relative w-full">
-                        <label htmlFor="name" className="absolute -top-2.5 left-3 bg-white px-2 text-sm text-gray-500">
+                        <label htmlFor="name" className="absolute -top-2.5 left-8 bg-white text-[#0B1727]/70  px-4 text-sm">
                             Full Name
                         </label>
                         <input
                             id="name"
                             type="text"
                             {...register('name', { required: 'Name is required' })}
-                            className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                         />
                         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
                     </div>
 
                     {/* Email */}
                     <div className="relative w-full">
-                        <label htmlFor="email" className="absolute -top-2.5 left-3 bg-white px-2 text-sm text-gray-500">
+                        <label htmlFor="email" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm text-gray-500">
                             Email
                         </label>
                         <input
                             id="email"
                             type="email"
                             {...register('email', { required: 'Email is required' })}
-                            className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                         />
                         {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                     </div>
 
                     {/* Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password" className="absolute -top-2.5 left-3 bg-white px-2 text-sm text-gray-500">
+                        <label htmlFor="password" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm text-gray-500">
                             Password
                         </label>
                         <input
@@ -111,14 +113,14 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             {...register('password', {
                                 required: 'Enter your password',
                             })}
-                            className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                         />
                         {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
                     </div>
 
                     {/* Confirm Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password_confirmation" className="absolute -top-2.5 left-3 bg-white px-2 text-sm text-gray-500">
+                        <label htmlFor="password_confirmation" className="absolute text-[#0B1727] -top-2.5 left-8 bg-white px-4 text-sm text-gray-500">
                             Confirm Password
                         </label>
                         <input
@@ -128,7 +130,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 required: 'Enter your password',
                                 validate: (value) => value === password || "Password doesn't match",
                             })}
-                            className="w-full rounded-2xl border-2 border-primary/40 py-3 pl-11 font-semibold text-gray-900 ring outline-none"
+                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
                         />
                         {errors.password_confirmation && <p className="text-sm text-red-500">{errors.password_confirmation.message}</p>}
                     </div>
@@ -170,7 +172,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Submit */}
-                    <div className="flex flex-col items-center mr-10">
+                    <div className=" flex flex-col items-center">
                         <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
                         </Button>
