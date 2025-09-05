@@ -51,9 +51,7 @@ export default function AppSidebar() {
         <div className="flex flex-col h-full p-6">
           {/* Logo Section */}
           <div className="flex items-center space-x-2 mb-10">
-            <span className="text-3xl font-bold bg-white text-[#031C5B] px-3 py-1 rounded-full">
-              BR
-            </span>
+           <img src={images.brnLogo} alt="" />
           </div>
 
           {/* Navigation Items */}
