@@ -13,6 +13,10 @@ export default function AppSidebarLayout({ children }: PropsWithChildren<{ bread
                 {/* <AppSidebarHeader breadcrumbs={breadcrumbs} /> */}
                 {children}
             </AppContent>
+            {/* <AppContent variant="sidebar" className="overflow-x-hidden">
+                <AppSidebarHeader breadcrumbs={breadcrumbs} />
+                {children}
+            </AppContent> */}
         </AppShell>
     );
 }

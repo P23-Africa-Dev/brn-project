@@ -146,7 +146,10 @@ function Dashboard({ auth, users }: Props) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* <Head title="Dashboard" /> */}
-            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4">
+
+            <div className='bg-[#031C5B] py-2 px-3'>
+
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-2xl p-4 bg-[#F9F9F9]">
                 <div className="hidden md:block">
                     {auth.user ? (
                         <h3 className="text-3xl font-medium dark:text-white">
@@ -422,6 +425,9 @@ function Dashboard({ auth, users }: Props) {
                     </div>
                 </div>
             </div>
+
+            </div>
+
         </AppLayout>
     );
 }
