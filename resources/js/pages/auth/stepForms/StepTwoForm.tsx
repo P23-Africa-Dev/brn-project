@@ -124,7 +124,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             <input
                                 type="text"
                                 {...register('companyName')}
-                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
+                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1  outline-none"
                             />
                             {errors.companyName && <p className="text-sm text-red-500">{errors.companyName.message}</p>}
                         </div>
@@ -137,7 +137,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             <input
                                 type="text"
                                 {...register('companyDo')}
-                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none"
+                                className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1  outline-none"
                             />
                             {errors.companyDo && <p className="text-sm text-red-500">{errors.companyDo.message}</p>}
                         </div>
@@ -151,7 +151,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                 onValueChange={(value) => setValue('industry', value)}
                                 onOpenChange={(open) => setOpenIndustrySelect(open)}
                             >
-                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-2 border-primary/80 py-6 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-2 outline-none">
+                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-2 border-primary/80 py-6 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1  outline-none">
                                     <SelectValue className="w-full whitespace-nowrap  " placeholder="Choose an industry" />
                                     {openIndustrySelect ? (
                                         <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-180 transform text-gray-400">
