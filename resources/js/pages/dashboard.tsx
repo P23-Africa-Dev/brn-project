@@ -149,7 +149,7 @@ function Dashboard({ auth, users }: Props) {
 
             <div className="bg-[#031C5B] px-3 py-2">
                 <div className="relative flex  flex-1 rounded-4xl bg-[#F9F9F9] px-12 py-3">
-                    <div className='max-h-screen flex flex-col gap-4 no-scrollbar   overflow-y-auto'>
+                    <div className='max-h-[95vh] flex flex-col gap-4 no-scrollbar   overflow-y-auto'>
                         <div className="hidden md:block mb-3">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide dark:text-white">
