@@ -53,7 +53,7 @@
     --color-secondary: #f3f0e9;
     --color-white: #fff;
     --color-gray: #e2e6e9;
-    --color-darkBlue: #193e47; 
+    --color-darkBlue: #193e47;
     --color-darkGreen: #27e6a7;
     --color-deepBlue: #0b1727;
 
@@ -199,7 +199,7 @@ body {
   --font-Gtrials: "GT Walsheim Trial Cn Rg";
 } */
 
-@layer base {
+/* @layer base {
     * {
         @apply border-border;
     }
@@ -207,7 +207,7 @@ body {
     body {
         @apply bg-background text-foreground;
     }
-}
+} */
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
@@ -256,7 +256,10 @@ body {
     }
 }
 
-body .apexcharts-toolbar{
-    display: none !important;
+@utility no-scrollbar {
+    @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
 }
 
+body .apexcharts-toolbar {
+    display: none !important;
+}
