@@ -10,9 +10,6 @@ import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
-// import { string } from 'zod';
-
-// import required modules
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -148,11 +145,11 @@ function Dashboard({ auth, users }: Props) {
             {/* <Head title="Dashboard" /> */}
 
             <div className="bg-[#031C5B] px-3 py-2">
-                <div className="relative flex  flex-1 rounded-4xl bg-[#F9F9F9]  px-12 py-3">
-                    <div className='max-h-[95vh] flex flex-col gap-4 no-scrollbar   overflow-y-auto'>
-                        <div className="hidden dark:text-deepBlue md:block mb-3">
+                <div className="relative flex flex-1 rounded-4xl bg-[#F9F9F9] px-12 py-3">
+                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-4 overflow-y-auto">
+                        <div className="mb-3 hidden w-full md:block dark:text-deepBlue">
                             {auth.user ? (
-                                <h3 className="text-3xl font-semibold tracking-wide ">
+                                <h3 className="text-3xl font-semibold tracking-wide">
                                     Good Morning <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
                                 </h3>
                             ) : (
@@ -239,13 +236,16 @@ function Dashboard({ auth, users }: Props) {
                         {/* SECOND ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                <div className="bg-white p-6 ">
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl shadow-md p-10 bg-white">
+                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+                                    <div className="absolute top-1/2 left-0 -ml-4 h-16 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-1/2 right-0 -mr-4 h-16 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     {/* Search Header */}
-                                    <div className="mb-6 flex items-center justify-between border-b-3 pb-4">
-                                        <h2 className="text-xl font-light text-gray-800 italic ">
-                                            Let's find your <span className="text-2xl leading-3 font-bold text-deepBlue">next deal</span>
+                                    <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 pb-3 bg-white ">
+                                        <h2 className="text-xl font-normal text-gray-800 italic">
+                                            Let's find your <span className="text-3xl  leading-3 font-bold text-deepBlue">next deal</span>
                                         </h2>
+
                                         <div className="-ml-10 flex w-full items-start space-x-2">
                                             <div className="relative w-full">
                                                 <div className="rleative">
@@ -261,13 +261,13 @@ function Dashboard({ auth, users }: Props) {
                                                     />
                                                 </div>
                                             </div>
-                                            <Sheet >
+                                            <Sheet>
                                                 <SheetTrigger asChild>
-                                                    <div className="flex w-[200px] cursor-pointer items-end justify-end self-center">
+                                                    <div className="flex w-[160px] cursor-pointer items-end justify-end self-center">
                                                         <img src={images.sliderHorizontal} className="h-10 w-10 cursor-pointer" alt="" />
                                                     </div>
                                                 </SheetTrigger>
-                                                <SheetContent className="w-[300px] sm:w-[400px] dark:bg-gray-800 dark:text-gray-100 px-5">
+                                                <SheetContent className="w-[300px] px-5 sm:w-[400px] dark:bg-gray-800 dark:text-gray-100">
                                                     <SheetHeader>
                                                         <SheetTitle className="mb-4 text-2xl font-bold dark:text-gray-100">Filter By;</SheetTitle>
                                                         <SheetDescription className="mb-6 text-sm text-gray-500 dark:text-gray-400">
@@ -351,7 +351,7 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
 
-                                    <div className="scrollbar-hide max-h-[60vh] no-scrollbar space-y-4 overflow-y-auto pr-2">
+                                    <div className="space-y-4 pr-2">
                                         {dummyCards.map((card, index) => (
                                             <UserCard
                                                 key={index}
@@ -396,7 +396,7 @@ function Dashboard({ auth, users }: Props) {
                             <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
                                 <div className="p-6">
                                     <div className="max-w-[150px]">
-                                        <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-gray-100">
+                                        <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-deepBlue">
                                             Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
                                         </h2>
                                     </div>
@@ -419,7 +419,7 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Scrollable Card Container */}
-                                    <div className="scrollbar-hide max-h-[30vh] space-y-4 overflow-y-auto pr-2">
+                                    <div className="no-scrollbar max-h-[30vh] space-y-4 overflow-y-auto pr-2">
                                         {dummyLeads.map((lead, index) => (
                                             <UserCardLead
                                                 key={index}
