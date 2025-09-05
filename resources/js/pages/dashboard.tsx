@@ -148,11 +148,11 @@ function Dashboard({ auth, users }: Props) {
             {/* <Head title="Dashboard" /> */}
 
             <div className="bg-[#031C5B] px-3 py-2">
-                <div className="relative flex  flex-1 rounded-4xl bg-[#F9F9F9] px-12 py-3">
+                <div className="relative flex  flex-1 rounded-4xl bg-[#F9F9F9]  px-12 py-3">
                     <div className='max-h-[95vh] flex flex-col gap-4 no-scrollbar   overflow-y-auto'>
-                        <div className="hidden md:block mb-3">
+                        <div className="hidden dark:text-deepBlue md:block mb-3">
                             {auth.user ? (
-                                <h3 className="text-3xl font-semibold tracking-wide dark:text-white">
+                                <h3 className="text-3xl font-semibold tracking-wide ">
                                     Good Morning <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
                                 </h3>
                             ) : (
@@ -172,7 +172,7 @@ function Dashboard({ auth, users }: Props) {
                             <div className="relative aspect-auto overflow-hidden rounded-xl shadow-md">
                                 <div className="flex flex-col p-3">
                                     <div className="flex justify-between">
-                                        <h4 className="font-bold">Network Status</h4>
+                                        <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
 
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1.5">
@@ -240,10 +240,10 @@ function Dashboard({ auth, users }: Props) {
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
                             <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                <div className="bg-white p-6 dark:bg-gray-800">
+                                <div className="bg-white p-6 ">
                                     {/* Search Header */}
                                     <div className="mb-6 flex items-center justify-between border-b-3 pb-4">
-                                        <h2 className="text-xl font-light text-gray-800 italic dark:text-gray-100">
+                                        <h2 className="text-xl font-light text-gray-800 italic ">
                                             Let's find your <span className="text-2xl leading-3 font-bold text-deepBlue">next deal</span>
                                         </h2>
                                         <div className="-ml-10 flex w-full items-start space-x-2">
@@ -261,13 +261,13 @@ function Dashboard({ auth, users }: Props) {
                                                     />
                                                 </div>
                                             </div>
-                                            <Sheet>
+                                            <Sheet >
                                                 <SheetTrigger asChild>
                                                     <div className="flex w-[200px] cursor-pointer items-end justify-end self-center">
                                                         <img src={images.sliderHorizontal} className="h-10 w-10 cursor-pointer" alt="" />
                                                     </div>
                                                 </SheetTrigger>
-                                                <SheetContent className="w-[300px] sm:w-[400px] dark:bg-gray-800 dark:text-gray-100">
+                                                <SheetContent className="w-[300px] sm:w-[400px] dark:bg-gray-800 dark:text-gray-100 px-5">
                                                     <SheetHeader>
                                                         <SheetTitle className="mb-4 text-2xl font-bold dark:text-gray-100">Filter By;</SheetTitle>
                                                         <SheetDescription className="mb-6 text-sm text-gray-500 dark:text-gray-400">
