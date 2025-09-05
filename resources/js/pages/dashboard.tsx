@@ -357,17 +357,19 @@ function Dashboard({ auth, users }: Props) {
                                         imageSrc={card.imageSrc}
                                     />
                                 ))} */}
-                                {users.map((user) => (
-                                    <UserCard
-                                        key={user.id}
-                                        name={user.name}
-                                        location={user.country}
-                                        title={user.position}
-                                        industry={user.industry}
-                                        rating="4.6"
-                                        imageSrc={user.profile_picture}
-                                    />
-                                ))}
+                                {users
+                                    .filter((user) => auth.user && user.id !== auth.user.id) // Filter out the current user
+                                    .map((user) => (
+                                        <UserCard
+                                            key={user.id}
+                                            name={user.name}
+                                            location={user.country}
+                                            title={user.position}
+                                            industry={user.industry || 'N/A'}
+                                            rating={4.6}
+                                            imageSrc={user.profile_picture || ''}
+                                        />
+                                    ))}
                             </div>
                         </div>
                     </div>

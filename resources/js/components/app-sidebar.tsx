@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   LayoutDashboard,
   MessageSquare,
@@ -11,13 +11,25 @@ import {
   Link as LinkIcon,
   LucideIcon,
 } from "lucide-react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from '@inertiajs/react';
 import images from "@/constants/image";
 
 interface NavItem {
   name: string;
   icon: LucideIcon;
   href: string;
+}
+
+interface PageProps {
+    auth: {
+        user: {
+            name: string;
+            position?: string;
+            company_name?: string;
+            profile_picture: string | null; // Update this line
+        };
+    };
+    [key: string]: any; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
 // Define the navigation items with href for Inertia
@@ -35,98 +47,106 @@ const userAccountItems: NavItem[] = [
 ];
 
 export default function AppSidebar() {
-  const [activeItem, setActiveItem] = useState<string>("Dashboard");
+    const { auth } = usePage<PageProps>().props;
+    const [activeItem, setActiveItem] = useState<string>('Dashboard');
+    const profileImage: string = `${images.man1}`;
 
-  const profileImage: string = `${images.man1}`;
+    // Add this function to clean the URL
+    const getProfilePicture = () => {
+        if (!auth.user?.profile_picture) return profileImage;
+        return auth.user.profile_picture.startsWith('http') ? auth.user.profile_picture : `${window.location.origin}${auth.user.profile_picture}`;
+    };
+
+  useEffect(() => {
+      console.log('Profile picture URL:', auth.user.profile_picture);
+  }, [auth.user.profile_picture]);
 
   return (
-    <div>
-      <div
-        className="hidden md:block sticky top-0 left-0 w-[64] h-screen text-white rounded-r-[48px] overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, #031C5B 0%, #0B1727 50%, #031C5B 100%)",
-        }}
-      >
-        <div className="flex flex-col h-full p-6">
-          {/* Logo Section */}
-          <div className="flex items-center space-x-2 mb-10">
-            <span className="text-3xl font-bold bg-white text-[#031C5B] px-3 py-1 rounded-full">
-              BR
-            </span>
-          </div>
-
-          {/* Navigation Items */}
-          <nav className="flex-1 space-y-4">
-            {navItems.map((item: NavItem) => {
-              const isActive: boolean = activeItem === item.name;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setActiveItem(item.name)}
-                  className={`relative flex items-center transition-all duration-300 ${
-                    isActive
-                      ? "font-bold"
-                      : "text-gray-400 hover:text-white"
-                  }`}
-                >
-                  {/* Highlight background */}
-                  <div
-                    className={`absolute top-0 left-0 w-full h-full transform transition-all duration-300 ${
-                      isActive
-                        ? "-translate-x-6 bg-white rounded-r-[32px]"
-                        : ""
-                    }`}
-                  ></div>
-
-                  {/* Icon + Label */}
-                  <div
-                    className={`relative flex items-center z-10 w-full p-3 rounded-lg transition-colors duration-300 ${
-                      isActive ? "text-gray-800" : "text-gray-400"
-                    }`}
-                  >
-                    <item.icon className="w-6 h-6 mr-4" />
-                    <span>{item.name}</span>
+      <div>
+          <div
+              className="sticky top-0 left-0 hidden h-screen w-[64] overflow-hidden rounded-r-[48px] text-white md:block"
+              style={{
+                  background: 'linear-gradient(180deg, #031C5B 0%, #0B1727 50%, #031C5B 100%)',
+              }}
+          >
+              <div className="flex h-full flex-col p-6">
+                  {/* Logo Section */}
+                  <div className="mb-10 flex items-center space-x-2">
+                      <span className="rounded-full bg-white px-3 py-1 text-3xl font-bold text-[#031C5B]">BR</span>
                   </div>
-                </Link>
-              );
-            })}
-          </nav>
 
-          {/* User Account Section */}
-          <div className="mt-auto pt-6 border-t border-gray-700">
-            <p className="text-xs text-gray-400 mb-4 tracking-wider">
-              USER ACCOUNT
-            </p>
-            <div className="flex items-center mb-6">
-              <img
-                src={profileImage}
-                alt="User Profile"
-                className="w-12 h-12 rounded-full mr-4 object-cover border-2 border-gray-400"
-              />
-              <div>
-                <h3 className="text-lg font-semibold">Kwame Williams</h3>
-                <p className="text-sm text-gray-400">CEO SuperBiz</p>
+                  {/* Navigation Items */}
+                  <nav className="flex-1 space-y-4">
+                      {navItems.map((item: NavItem) => {
+                          const isActive: boolean = activeItem === item.name;
+                          return (
+                              <Link
+                                  key={item.name}
+                                  href={item.href}
+                                  onClick={() => setActiveItem(item.name)}
+                                  className={`relative flex items-center transition-all duration-300 ${
+                                      isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
+                                  }`}
+                              >
+                                  {/* Highlight background */}
+                                  <div
+                                      className={`absolute top-0 left-0 h-full w-full transform transition-all duration-300 ${
+                                          isActive ? '-translate-x-6 rounded-r-[32px] bg-white' : ''
+                                      }`}
+                                  ></div>
+
+                                  {/* Icon + Label */}
+                                  <div
+                                      className={`relative z-10 flex w-full items-center rounded-lg p-3 transition-colors duration-300 ${
+                                          isActive ? 'text-gray-800' : 'text-gray-400'
+                                      }`}
+                                  >
+                                      <item.icon className="mr-4 h-6 w-6" />
+                                      <span>{item.name}</span>
+                                  </div>
+                              </Link>
+                          );
+                      })}
+                  </nav>
+
+                  {/* User Account Section */}
+                  <div className="mt-auto border-t border-gray-700 pt-6">
+                      <p className="mb-4 text-xs tracking-wider text-gray-400">USER ACCOUNT</p>
+                      <div className="mb-6 flex items-center">
+                          <img
+                              src={getProfilePicture()}
+                              alt={`${auth.user.name}'s Profile`}
+                              className="mr-4 h-12 w-12 rounded-full border-2 border-gray-400 object-cover"
+                              onError={(e) => {
+                                  e.currentTarget.src = profileImage;
+                              }}
+                          />
+                          <div>
+                              <h3 className="text-lg font-semibold">{auth.user.name}</h3>
+                              <p className="text-sm text-gray-400">
+                                  {auth.user.position && auth.user.company_name
+                                      ? `${auth.user.position} at ${auth.user.company_name}`
+                                      : auth.user.position || auth.user.company_name || ''}
+                              </p>
+                          </div>
+                      </div>
+                      <div className="space-y-4">
+                          {userAccountItems.map((item: NavItem) => (
+                              <Link
+                                  key={item.name}
+                                  href={item.href}
+                                  className="flex items-center text-gray-400 transition-colors duration-200 hover:text-white"
+                              >
+                                  <div className="relative flex items-center rounded-lg p-2 transition-colors duration-300">
+                                      <item.icon className="mr-4 h-6 w-6" />
+                                      <span>{item.name}</span>
+                                  </div>
+                              </Link>
+                          ))}
+                      </div>
+                  </div>
               </div>
-            </div>
-            <div className="space-y-4">
-              {userAccountItems.map((item: NavItem) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center text-gray-400 hover:text-white transition-colors duration-200"
-                >
-                  <div className="relative flex items-center p-2 rounded-lg transition-colors duration-300">
-                    <item.icon className="w-6 h-6 mr-4" />
-                    <span>{item.name}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
           </div>
-        </div>
       </div>
-    </div>
   );
 }
