@@ -350,32 +350,31 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Cards Container */}
-
-                                    <div className="space-y-4 pr-2">
-                                        {dummyCards.map((card, index) => (
-                                            <UserCard
-                                                key={index}
-                                                name={card.name}
-                                                location={card.location}
-                                                title={card.title}
-                                                industry={card.industry}
-                                                rating={card.rating}
-                                                imageSrc={card.imageSrc}
-                                            />
-                                        ))}
-                                        {/* {users.map((user) => (
+                            <div className="space-y-4 pr-2">
+                                {/* {dummyCards.map((card, index) => (
                                     <UserCard
-                                        key={user.id}
-                                        name={user.name}
-                                        location={user.country}
-                                        title={user.position}
-                                        industry={user.industry}
-                                        rating="4.6"
-                                        imageSrc={user.profile_picture}
+                                        key={index}
+                                        name={card.name}
+                                        location={card.location}
+                                        title={card.title}
+                                        industry={card.industry}
+                                        rating={card.rating}
+                                        imageSrc={card.imageSrc}
                                     />
                                 ))} */}
-                                    </div>
-                                </div>
+                                {users
+                                    .filter((user) => auth.user && user.id !== auth.user.id) // Filter out the current user
+                                    .map((user) => (
+                                        <UserCard
+                                            key={user.id}
+                                            name={user.name}
+                                            location={user.country}
+                                            title={user.position}
+                                            industry={user.industry || 'N/A'}
+                                            rating={4.6}
+                                            imageSrc={user.profile_picture || ''}
+                                        />
+                                    ))}
                             </div>
 
                             {/* Second child spans 1 column */}
