@@ -10,6 +10,7 @@ import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
+// import { Upload } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -22,26 +23,25 @@ type User = {
     id: number;
     name: string;
     email: string;
-    profile_picture?: string;
+    profile_picture?: string | null;
     company_name?: string;
     company_description?: string;
     industry?: string;
     categories?: string;
     great_at?: string;
     can_help_with?: string;
-    rating: 4.6;
+    rating?: number;
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-
-    phone: string;
-    linkedin: string;
-    country: string;
-    position: string;
-    years_of_operation: string;
-    number_of_employees: string;
-    selected_outcome: string;
-    goals: string;
+    phone?: string;
+    linkedin?: string;
+    country?: string;
+    position?: string;
+    years_of_operation?: string;
+    number_of_employees?: string;
+    selected_outcome?: string;
+    goals?: string;
 };
 
 interface Props extends PageProps {
@@ -140,6 +140,13 @@ function Dashboard({ auth, users }: Props) {
         },
     ];
 
+    const getGreeting = () => {
+        const hour = new Date().getHours();
+        if (hour < 12) return 'Good Morning';
+        if (hour < 18) return 'Good Afternoon';
+        return 'Good Evening';
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* <Head title="Dashboard" /> */}
@@ -150,7 +157,7 @@ function Dashboard({ auth, users }: Props) {
                         <div className="mb-3 hidden w-full md:block dark:text-deepBlue">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide">
-                                    Good Morning <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
+                                    {getGreeting()} <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
                                 </h3>
                             ) : (
                                 <h3 className="text-3xl font-medium dark:text-white">
@@ -236,14 +243,14 @@ function Dashboard({ auth, users }: Props) {
                         {/* SECOND ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl shadow-md p-10 bg-white">
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-white p-10 shadow-md">
                                 <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
                                     <div className="absolute top-1/2 left-0 -ml-4 h-16 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
                                     <div className="absolute top-1/2 right-0 -mr-4 h-16 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     {/* Search Header */}
-                                    <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 pb-3 bg-white ">
+                                    <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 bg-white pb-3">
                                         <h2 className="text-xl font-normal text-gray-800 italic">
-                                            Let's find your <span className="text-3xl  leading-3 font-bold text-deepBlue">next deal</span>
+                                            Let's find your <span className="text-3xl leading-3 font-bold text-deepBlue">next deal</span>
                                         </h2>
 
                                         <div className="-ml-10 flex w-full items-start space-x-2">
@@ -350,40 +357,31 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Cards Container */}
-                            <div className="space-y-4 pr-2">
-                                {/* {dummyCards.map((card, index) => (
-                                    <UserCard
-                                        key={index}
-                                        name={card.name}
-                                        location={card.location}
-                                        title={card.title}
-                                        industry={card.industry}
-                                        rating={card.rating}
-                                        imageSrc={card.imageSrc}
-                                    />
-                                ))} */}
-                                {users
-                                    .filter((user) => auth.user && user.id !== auth.user.id) // Filter out the current user
-                                    .map((user) => (
-                                        <UserCard
-                                            key={user.id}
-                                            name={user.name}
-                                            location={user.country}
-                                            title={user.position}
-                                            industry={user.industry || 'N/A'}
-                                            rating={4.6}
-                                            imageSrc={user.profile_picture || ''}
-                                        />
-                                    ))}
-                            </div>
+                                    <div className="space-y-4 pr-2">
+                                        {users
+                                            ?.filter((user) => auth.user && user.id !== auth.user.id)
+                                            .map((user) => (
+                                                <UserCard
+                                                    key={user.id}
+                                                    name={user.name}
+                                                    location={user.country || 'Location not specified'}
+                                                    title={user.position || 'Position not specified'}
+                                                    industry={user.industry || 'N/A'}
+                                                    rating={user.rating || 4.6}
+                                                    imageSrc={user.profile_picture || ''}
+                                                />
+                                            ))}
+                                    </div>
 
-                            {/* Second child spans 1 column */}
-                            <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                <div className="p-6">
-                                    <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
+                                    {/* Second child spans 1 column */}
+                                    <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
+                                        <div className="p-6">
+                                            <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
-                                    <div>
-                                        <BasicPolarChart />
+                                            <div>
+                                                <div>{typeof window !== 'undefined' && <BasicPolarChart />}</div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
