@@ -169,16 +169,18 @@ export default function Register({ prefill }: RegisterProps) {
             years_of_operation: prefill?.years_of_operation ?? '',
             number_of_employees: prefill?.number_of_employees ?? '',
             selected_outcome: prefill?.selected_outcome ?? '',
-            goals: prefill?.goals ?? '',
+            goals: prefill?.goals ?? ''
         };
     });
 
     const steps = ['Account Info', 'Company Info', 'Interests', 'Visibility'];
 
+
     // ✅ Persist formData in localStorage whenever it changes
     useEffect(() => {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(formData));
     }, [formData]);
+
 
     const goToStep = (newStep: number) => {
         setStep(newStep);
@@ -206,12 +208,11 @@ export default function Register({ prefill }: RegisterProps) {
             const payload = new FormData();
             Object.entries(finalData).forEach(([key, value]) => {
                 if (Array.isArray(value)) {
-                    value.forEach((v) => {
-                        // convert boolean to string
-                        payload.append(`${key}[]`, typeof v === 'boolean' ? String(v) : v);
-                    });
-                } else if (value !== null) {
-                    payload.append(key, typeof value === 'boolean' ? String(value) : (value as any));
+                    value.forEach((v) => payload.append(`${key}[]`, v));
+                } else if (value instanceof File) {
+                    payload.append(key, value);
+                } else if (value !== null && value !== undefined) {
+                    payload.append(key, String(value));
                 }
             });
 
@@ -295,7 +296,7 @@ export default function Register({ prefill }: RegisterProps) {
                                 company_description: data.companyDo,
                                 industry: data.industry,
                                 categories: data.categories,
-
+                                
                                 phone: data.phone,
                                 linkedin: data.linkedin,
                                 country: data.country,

@@ -28,10 +28,9 @@ export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent,
                     style={{
                         backgroundImage: `url(${images.formBG})`,
                     }}
-                    className="flex w-full  md:w-2/4 h-screen  md:justify-end  xl:w-full xl:justify-center"
+                    className="flex w-full  md:w-2/4 h-screen  md:justify-end xl:w-full xl:justify-center"
                 >
-                    {children}
-                    
+                    <div className="w-full p-8 lg:overflow-y-auto ">{children}</div>
                 </div>
             </div>
         </>
