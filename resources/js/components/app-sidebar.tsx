@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useEffect, useState } from "react";
 import {
@@ -15,9 +15,9 @@ import { Link, usePage } from '@inertiajs/react';
 import images from "@/constants/image";
 
 interface NavItem {
-  name: string;
-  icon: LucideIcon;
-  href: string;
+    name: string;
+    icon: LucideIcon;
+    href: string;
 }
 
 interface PageProps {
@@ -34,16 +34,16 @@ interface PageProps {
 
 // Define the navigation items with href for Inertia
 const navItems: NavItem[] = [
-  { name: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { name: "Referrals", icon: LinkIcon, href: "/referrals" },
-  { name: "Messages", icon: MessageSquare, href: "/messages" },
-  { name: "Directory", icon: Users, href: "/directory" },
-  { name: "Leads", icon: SquareDashedKanban, href: "/leads" },
+    { name: 'Dashboard', icon: LayoutDashboard, href: '/dashboard' },
+    { name: 'Referrals', icon: LinkIcon, href: '/referrals' },
+    { name: 'Messages', icon: MessageSquare, href: '/messages' },
+    { name: 'Directory', icon: Users, href: '/directory' },
+    { name: 'Leads', icon: SquareDashedKanban, href: '/leads' },
 ];
 
 const userAccountItems: NavItem[] = [
-  { name: "Settings", icon: Settings, href: "/settings" },
-  { name: "Help", icon: Headphones, href: "/help" },
+    { name: 'Settings', icon: Settings, href: '/settings' },
+    { name: 'Help', icon: Headphones, href: '/help' },
 ];
 
 export default function AppSidebar() {
@@ -62,7 +62,10 @@ export default function AppSidebar() {
   }, [auth.user.profile_picture]);
 
   return (
-      <div>
+      <div className="bg-[#031C5B]"
+              style={{
+                    background: 'linear-gradient(180deg, #031C5B 0%, #0B1727 50%, #031C5B 100%)',
+                }}>
           <div
               className="sticky top-0 left-0 hidden h-screen w-[64] overflow-hidden rounded-r-[48px] text-white md:block"
               style={{
@@ -72,7 +75,7 @@ export default function AppSidebar() {
               <div className="flex h-full flex-col p-6">
                   {/* Logo Section */}
                   <div className="mb-10 flex items-center space-x-2">
-                      <span className="rounded-full bg-white px-3 py-1 text-3xl font-bold text-[#031C5B]">BR</span>
+                     <img src={images.brnLogo} alt="" />
                   </div>
 
                   {/* Navigation Items */}
