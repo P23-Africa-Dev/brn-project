@@ -42,65 +42,63 @@ export default function StepFourForm({ onNext }: StepFourProps) {
     };
 
     return (
-        <div className="w-full  p-8 lg:overflow-y-auto xl:ml-16">
-            <div className="relative z-10 mx-auto max-w-md xl:max-w-lg">
-                {/* Heading */}
-                <div className="mb-10">
-                    <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">Control your visibility</h2>
-                    <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">You can change these anytime.</p>
+        <div className="relative z-10 mx-auto max-w-md xl:max-w-lg">
+            {/* Heading */}
+            <div className="mb-10">
+                <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">Control your visibility</h2>
+                <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">You can change these anytime.</p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-8">
+                {/* Visibility Options */}
+                <div className="space-y-5">
+                    {VISIBILITY_OPTIONS.map((opt, idx) => (
+                        <div key={opt.title} className="flex items-center justify-between rounded-xl py-4">
+                            <div className="flex-1">
+                                <div className="text-base font-semibold text-primary dark:text-black">{opt.title}</div>
+                                <div className="mt-1 max-w-xs pr-5 text-base font-light text-[#8C9AA6]">{opt.desc}</div>
+                            </div>
+
+                            {/* Toggle */}
+                            <button
+                                type="button"
+                                aria-pressed={toggles[idx]}
+                                onClick={() => handleToggle(idx)}
+                                className={`ml-10 flex h-8 w-17 items-center rounded-full border-2 border-white transition-colors duration-200 ${
+                                    toggles[idx] ? 'bg-primary' : 'bg-grayLighter '
+                                }`}
+                            >
+                                <span
+                                    className={`inline-block h-7 w-10 transform rounded-full bg-white dark:bg-black shadow transition-transform duration-200 ${
+                                        toggles[idx] ? 'translate-x-6' : 'translate-x-0'
+                                    }`}
+                                />
+                            </button>
+                        </div>
+                    ))}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* Visibility Options */}
-                    <div className="space-y-5">
-                        {VISIBILITY_OPTIONS.map((opt, idx) => (
-                            <div key={opt.title} className="flex items-center justify-between rounded-xl py-4">
-                                <div className="flex-1">
-                                    <div className="text-base font-semibold text-primary dark:text-black">{opt.title}</div>
-                                    <div className="mt-1 max-w-xs pr-5 text-base font-light text-[#8C9AA6]">{opt.desc}</div>
-                                </div>
+                {/* Submit */}
+                <div className="flex flex-col items-center lg:mr-10">
+                    <button type="submit" className="w-full rounded-2xl bg-pinkLight py-5 font-semibold text-white hover:bg-pinkLight/90">
+                        Proceed
+                    </button>
 
-                                {/* Toggle */}
-                                <button
-                                    type="button"
-                                    aria-pressed={toggles[idx]}
-                                    onClick={() => handleToggle(idx)}
-                                    className={`ml-10 flex h-8 w-17 items-center rounded-full border-2 border-white  transition-colors duration-200 ${
-                                        toggles[idx] ? 'bg-primary dark:bg-black' : 'bg-grayLighter '
-                                    }`}
-                                >
-                                    <span
-                                        className={`inline-block h-6 w-10 transform rounded-full bg-white shadow transition-transform duration-200 dark:bg-white ${
-                                            toggles[idx] ? 'translate-x-5.5' : 'translate-x-0.5'
-                                        }`}
-                                    />
-                                </button>
-                            </div>
-                        ))}
+                    <div className="mt-4 text-left text-primary lg:hidden lg:px-0">
+                        <p className="text-sm">
+                            Already have an account?{' '}
+                            <a href="/login" className="font-bold text-primary italic hover:underline">
+                                Sign In
+                            </a>
+                        </p>
+                        <span className="text-sm text-primary">
+                            <a href="/help" className="font-bold text-primary italic hover:underline">
+                                Need Help?
+                            </a>
+                        </span>
                     </div>
-
-                    {/* Submit */}
-                    <div className="flex flex-col items-center lg:mr-10">
-                        <button type="submit" className="w-full rounded-2xl bg-pinkLight py-5 font-semibold text-white hover:bg-pinkLight/90">
-                            Proceed
-                        </button>
-
-                        <div className="mt-4 text-left text-primary lg:hidden lg:px-0">
-                            <p className="text-sm">
-                                Already have an account?{' '}
-                                <a href="/login" className="font-bold text-primary italic hover:underline">
-                                    Sign In
-                                </a>
-                            </p>
-                            <span className="text-sm text-primary">
-                                <a href="/help" className="font-bold text-primary italic hover:underline">
-                                    Need Help?
-                                </a>
-                            </span>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     );
 }

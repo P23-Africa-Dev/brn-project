@@ -24,7 +24,6 @@ import chart from '../../../public/assets/Chart.png';
 import chartDesc from '../../../public/assets/Description.png';
 import businessMan1 from '../../../public/assets/business-man1.jpg';
 import userCheck from '../../../public/assets/user-check-01.png';
-import brnLogo from '../../../public/assets/brn-logo.png';
 
 const images = {
     uploadBg,
@@ -51,8 +50,7 @@ const images = {
     chart,
     chartDesc,
     businessMan1,
-    userCheck,
-    brnLogo
+    userCheck
 
 };
 

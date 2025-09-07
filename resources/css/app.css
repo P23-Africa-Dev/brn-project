@@ -9,33 +9,6 @@
         url('../../public/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Trial-BF651b7fc730eb2.woff') format('woff');
 }
 
-@font-face {
-    font-family: 'GT Walsheim Trial Cn U Lt';
-    font-style: normal;
-    font-weight: normal;
-    src:
-        local('GT Walsheim Trial Cn U Lt'),
-        url('../../public/fonts/gt-trials/GT-Walsheim-Condensed-Ultra-Light-Trial-BF651b7fc73b30e.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'GT Walsheim Trial Cn Rg Ob';
-    font-style: normal;
-    font-weight: normal;
-    src:
-        local('GT Walsheim Trial Cn Rg Ob'),
-        url('../../public/fonts/gt-trials/GT-Walsheim-Condensed-Regular-Oblique-Trial-BF651b7fc71cf17.woff') format('woff');
-}
-
-@font-face {
-    font-family: 'GT Walsheim Trial Cn Th';
-    font-style: normal;
-    font-weight: normal;
-    src:
-        local('GT Walsheim Trial Cn Th'),
-        url('../../public/fonts/gt-trials/GT-Walsheim-Condensed-Thin-Trial-BF651b7fc72dc1c.woff') format('woff');
-}
-
 @import 'tailwindcss';
 
 @plugin 'tailwindcss-animate';
@@ -50,20 +23,17 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-primary: #0b1727;
-    --color-secondary: #f3f0e9;
-    --color-white: #fff;
-    --color-gray: #e2e6e9;
-    --color-darkBlue: #193e47;
-    --color-darkGreen: #27e6a7;
-    --color-deepBlue: #0b1727;
+    --color-secondary: #f3f0e9 ;
+    --color-white: #fff ;
+    --color-gray: #e2e6e9 ;
+    --color-darkBlue: #193E47 ;
+    --color-darkGreen: #27E6A7 ;
+    --color-deepBlue: #0B1727 ;
 
     --color-grayLight: #8c9aa6;
     --color-grayLighter: #c1bbbb;
     --color-pinkLight: #2abfbb;
     --font-Gtrials: 'GT Walsheim Trial Cn Rg';
-    --font-GtrialsLT: 'GT Walsheim Trial Cn U Lt';
-    --font-GtrialsOb: 'GT Walsheim Trial Cn Rg Ob';
-    --font-GtrialsTh: 'GT Walsheim Trial Cn Th';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
@@ -150,7 +120,7 @@
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
+ --background: oklch(0.145 0 0);
     --foreground: oklch(0.985 0 0);
     --card: oklch(0.205 0 0);
     --card-foreground: oklch(0.985 0 0);
@@ -199,7 +169,7 @@ body {
   --font-Gtrials: "GT Walsheim Trial Cn Rg";
 } */
 
-/* @layer base {
+@layer base {
     * {
         @apply border-border;
     }
@@ -207,7 +177,7 @@ body {
     body {
         @apply bg-background text-foreground;
     }
-} */
+}
 
 @theme inline {
     --radius-sm: calc(var(--radius) - 4px);
@@ -256,10 +226,6 @@ body {
     }
 }
 
-@utility no-scrollbar {
-    @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
-}
-
-body .apexcharts-toolbar {
-    display: none !important;
+body {
+    background-color: white;
 }

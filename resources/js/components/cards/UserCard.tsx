@@ -1,4 +1,4 @@
-import { MapPin, Star } from 'lucide-react';
+import { MapPin, Star } from "lucide-react";
 
 interface UserCardProps {
     name: string;
@@ -10,7 +10,7 @@ interface UserCardProps {
 }
 const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, rating, imageSrc }) => {
     return (
-        <div className="relative flex items-center space-x-4 border-b-3 bg-transparent p-4">
+        <div className="flex items-center space-x-4 border-b-3  bg-white p-4">
             <div>
                 <img src={imageSrc} alt={`${name}'s profile`} className="h-16 w-16 rounded-full object-cover" />
             </div>
@@ -19,13 +19,13 @@ const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, ra
                     <div>
                         <h3 className="text-xl font-semibold text-darkBlue">{name}</h3>
                         <div className="flex items-center gap-2 text-darkBlue">
-                            <MapPin className="h-4 w-4 font-light text-darkBlue" />
+                            <MapPin className="font-light w-4 h-4 text-darkBlue" />
                             <p className="text-sm font-light">{location}</p>
                         </div>
                     </div>
                     <div className="flex items-center space-x-1 text-yellow-500">
-                        <span className="text-2xl font-medium text-gray-600">{rating}</span>
-                        <Star className="h-7 w-7 fill-darkGreen font-bold text-darkGreen" />
+                        <span className="font-medium text-2xl text-gray-600">{rating}</span>
+                        <Star className="h-7 w-7 text-darkGreen font-bold fill-darkGreen" />
                     </div>
                 </div>
                 <div className="mt-2 flex justify-between text-sm">
@@ -35,7 +35,7 @@ const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, ra
                     </div>
                     <div>
                         <p className="text-gray-500">Industry</p>
-                        <p className="font-bold text-darkBlue">{industry}</p>
+                        <p className="font-bold text-darkBlue ">{industry}</p>
                     </div>
                 </div>
             </div>
