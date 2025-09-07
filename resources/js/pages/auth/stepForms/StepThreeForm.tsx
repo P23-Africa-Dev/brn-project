@@ -12,10 +12,10 @@ interface StepThreeProps {
 }
 
 const sampleTags = [
-    { label: 'Web Development', value: 'web_dev' },
-    { label: 'UI/UX Design', value: 'uiux' },
-    { label: 'Marketing', value: 'marketing' },
-    { label: 'Finance', value: 'finance' },
+    { label: 'Sales', value: 'sales' },
+    { label: 'Fundraising', value: 'fundraising' },
+    { label: 'Product', value: 'product' },
+    { label: 'Strategy', value: 'strategy' },
     { label: 'Cybersecurity', value: 'cybersecurity' },
     { label: 'AI & Data', value: 'ai_data' },
     { label: 'Consulting', value: 'consulting' },
@@ -52,94 +52,100 @@ const {
     };
 
     return (
-        <div className="mx-auto max-w-md z-10 relative">
-            {/* Heading */}
-            <div className="mb-10">
-                <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">What’s your secret sauce?</h2>
-                <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">Members will search for these skills!</p>
-            </div>
+        <div className="w-full  p-8 lg:overflow-y-auto xl:ml-16">
+            <div className="relative z-10 mx-auto max-w-md  xl:max-w-lg">
+                {/* Heading */}
+                <div className="mb-10">
+                    <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">What’s your secret sauce?</h2>
+                    <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">Members will search for these skills!</p>
+                </div>
 
-            <div className=" ">
-                <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-8">
-                    {/* I'm great at */}
-                    <div className="space-y-3 py-2">
-                        <h4 className="mb-2 text-base font-bold dark:text-black">I'm great at;</h4>
-                        <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
+                <div className=" ">
+                    <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-8 lg:mr-0">
+                        {/* I'm great at */}
+                        <div className="space-y-3 py-2">
+                            <h4 className="mb-2 text-base font-bold dark:text-black">I'm great at;</h4>
+                            <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
 
-                        <div className="flex flex-wrap gap-3 px-1 py-2">
-                            {sampleTags.map((tag) => {
-                                const isSelected = greatAtSelected.includes(tag.value);
-                                const disableRest = greatAtSelected.length >= 3 && !isSelected;
+                            <div className="flex flex-wrap gap-3 px-1 py-2">
+                                {sampleTags.map((tag) => {
+                                    const isSelected = greatAtSelected.includes(tag.value);
+                                    const disableRest = greatAtSelected.length >= 3 && !isSelected;
 
-                                return (
-                                    <button
-                                        type="button"
-                                        key={tag.value}
-                                        onClick={() => toggleTag('great_at', tag.value)}
-                                        className={`flex items-center space-x-2 rounded-3xl px-4 py-3 font-Gtrials text-sm text-[#0B1727]/70 shadow-sm transition-all duration-200 ${
-                                            isSelected ? 'bg-transparent text-[#0B1727]/80' : 'border-gray-300 bg-white'
-                                        } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
-                                    >
-                                        <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-5 w-5" />
-                                        <span>{tag.label}</span>
-                                    </button>
-                                );
-                            })}
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={tag.value}
+                                            onClick={() => toggleTag('great_at', tag.value)}
+                                            className={`flex items-center space-x-2 bg-white rounded-3xl px-8 py-2.5 font-GtrialsTh text-base tracking-wide  shadow-md transition-all duration-200 ${
+                                                isSelected ? 'bg-transparent font-bold text-[#0B1727]' : ' font-semibold text-[#0B1727]/60'
+                                            } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
+                                        >
+                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-7 w-7" />
+                                            <span>{tag.label}</span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+
+                            {errors.great_at && <p className="mt-1 text-sm text-red-500">{errors.great_at.message}</p>}
                         </div>
 
-                        {errors.great_at && <p className="mt-1 text-sm text-red-500">{errors.great_at.message}</p>}
-                    </div>
+                        {/* I can help others with */}
+                        <div className="space-y-3 py-2">
+                            <h4 className="mb-2 text-base font-bold dark:text-black">I can help others with;</h4>
+                            <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
 
-                    {/* I can help others with */}
-                    <div className="space-y-3 py-2">
-                        <h4 className="mb-2 text-base font-bold dark:text-black">I can help others with;</h4>
-                        <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
+                            <div className="flex flex-wrap gap-3 px-1 py-2">
+                                {sampleTags.map((tag) => {
+                                    const isSelected = helpWithSelected.includes(tag.value);
+                                    const disableRest = helpWithSelected.length >= 3 && !isSelected;
 
-                        <div className="flex flex-wrap gap-3 px-1 py-2">
-                            {sampleTags.map((tag) => {
-                                const isSelected = helpWithSelected.includes(tag.value);
-                                const disableRest = helpWithSelected.length >= 3 && !isSelected;
+                                    return (
+                                        <button
+                                            type="button"
+                                            key={tag.value}
+                                            onClick={() => toggleTag('can_help_with', tag.value)}
+                                            className={`flex items-center space-x-2 bg-white rounded-3xl px-8 py-2.5 font-GtrialsTh text-base tracking-wide  shadow-md transition-all duration-200 ${
+                                                isSelected ? 'bg-transparent font-bold text-[#0B1727]' : ' font-semibold text-[#0B1727]/60'
+                                            } ${disableRest ? 'pointer-events-none opacity-60 blur-[1px]' : ''}`}
+                                        >
+                                            <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-7 w-7" />
+                                            <span>{tag.label}</span>
+                                        </button>
+                                    );
+                                    
+                                })}
+                            </div>
 
-                                return (
-                                    <button
-                                        type="button"
-                                        key={tag.value}
-                                        onClick={() => toggleTag('can_help_with', tag.value)}
-                                        className={`flex items-center space-x-2 rounded-3xl px-4 py-3 font-Gtrials text-sm text-[#0B1727]/70 shadow-sm transition-all duration-200 ${
-                                            isSelected ? 'bg-transparent text-[#0B1727]/80' : 'border-gray-300 bg-white'
-                                        } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
-                                    >
-                                        <img src={isSelected ? images.badgeMark : images.badge} alt="" className="h-6 w-6" />
-                                        <span>{tag.label}</span>
-                                    </button>
-                                );
-                            })}
+                            {errors.can_help_with && <p className="mt-1 text-sm text-red-500">{errors.can_help_with.message}</p>}
                         </div>
 
-                        {errors.can_help_with && <p className="mt-1 text-sm text-red-500">{errors.can_help_with.message}</p>}
-                    </div>
+                        {/* Submit */}
+                        <div className="flex flex-col items-center">
+                            <Button
+                                type="submit"
+                                className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90"
+                            >
+                                Proceed
+                            </Button>
 
-                    {/* Submit */}
-                    <div className="flex flex-col items-center">
-                        <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
-                            Proceed
-                        </Button>
-
-                        <div className="mt-4 text-left text-primary lg:hidden lg:px-0">
-                            <p className="text-sm">
-                                Already have an account?{' '}
-                                <a href="/login" className="font-bold text-primary italic hover:underline">
-                                    Sign In
-                                </a>
-                            </p>
-                            <span className="text-sm text-primary">
-                                <a href="/help" className="font-bold text-primary italic hover:underline">
-                                    Need Help?
-                                </a>
-                            </span>
+                            <div className="mt-4 text-left text-primary lg:hidden lg:px-0">
+                                <p className="text-sm">
+                                    Already have an account?{' '}
+                                    <a href="/login" className="font-bold text-primary italic hover:underline">
+                                        Sign In
+                                    </a>
+                                </p>
+                                <span className="text-sm text-primary">
+                                    <a href="/help" className="font-bold text-primary italic hover:underline">
+                                        Need Help?
+                                    </a>
+                                </span>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     );
