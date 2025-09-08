@@ -25,6 +25,16 @@ import chartDesc from '../../../public/assets/Description.png';
 import businessMan1 from '../../../public/assets/business-man1.jpg';
 import userCheck from '../../../public/assets/user-check-01.png';
 import brnLogo from '../../../public/assets/brn-logo.png';
+import dashboardIcon from '../../../public/assets/dashboard-square-03.png';
+import repeatIcon from '../../../public/assets/repeat.png';
+import messageIcon from '../../../public/assets/bubble-chat.png';
+import directoryIcon from '../../../public/assets/search-list-02.png';
+import LeadsIcon from '../../../public/assets/share-knowledge.png';
+import accountSettingsIcon from '../../../public/assets/account-setting-03.png';
+import profileIcon from '../../../public/assets/curev-card-pattern1.png';
+import uibg from '../../../public/assets/ui-dashboard-bg.png';
+import patternUserRight from '../../../public/assets/pattern-right.png';
+import patternUserLeft from '../../../public/assets/patternLeft.png';
 
 const images = {
     uploadBg,
@@ -52,7 +62,17 @@ const images = {
     chartDesc,
     businessMan1,
     userCheck,
-    brnLogo
+    brnLogo,
+    dashboardIcon,
+    repeatIcon,
+    messageIcon,
+    directoryIcon,
+    LeadsIcon,
+    accountSettingsIcon,
+    profileIcon,
+    uibg,
+    patternUserRight,
+    patternUserLeft,
 
 };
 

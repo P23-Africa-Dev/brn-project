@@ -11,8 +11,10 @@ interface UserCardProps {
 const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, rating, imageSrc }) => {
     return (
         <div className="relative flex items-center space-x-4 border-b-3 bg-transparent p-4">
-            <div>
-                <img src={imageSrc} alt={`${name}'s profile`} className="h-16 w-16 rounded-full object-cover" />
+          
+            <div className="relative  h-[100px] w-[100px] overflow-hidden rounded-l-xl bg-[#FDF7E0]">
+                {/* Placeholder for the image, replace with actual image source */}
+                <img src={imageSrc} alt={`${name}'s profile`} className="absolute inset-0  h-full w-full max-w-[90px] rounded-l-xl object-cover" />
             </div>
             <div className="flex-1">
                 <div className="flex items-center justify-between">
