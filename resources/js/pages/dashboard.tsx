@@ -146,7 +146,7 @@ function Dashboard({ auth, users }: Props) {
 
             <div className="bg-[#031C5B] px-3 py-2">
                 <div className="relative flex flex-1 rounded-4xl bg-[#F9F9F9] px-12 py-3">
-                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-4 overflow-y-auto">
+                    <div className="no-scrollbar flex max-h-[95vh] pb-1 flex-col gap-4 overflow-y-auto">
                         <div className="mb-3 hidden w-full md:block dark:text-deepBlue">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide">
@@ -243,7 +243,7 @@ function Dashboard({ auth, users }: Props) {
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 pb-3 bg-white ">
                                         <h2 className="text-xl font-normal text-gray-800 italic">
-                                            Let's find your <span className="text-3xl  leading-3 font-bold text-deepBlue">next deal</span>
+                                            Let's find your <span className="text-2xl  leading-3 font-bold text-deepBlue">next deal</span>
                                         </h2>
 
                                         <div className="-ml-10 flex w-full items-start space-x-2">
@@ -400,7 +400,7 @@ function Dashboard({ auth, users }: Props) {
                                             Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
                                         </h2>
                                     </div>
-
+                                            
                                     <div>
                                         <SmartMatchesSection />
                                     </div>
