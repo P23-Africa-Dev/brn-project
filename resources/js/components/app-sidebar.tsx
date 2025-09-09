@@ -100,13 +100,13 @@ export default function AppSidebar() {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setActiveItem(item.name)}
-                                    className={`relative flex items-center   transition-all duration-300 ${
+                                    className={`relative flex items-center  cursor-pointer transition-all duration-300 ${
                                         isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
                                     }`}
                                 >
                                     {/* Highlight background */}
                                     <div
-                                        className={`absolute top-0 left-0 h-full w-[600px] z-10 transform transition-all duration-300 ${
+                                        className={`absolute top-0 left-0 h-full w-[600px] z-10  transform transition-all duration-300 ${
                                             isActive ? '-translate-x-3 rounded-l-full rounded-r-2xl bg-white' : ''
                                         }`}
                                     ></div>
@@ -114,7 +114,7 @@ export default function AppSidebar() {
                                     {/* Icon + Label */}
                                     <div
                                         className={`relative z-10 flex w-full   items-center rounded-lg py-2 transition-colors duration-300 ${
-                                            isActive ? 'text-gray-800 font-bold' : 'text-white font-light'
+                                            isActive ? 'text-primary font-bold py-2.5' : 'text-white font-light'
                                         }`}
                                     >
                                         <div
@@ -134,7 +134,7 @@ export default function AppSidebar() {
                     {/* User Account Section */}
                     <div className="mt-10 pb-10">
                         <p className="mb-2 text-xs tracking-wider text-gray-400">USER ACCOUNT</p>
-                        <div className="mb-3 flex items-center space-x-1.5">
+                        <div className="mb-4 flex items-center space-x-1.5">
                             <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
                                 <img
                                     src={getProfilePicture()}
@@ -160,10 +160,10 @@ export default function AppSidebar() {
                                 <Link
                                     key={item.name}
                                     href={item.href}
-                                    className="flex items-center text-gray-400 transition-colors duration-200 hover:text-white"
+                                    className="flex items-center pb-2.5 text-white  transition-colors duration-200 hover:text-white/70  font-light"
                                 >
                                     <div className="relative flex items-center rounded-lg transition-colors duration-300">
-                                        <img src={item.icon} alt="" />
+                                        <img src={item.icon} className='mr-3' alt="" />
                                         <span>{item.name}</span>
                                     </div>
                                 </Link>

@@ -37,7 +37,7 @@ const BasicPolarChart: React.FC<ChartProps> = ({ apiUrl }) => {
             },
             responsive: [
                 {
-                    breakpoint: 480,
+                    breakpoint: 430,
                     options: {
                         chart: { width: 280 },
                         legend: { position: 'bottom' },
@@ -79,7 +79,7 @@ const BasicPolarChart: React.FC<ChartProps> = ({ apiUrl }) => {
 
     return (
         <div className="relative overflow-hidden">
-            <ReactApexChart options={chartData.options} series={chartData.series} type="polarArea" height={350} />
+            <ReactApexChart options={chartData.options} series={chartData.series} type="polarArea" height={300} />
         </div>
     );
 };

@@ -27,12 +27,12 @@ interface SmartMatchCardProps {
 
 const SmartMatchCard: React.FC<SmartMatchCardProps> = ({ match }) => {
     return (
-        <Card className="relative flex h-[180px] w-[170px] flex-col justify-end overflow-hidden rounded-xl border-2 border-darkGreen shadow-lg dark:border-teal-400/50">
+        <Card className="relative flex h-[202px] max-w-[250px] w-full flex-col justify-end overflow-hidden rounded-xl  shadow-lg ">
             <img src={match.imageSrc} alt={match.name} className="absolute inset-0 z-0 h-full w-full object-cover" />
             {/* Overlay for text readability */}
             <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/40 to-transparent"></div>
 
-            <CardContent className="relative -bottom-7 z-20 bg-[#FFFFFFCC]/80 p-4">
+            <div className="relative -bottom-7 z-20 bg-[#FFFFFFCC]/80 p-4">
                 <h3 className="text-sm font-bold text-darkBlue">Chidi Nwonsu</h3>
                 <p className="text-xs font-medium text-darkBlue opacity-90">{match.title}</p>
                 <div className="mt-2 flex items-center">
@@ -42,7 +42,7 @@ const SmartMatchCard: React.FC<SmartMatchCardProps> = ({ match }) => {
                 <button className="absolute right-4 bottom-4 flex items-center justify-center rounded-full bg-darkBlue p-2 backdrop-blur-sm transition-colors hover:bg-darkBlue/70">
                     <Link className="h-3 w-3 text-white" />
                 </button>
-            </CardContent>
+            </div>
         </Card>
     );
 };
@@ -53,20 +53,19 @@ interface SwiperCarouselProps {
 
 const SwiperCarousel: React.FC<SwiperCarouselProps> = ({ matches }) => {
     return (
-        <Swiper
-            // You can add breakpoints here for responsiveness
-            slidesPerView={2}
-            spaceBetween={5}
-            freeMode={true}
-            pagination={{ clickable: true }}
-            className="mySwiper"
-        >
-            {matches.map((match, index) => (
-                <SwiperSlide key={index} className="w-full">
-                    <SmartMatchCard match={match} />
-                </SwiperSlide>
-            ))}
-        </Swiper>
+  <Swiper
+  slidesPerView={2.3}   // Show 2 and a half slides
+  spaceBetween={16}     // Add spacing between cards (adjust px value as needed)
+  freeMode={true}
+  pagination={{ clickable: true }}
+  className="mySwiper"
+>
+  {matches.map((match, index) => (
+    <SwiperSlide key={index} className="w-full">
+      <SmartMatchCard match={match} />
+    </SwiperSlide>
+  ))}
+</Swiper>
     );
 };
 

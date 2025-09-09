@@ -31,10 +31,13 @@ import messageIcon from '../../../public/assets/bubble-chat.png';
 import directoryIcon from '../../../public/assets/search-list-02.png';
 import LeadsIcon from '../../../public/assets/share-knowledge.png';
 import accountSettingsIcon from '../../../public/assets/account-setting-03.png';
-import profileIcon from '../../../public/assets/curev-card-pattern1.png';
+import profileIcon from '../../../public/assets/customer-service-01.png';
 import uibg from '../../../public/assets/ui-dashboard-bg.png';
 import patternUserRight from '../../../public/assets/pattern-right.png';
 import patternUserLeft from '../../../public/assets/patternLeft.png';
+import userCard from '../../../public/assets/user-card-bg.png';
+import mobileCardBG from '../../../public/assets/mobile-bg.png';
+
 
 const images = {
     uploadBg,
@@ -73,6 +76,8 @@ const images = {
     uibg,
     patternUserRight,
     patternUserLeft,
+    userCard,
+    mobileCardBG,
 
 };
 

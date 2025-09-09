@@ -151,15 +151,15 @@ function Dashboard({ auth, users }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* <Head title="Dashboard" /> */}
 
-            <div className="bg-[#031C5B] py-2">
+            <div className="bg-[#031C5B] pt-2 pb-2.5">
                 <div
-                    className="relative flex flex-1 rounded-4xl bg-[#fff] bg-cover bg-no-repeat px-12 py-3 bg-blend-overlay"
+                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9] bg-cover bg-no-repeat py-3 bg-blend-overlay"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-4 overflow-y-auto pb-1">
-                        <div className="mb-3 hidden w-full md:block dark:text-deepBlue">
+                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-2 overflow-y-auto px-12 pb-1">
+                        <div className="mb-1 hidden w-full md:block dark:text-deepBlue">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide">
                                     {getGreeting()} <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
@@ -173,19 +173,19 @@ function Dashboard({ auth, users }: Props) {
                         {/* FIRST ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                             {/* CHART CONTAINER */}
-                            <div className="relative aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 shadow-lg">
+                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2">
                                 <SplineAreaChart />
                             </div>
 
                             {/* CONNECTIONS CONTAINER */}
-                            <div className="relative aspect-auto overflow-hidden rounded-xl shadow-md">
+                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-xl">
                                 <div className="flex flex-col p-3">
                                     <div className="flex justify-between">
                                         <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
 
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1.5">
-                                                <span className="text-xl leading-10 font-medium">15%</span>
+                                                <span className="text-xl leading-10 font-semibold">15%</span>
                                                 <span>
                                                     <img src={images.arrowUp} alt="" />
                                                 </span>
@@ -215,7 +215,7 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* COMMUNITY CONTAINER */}
-                            <div className="relative aspect-auto overflow-hidden rounded-xl shadow-md">
+                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-xl">
                                 <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-5">
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="mt-8 ml-2 pr-3">
@@ -246,20 +246,21 @@ function Dashboard({ auth, users }: Props) {
                         </div>
 
                         {/* SECOND ROW */}
-                        <div className="grid auto-rows-min gap-4 md:grid-cols-5">
+                        <div className="grid auto-rows-[392px] gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl  p-10 shadow-md">
-                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
+                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-transparent px-10 pt-10">
+                                <img src={images.userCard} className="absolute inset-0 h-full w-full" alt="" />
+                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
                                     {/* Absolute positioning for the half-circles on the sides */}
-                                
-                                    <div className="absolute top-[15%] left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-1/2 left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-[15%]  right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-1/2 right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+
+                                    <div className="absolute top-[25%] left-0 z-10 -ml-4 h-10 w-9 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
+                                    <div className="absolute top-[60%] left-0 -ml-4 h-10 w-9 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
+                                    <div className="absolute top-[25%] right-0 -mr-4 h-10 w-9 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
+                                    <div className="absolute top-[60%] right-0 -mr-4 h-10 w-9 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
                                     {/* Search Header */}
-                                    <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 bg-white pb-3">
+                                    <div className="sticky top-0 z-10 flex items-center justify-between border-b-3 bg-white pb-3">
                                         <h2 className="text-xl font-normal text-gray-800 italic">
-                                            Let's find your <span className="text-3xl leading-3 font-bold text-deepBlue">next deal</span>
+                                            Let's find your <span className="text-2xl leading-3 font-bold text-deepBlue">next deal</span>
                                         </h2>
 
                                         <div className="-ml-10 flex w-full items-start space-x-2">
@@ -366,7 +367,7 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Cards Container */}
-                                    <div className="space-y-4 pr-2">
+                                    <div className="space-y-4 pr-12">
                                         {dummyCards.map((card, index) => (
                                             <UserCard
                                                 key={index}
@@ -396,7 +397,7 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* Second child spans 1 column */}
-                            <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl">
                                 <div className="p-6">
                                     <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
@@ -410,25 +411,23 @@ function Dashboard({ auth, users }: Props) {
                         {/* THIRD ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* SMART CLIENT */}
-                            <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                <div className="p-6">
-                                    <div className="max-w-[150px]">
-                                        <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-deepBlue">
-                                            Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
-                                        </h2>
-                                    </div>
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl border-2 border-darkGreen">
+                                <div className="max-w-[150px] pt-3 pb-2 pl-5">
+                                    <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-deepBlue">
+                                        Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
+                                    </h2>
+                                </div>
 
-                                    <div>
-                                        <SmartMatchesSection />
-                                    </div>
+                                <div>
+                                    <SmartMatchesSection />
                                 </div>
                             </div>
 
                             {/* REMCOMMENDATION LEANDS */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                <div className="p-6">
+                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl">
+                                <div className="mx-auto max-w-xl pt-4">
                                     {/* Header */}
-                                    <div className="mb-6 flex items-center justify-between">
+                                    <div className="mb-6 flex items-center justify-between px-3 md:px-0">
                                         <h2 className="text-xl font-bold text-darkBlue dark:text-gray-100">Recommended Leads</h2>
                                         <div className="rounded-xl bg-[#59AFD6] px-6 py-0.5 text-sm font-medium text-white hover:bg-[#59AFD6]/80 dark:bg-blue-900">
                                             Verified
