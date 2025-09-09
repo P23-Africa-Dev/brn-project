@@ -67,7 +67,7 @@ const {
                             <h4 className="mb-2 text-base font-bold dark:text-black">I'm great at;</h4>
                             <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
 
-                            <div className="flex flex-wrap gap-3 px-1 py-2">
+                            <div className="flex flex-wrap gap-3 -ml-1.5  py-2">
                                 {sampleTags.map((tag) => {
                                     const isSelected = greatAtSelected.includes(tag.value);
                                     const disableRest = greatAtSelected.length >= 3 && !isSelected;
@@ -96,7 +96,7 @@ const {
                             <h4 className="mb-2 text-base font-bold dark:text-black">I can help others with;</h4>
                             <p className="pl-1 text-sm text-grayLight">select max 3 tags</p>
 
-                            <div className="flex flex-wrap gap-3 px-1 py-2">
+                            <div className="flex flex-wrap gap-3 -ml-1.5 py-2">
                                 {sampleTags.map((tag) => {
                                     const isSelected = helpWithSelected.includes(tag.value);
                                     const disableRest = helpWithSelected.length >= 3 && !isSelected;

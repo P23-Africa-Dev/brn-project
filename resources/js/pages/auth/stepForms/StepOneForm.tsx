@@ -83,7 +83,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             id="name"
                             type="text"
                             {...register('name', { required: 'Name is required' })}
-                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1 outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
                         />
                         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
                     </div>
@@ -97,7 +97,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             id="email"
                             type="email"
                             {...register('email', { required: 'Email is required' })}
-                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1 outline-none"
+                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
                         />
                         {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                     </div>
@@ -113,7 +113,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             {...register('password', {
                                 required: 'Enter your password',
                             })}
-                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1 outline-none"
+                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
                         />
                         {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
                     </div>
@@ -130,7 +130,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 required: 'Enter your password',
                                 validate: (value) => value === password || "Password doesn't match",
                             })}
-                            className="w-full rounded-2xl border-2 border-primary/80 py-3 pl-11 ring-[#0B1727]/70 font-semibold text-gray-900 ring-1 outline-none"
+                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
                         />
                         {errors.password_confirmation && <p className="text-sm text-red-500">{errors.password_confirmation.message}</p>}
                     </div>

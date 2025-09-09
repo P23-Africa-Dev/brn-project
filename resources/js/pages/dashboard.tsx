@@ -100,9 +100,14 @@ function Dashboard({ auth, users }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* <Head title="Dashboard" /> */}
 
-            <div className="bg-[#031C5B] px-3 py-2">
-                <div className="relative flex flex-1 rounded-4xl bg-[#F9F9F9] px-12 py-3">
-                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-4 overflow-y-auto">
+            <div className="bg-[#031C5B] py-2">
+                <div
+                    className="relative flex flex-1 rounded-4xl bg-[#fff] bg-cover bg-no-repeat px-12 py-3 bg-blend-overlay"
+                    style={{
+                        backgroundImage: `url(${images.uibg})`,
+                    }}
+                >
+                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-4 overflow-y-auto pb-1">
                         <div className="mb-3 hidden w-full md:block dark:text-deepBlue">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide">
@@ -192,10 +197,14 @@ function Dashboard({ auth, users }: Props) {
                         {/* SECOND ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-white p-10 shadow-md">
-                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
-                                    <div className="absolute top-1/2 left-0 -ml-4 h-16 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-1/2 right-0 -mr-4 h-16 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl  p-10 shadow-md">
+                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
+                                    {/* Absolute positioning for the half-circles on the sides */}
+                                
+                                    <div className="absolute top-[15%] left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-1/2 left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-[15%]  right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-1/2 right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 bg-white pb-3">
                                         <h2 className="text-xl font-normal text-gray-800 italic">
@@ -307,7 +316,18 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="space-y-4 pr-2">
-                                        {users
+                                        {dummyCards.map((card, index) => (
+                                            <UserCard
+                                                key={index}
+                                                name={card.name}
+                                                location={card.location}
+                                                title={card.title}
+                                                industry={card.industry}
+                                                rating={card.rating}
+                                                imageSrc={card.imageSrc}
+                                            />
+                                        ))}
+                                        {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserCard
@@ -319,18 +339,18 @@ function Dashboard({ auth, users }: Props) {
                                                     rating={user.rating || 4.6}
                                                     imageSrc={user.profile_picture || ''}
                                                 />
-                                            ))}
+                                            ))} */}
                                     </div>
+                                </div>
+                            </div>
 
-                                    {/* Second child spans 1 column */}
-                                    <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
-                                        <div className="p-6">
-                                            <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
+                            {/* Second child spans 1 column */}
+                            <div className="relative col-span-2 aspect-auto overflow-hidden rounded-xl shadow-md">
+                                <div className="p-6">
+                                    <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
-                                            <div>
-                                                <div>{typeof window !== 'undefined' && <BasicPolarChart />}</div>
-                                            </div>
-                                        </div>
+                                    <div>
+                                        <div>{typeof window !== 'undefined' && <BasicPolarChart />}</div>
                                     </div>
                                 </div>
                             </div>
