@@ -30,6 +30,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //     return Inertia::render('dashboard');
     // })->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard', [DashboardController::class, 'weeklyActivity']);
+    Route::get('/dashboard/{userId?}', [DashboardController::class, 'weeklyActivity']);
 
     // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     // Route::post('/api/payment/initialize', [PaymentController::class, 'initializePayment'])->name('payment.initialize');

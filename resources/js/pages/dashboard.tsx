@@ -316,7 +316,7 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="space-y-4 pr-2">
-                                        {dummyCards.map((card, index) => (
+                                        {/* {dummyCards.map((card, index) => (
                                             <UserCard
                                                 key={index}
                                                 name={card.name}
@@ -326,8 +326,8 @@ function Dashboard({ auth, users }: Props) {
                                                 rating={card.rating}
                                                 imageSrc={card.imageSrc}
                                             />
-                                        ))}
-                                        {/* {users
+                                        ))} */}
+                                        {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserCard
@@ -339,7 +339,7 @@ function Dashboard({ auth, users }: Props) {
                                                     rating={user.rating || 4.6}
                                                     imageSrc={user.profile_picture || ''}
                                                 />
-                                            ))} */}
+                                            ))} 
                                     </div>
                                 </div>
                             </div>
