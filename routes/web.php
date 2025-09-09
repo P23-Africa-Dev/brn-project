@@ -3,6 +3,8 @@
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,6 +36,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard/{userId?}', [DashboardController::class, 'weeklyActivity']);
     Route::get('/api/user-activity-change', [DashboardController::class, 'getActivityChange']);
 
+    // Route::get('/chats', function () {
+    //     return Inertia::render('chats/index');  // Note the lowercase path
+    // })->name('chats.index');
+    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::get('/chats/{conversation}', [ChatController::class, 'show'])->name('chats.show');
+    Route::post('/chats/{conversation}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
+
     // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     // Route::post('/api/payment/initialize', [PaymentController::class, 'initializePayment'])->name('payment.initialize');
     // Route::get('/payment/callback', [PaymentController::class, 'handleCallback'])->name('payment.callback');
@@ -63,5 +72,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 
 
-require __DIR__.'/settings.php';
-require __DIR__.'/auth.php';
+require __DIR__ . '/settings.php';
+require __DIR__ . '/auth.php';
