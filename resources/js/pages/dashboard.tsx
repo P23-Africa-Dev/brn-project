@@ -49,57 +49,6 @@ interface Props extends PageProps {
 }
 
 function Dashboard({ auth, users }: Props) {
-    const dummyCards = [
-        {
-            name: 'Thabo Molefe',
-            location: 'Johannesburg, South Africa',
-            title: 'CFO',
-            industry: 'Renewable Energy',
-            rating: 4.6,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Amina Diop',
-            location: 'Dakar, Senegal',
-            title: 'COO',
-            industry: 'Francophone Africa Startups',
-            rating: 4.6,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Suresh Kumar',
-            location: 'Mumbai, India',
-            title: 'CTO',
-            industry: 'Fintech',
-            rating: 4.8,
-            imageSrc: `${images.man4}`,
-        },
-        {
-            name: 'Maria Garcia',
-            location: 'Mexico City, Mexico',
-            title: 'CEO',
-            industry: 'E-commerce',
-            rating: 4.5,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Chen Wei',
-            location: 'Beijing, China',
-            title: 'VP of Sales',
-            industry: 'Artificial Intelligence',
-            rating: 4.7,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Fatima Al-Hamad',
-            location: 'Dubai, UAE',
-            title: 'Head of Marketing',
-            industry: 'Luxury Goods',
-            rating: 4.9,
-            imageSrc: `${images.man3}`,
-        },
-    ];
-
     const dummyLeads = [
         {
             name: 'Thabo Ladi',

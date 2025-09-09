@@ -29,7 +29,7 @@ interface PageProps {
             profile_picture: string | null; // Update this line
         };
     };
-    [key: string]: any; // Add index signature to satisfy Inertia's PageProps constraint
+    [key: string]: unknown; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
 // Define the navigation items with href for Inertia

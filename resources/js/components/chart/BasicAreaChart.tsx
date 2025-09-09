@@ -2,11 +2,16 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
-
-
 interface ChartProps {
     apiUrl?: string; // Laravel API endpoint
 }
+
+// interface ChartData {
+//     name: string;
+//     value: number;
+//     // add other required properties
+// }
+
 const BasicAreaChart:  React.FC<ChartProps>  = ({ apiUrl }) => {
   const [chartData, setChartData] = useState<{
     series: any[];
