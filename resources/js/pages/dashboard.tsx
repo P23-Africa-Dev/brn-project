@@ -9,8 +9,9 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTr
 import images from '@/constants/image';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
+import axios from 'axios';
 import { Upload } from 'lucide-react';
-// import { Upload } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -49,6 +50,25 @@ interface Props extends PageProps {
 }
 
 function Dashboard({ auth, users }: Props) {
+    const [activityChange, setActivityChange] = useState<{
+        change: number;
+        isIncrease: boolean;
+    }>({
+        change: 0,
+        isIncrease: true,
+    });
+
+    useEffect(() => {
+        axios
+            .get('/api/user-activity-change')
+            .then((response) => {
+                setActivityChange(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching activity change:', error);
+            });
+    }, []);
+
     const dummyLeads = [
         {
             name: 'Thabo Ladi',
@@ -131,15 +151,25 @@ function Dashboard({ auth, users }: Props) {
                                 <div className="flex flex-col p-3">
                                     <div className="flex justify-between">
                                         <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
-
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1.5">
-                                                <span className="text-xl leading-10 font-medium">15%</span>
+                                                <span
+                                                    className={`text-xl leading-10 font-medium ${
+                                                        activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
+                                                    }`}
+                                                >
+                                                    {Math.abs(activityChange.change)}%
+                                                </span>
                                                 <span>
-                                                    <img src={images.arrowUp} alt="" />
+                                                    <img
+                                                        src={activityChange.isIncrease ? images.arrowUp : images.arrowDown}
+                                                        alt={activityChange.isIncrease ? 'Increase' : 'Decrease'}
+                                                    />
                                                 </span>
                                             </h5>
-                                            <h6 className="-mt-2 text-[12px] font-normal">Increase this week</h6>
+                                            <h6 className="-mt-2 text-[12px] font-normal">
+                                                {activityChange.isIncrease ? 'Increase' : 'Decrease'} this week
+                                            </h6>
                                         </div>
                                     </div>
                                     <div className="flex justify-between">
@@ -197,13 +227,13 @@ function Dashboard({ auth, users }: Props) {
                         {/* SECOND ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl  p-10 shadow-md">
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl p-10 shadow-md">
                                 <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
                                     {/* Absolute positioning for the half-circles on the sides */}
-                                
+
                                     <div className="absolute top-[15%] left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
                                     <div className="absolute top-1/2 left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-[15%]  right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-[15%] right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     <div className="absolute top-1/2 right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 mb-6 flex items-center justify-between border-b-3 bg-white pb-3">
@@ -339,7 +369,7 @@ function Dashboard({ auth, users }: Props) {
                                                     rating={user.rating || 4.6}
                                                     imageSrc={user.profile_picture || ''}
                                                 />
-                                            ))} 
+                                            ))}
                                     </div>
                                 </div>
                             </div>

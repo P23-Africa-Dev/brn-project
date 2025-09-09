@@ -42,4 +42,36 @@ class DashboardController extends Controller
             'data' => $activities
         ]);
     }
+
+    public function getActivityChange()
+    {
+        $userId = Auth::id();
+        $today = Carbon::now();
+
+        // Get this week's total minutes
+        $thisWeek = UserActivity::where('user_id', $userId)
+            ->whereBetween('created_at', [
+                $today->copy()->startOfWeek(),
+                $today->copy()->endOfWeek()
+            ])
+            ->sum('minutes_online');
+
+        // Get last week's total minutes
+        $lastWeek = UserActivity::where('user_id', $userId)
+            ->whereBetween('created_at', [
+                $today->copy()->subWeek()->startOfWeek(),
+                $today->copy()->subWeek()->endOfWeek()
+            ])
+            ->sum('minutes_online');
+
+        // Calculate percentage change
+        $percentageChange = $lastWeek > 0
+            ? (($thisWeek - $lastWeek) / $lastWeek) * 100
+            : ($thisWeek > 0 ? 100 : 0);
+
+        return response()->json([
+            'change' => round($percentageChange, 1),
+            'isIncrease' => $percentageChange >= 0
+        ]);
+    }
 }
