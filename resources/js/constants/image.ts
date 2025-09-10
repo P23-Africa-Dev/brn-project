@@ -38,6 +38,10 @@ import LeadsIcon from '../../../public/assets/share-knowledge.png';
 import uibg from '../../../public/assets/ui-dashboard-bg.png';
 import userCheck from '../../../public/assets/user-check-01.png';
 import mobileCardBG from '../../../public/assets/mobile-bg.png';
+import shareKnowledge from '../../../public/assets/share-knowledge-mobile.png';
+import unlink from '../../../public/assets/unlink-01.png';
+import mobileGraph from '../../../public/assets/mobile-graph-pattern.png';
+import curveMobilePattern from '../../../public/assets/curver-mobile-pattern.png';
 
 const images = {
     uploadBg,
@@ -79,6 +83,10 @@ const images = {
     mobileCardBG,
     notification,
     man6,
+    shareKnowledge,
+    unlink,
+    mobileGraph,
+    curveMobilePattern,
     arrowDown: '/images/arrow-down.svg',
 };
 

@@ -8,7 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
 import { Counter } from '@/hooks/useCounter';
-import { Country, getAfricanCountries } from '@/hooks/useCountryService';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import axios from 'axios';
@@ -112,6 +111,57 @@ function Dashboard({ auth, users }: Props) {
         },
     ];
 
+    const dummyCards = [
+        {
+            name: 'Thabo Molefe',
+            location: 'Johannesburg, South Africa',
+            title: 'CFO',
+            industry: 'Renewable Energy',
+            rating: 4.6,
+            imageSrc: `${images.man2}`,
+        },
+        {
+            name: 'Amina Diop',
+            location: 'Dakar, Senegal',
+            title: 'COO',
+            industry: 'Francophone Africa Startups',
+            rating: 4.6,
+            imageSrc: `${images.man3}`,
+        },
+        {
+            name: 'Suresh Kumar',
+            location: 'Mumbai, India',
+            title: 'CTO',
+            industry: 'Fintech',
+            rating: 4.8,
+            imageSrc: `${images.man4}`,
+        },
+        {
+            name: 'Maria Garcia',
+            location: 'Mexico City, Mexico',
+            title: 'CEO',
+            industry: 'E-commerce',
+            rating: 4.5,
+            imageSrc: `${images.man3}`,
+        },
+        {
+            name: 'Chen Wei',
+            location: 'Beijing, China',
+            title: 'VP of Sales',
+            industry: 'Artificial Intelligence',
+            rating: 4.7,
+            imageSrc: `${images.man2}`,
+        },
+        {
+            name: 'Fatima Al-Hamad',
+            location: 'Dubai, UAE',
+            title: 'Head of Marketing',
+            industry: 'Luxury Goods',
+            rating: 4.9,
+            imageSrc: `${images.man3}`,
+        },
+    ];
+
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return 'Good Morning';
@@ -125,7 +175,7 @@ function Dashboard({ auth, users }: Props) {
 
             <div className="bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9]  bg-cover bg-no-repeat bg-blend-overlay lg:py-3"
+                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9] bg-cover bg-no-repeat bg-blend-overlay lg:py-3"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
@@ -143,14 +193,14 @@ function Dashboard({ auth, users }: Props) {
                                 </h3>
                             )}
                         </div>
-                        {/* MOBILE GREETINGS */}
+                        {/*-------------------------//////////////////////----------------- FIRST ROW MOBILE----------------//////////////////////------------------------- */}
                         <div
-                            className="w-full bg-center bg-no-repeat md:bg-cover lg:hidden"
+                            className="w-full bg-center bg-no-repeat sm:bg-cover lg:hidden"
                             style={{
                                 backgroundImage: `url(${images.mobileCardBG})`,
                             }}
                         >
-                            <div className="grid w-full grid-cols-2 place-content-between px-10 py-10">
+                            <div className="grid w-full grid-cols-2 place-content-between px-6 py-10">
                                 <div className="mb-1 w-full place-self-center text-white dark:text-white">
                                     {auth.user ? (
                                         <>
@@ -175,14 +225,14 @@ function Dashboard({ auth, users }: Props) {
                         </div>
 
                         {/* FIRST ROW */}
-                        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                        <div className="grid auto-rows-min gap-4 lg:grid-cols-3">
                             {/* CHART CONTAINER */}
                             <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 lg:block">
                                 <SplineAreaChart />
                             </div>
 
                             {/* CONNECTIONS CONTAINER */}
-                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-xl">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-xl lg:block">
                                 <div className="flex flex-col p-3">
                                     <div className="flex justify-between">
                                         <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
@@ -235,8 +285,79 @@ function Dashboard({ auth, users }: Props) {
                                 </div>
                             </div>
 
+                            {/*-------------------------//////////////////////----------------- SECOND ROW MOBILE----------------//////////////////////------------------------- */}
+                            {/* MOBILE NETWORK STATUS */}
+                            <div className="flex justify-between lg:hidden">
+                                <div className="w-full max-w-[290px]">
+                                    <h5 className="mb-2 pl-6 text-xs font-bold">Network Stats</h5>
+
+                                    <div className="flex rounded-full border border-primary/70 px-4 py-1 ring">
+                                        <div className="grid grid-cols-2 place-items-center gap-3">
+                                            <img src={images.shareKnowledge} alt="" />
+
+                                            <div className="">
+                                                <span className="text-lg font-bold text-[#F05831]">
+                                                    {' '}
+                                                    <Counter end={45000} />
+                                                </span>{' '}
+                                                <h6 className="text-xs text-[#727677]">Leads</h6>
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-2 place-items-center">
+                                            <img src={images.unlink} alt="" className="-mr-4" />
+
+                                            <div className="">
+                                                <span className="text-lg font-bold text-[#0496FF]">
+                                                    <Counter end={75000} />
+                                                </span>{' '}
+                                                <br />
+                                                <h6 className="text-xs text-[#727677]">Connections</h6>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-4 flex max-w-[100px] items-center justify-items-end gap-1">
+                                    <div className="flex flex-col items-center justify-center">
+                                        <div className="flex">
+                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
+                                                <img className="h-full w-full object-center" src={images.man3} alt="User avatar" />
+                                            </div>
+                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
+                                                <img className="h-full w-full object-center" src={images.man1} alt="User avatar" />
+                                            </div>
+                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
+                                                <img className="h-full w-full object-center" src={images.man2} alt="User avatar" />
+                                            </div>
+                                        </div>
+                                        <h4 className="mb-2 w-full flex-1 text-center text-[9px] whitespace-nowrap text-primary">200k+ People</h4>
+                                        <button className="rounded-full bg-[#BB98FB] px-3 py-1 text-[10px] font-semibold whitespace-nowrap">
+                                            Active Member
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/*-------------------------//////////////////////----------------- THIRD ROW MOBILE----------------//////////////////////------------------------- */}
+                            <img  className='block lg:hidden' src={images.mobileGraph} alt="" />
+
+                            {/*-------------------------//////////////////////----------------- FOURTH ROW MOBILE----------------//////////////////////------------------------- */}
+                            <div className='block lg:hidden'>
+                                <div className="grid grid-cols-3 place-items-center rounded-full border border-[#F9F9F9] bg-[#F1EEEE] py-0.5 shadow-md">
+                                    <button className="rounded-full bg-transparent px-4 py-1.5 text-[13px] font-normal whitespace-nowrap text-primary">
+                                        Connections
+                                    </button>
+                                    <button className="rounded-full bg-[#A87EF7] px-4 py-1.5 text-[13px] font-semibold whitespace-nowrap text-primary">
+                                        Smart matches
+                                    </button>
+                                    <button className="rounded-full bg-transparent px-4 py-1.5 text-[13px] font-normal whitespace-nowrap text-primary">
+                                        Active Leads
+                                    </button>
+                                </div>
+                            </div>
+
                             {/* COMMUNITY CONTAINER */}
-                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-xl">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-xl lg:block">
                                 <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-5">
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="mt-8 ml-2 pr-3">
@@ -266,8 +387,14 @@ function Dashboard({ auth, users }: Props) {
                             </div>
                         </div>
 
+                        {/*-------------------------//////////////////////----------------- FIFTH ROW MOBILE----------------//////////////////////------------------------- */}
+
+                        <div className='pt-3 px-2 bg-[#0B1727]'>
+                            
+                        </div>
+
                         {/* SECOND ROW */}
-                        <div className="grid auto-rows-[392px] gap-4 md:grid-cols-5">
+                        <div className=" lg:auto-rows-[392px] auto-rows-max gap-4 md:grid-cols-5 hidden lg:grid">
                             {/* First child spans 2 columns */}
                             <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl p-10 shadow-md">
                                 <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
@@ -321,11 +448,11 @@ function Dashboard({ auth, users }: Props) {
                                                             {/* {loading && <p>Loading countries…</p>}
                                                             {error && <p className="text-red-500">Error: {error}</p>} */}
 
-                                                            <Select >
+                                                            <Select>
                                                                 <SelectTrigger id="country" className="w-full">
                                                                     <SelectValue placeholder="Select a country" />
                                                                 </SelectTrigger>
-                                                                <SelectContent>
+                                                                <SelectContent className="px-3 py-4">
                                                                     Nigeria
                                                                     {/* {africanCountries.map((c) => (
                                                                         <SelectItem key={c.code} value={c.name}>
@@ -406,7 +533,7 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="space-y-4 pr-2">
-                                        {/* {dummyCards.map((card, index) => (
+                                        {dummyCards.map((card, index) => (
                                             <UserCard
                                                 key={index}
                                                 name={card.name}
@@ -416,8 +543,8 @@ function Dashboard({ auth, users }: Props) {
                                                 rating={card.rating}
                                                 imageSrc={card.imageSrc}
                                             />
-                                        ))} */}
-                                        {users
+                                        ))}
+                                        {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserCard
@@ -429,13 +556,13 @@ function Dashboard({ auth, users }: Props) {
                                                     rating={user.rating || 4.6}
                                                     imageSrc={user.profile_picture || ''}
                                                 />
-                                            ))}
+                                            ))} */}
                                     </div>
                                 </div>
                             </div>
 
                             {/* Second child spans 1 column */}
-                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl bg-white">
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl bg-white hidden lg:block">
                                 <div className="p-6">
                                     <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
