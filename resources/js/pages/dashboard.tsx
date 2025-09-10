@@ -11,6 +11,7 @@ import { Counter } from '@/hooks/useCounter';
 import { Country, getAfricanCountries } from '@/hooks/useCountryService';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
+import axios from 'axios';
 import { Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 // import { Upload } from 'lucide-react';
@@ -52,76 +53,24 @@ interface Props extends PageProps {
 }
 
 function Dashboard({ auth, users }: Props) {
-    const [africanCountries, setAfricanCountries] = useState<Country[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+    const [activityChange, setActivityChange] = useState<{
+        change: number;
+        isIncrease: boolean;
+    }>({
+        change: 0,
+        isIncrease: true,
+    });
 
     useEffect(() => {
-        async function fetchData() {
-            setLoading(true);
-            try {
-                const list = await getAfricanCountries();
-                setAfricanCountries(list);
-                console.log(list);
-            } catch (err: any) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        }
-        fetchData();
+        axios
+            .get('/api/user-activity-change')
+            .then((response) => {
+                setActivityChange(response.data);
+            })
+            .catch((error) => {
+                console.error('Error fetching activity change:', error);
+            });
     }, []);
-    const dummyCards = [
-        {
-            name: 'Thabo Molefe',
-            location: 'Johannesburg, South Africa',
-            title: 'CFO',
-            industry: 'Renewable Energy',
-            rating: 4.6,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Amina Diop',
-            location: 'Dakar, Senegal',
-            title: 'COO',
-            industry: 'Francophone Africa Startups',
-            rating: 4.6,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Suresh Kumar',
-            location: 'Mumbai, India',
-            title: 'CTO',
-            industry: 'Fintech',
-            rating: 4.8,
-            imageSrc: `${images.man4}`,
-        },
-        {
-            name: 'Maria Garcia',
-            location: 'Mexico City, Mexico',
-            title: 'CEO',
-            industry: 'E-commerce',
-            rating: 4.5,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Chen Wei',
-            location: 'Beijing, China',
-            title: 'VP of Sales',
-            industry: 'Artificial Intelligence',
-            rating: 4.7,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Fatima Al-Hamad',
-            location: 'Dubai, UAE',
-            title: 'Head of Marketing',
-            industry: 'Luxury Goods',
-            rating: 4.9,
-            imageSrc: `${images.man3}`,
-        },
-    ];
 
     const dummyLeads = [
         {
@@ -237,15 +186,25 @@ function Dashboard({ auth, users }: Props) {
                                 <div className="flex flex-col p-3">
                                     <div className="flex justify-between">
                                         <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
-
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1.5">
-                                                <span className="text-xl leading-10 font-semibold">15%</span>
+                                                <span
+                                                    className={`text-xl leading-10 font-medium ${
+                                                        activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
+                                                    }`}
+                                                >
+                                                    {Math.abs(activityChange.change)}%
+                                                </span>
                                                 <span>
-                                                    <img src={images.arrowUp} alt="" />
+                                                    <img
+                                                        src={activityChange.isIncrease ? images.arrowUp : images.arrowDown}
+                                                        alt={activityChange.isIncrease ? 'Increase' : 'Decrease'}
+                                                    />
                                                 </span>
                                             </h5>
-                                            <h6 className="-mt-2 text-[12px] font-normal">Increase this week</h6>
+                                            <h6 className="-mt-2 text-[12px] font-normal">
+                                                {activityChange.isIncrease ? 'Increase' : 'Decrease'} this week
+                                            </h6>
                                         </div>
                                     </div>
                                     <div className="flex justify-between">
@@ -310,15 +269,14 @@ function Dashboard({ auth, users }: Props) {
                         {/* SECOND ROW */}
                         <div className="grid auto-rows-[392px] gap-4 md:grid-cols-5">
                             {/* First child spans 2 columns */}
-                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-transparent px-10 pt-10">
-                                <img src={images.userCard} className="absolute inset-0 h-full w-full" alt="" />
-                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto">
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl p-10 shadow-md">
+                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
                                     {/* Absolute positioning for the half-circles on the sides */}
 
-                                    <div className="absolute top-[25%] left-0 z-10 -ml-4 h-10 w-9 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
-                                    <div className="absolute top-[60%] left-0 -ml-4 h-10 w-9 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
-                                    <div className="absolute top-[25%] right-0 -mr-4 h-10 w-9 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
-                                    <div className="absolute top-[60%] right-0 -mr-4 h-10 w-9 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-transparent shadow-[inset_2px_3px_2px_rgba(0,0,0,0.3)]"></div>
+                                    <div className="absolute top-[15%] left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-1/2 left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-[15%] right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-1/2 right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 flex items-center justify-between border-b-3 bg-white pb-3">
                                         <h2 className="text-xl font-normal text-gray-800 italic">
@@ -363,7 +321,7 @@ function Dashboard({ auth, users }: Props) {
                                                             {/* {loading && <p>Loading countries…</p>}
                                                             {error && <p className="text-red-500">Error: {error}</p>} */}
 
-                                                            <Select onValueChange={(val) => setSelectedCountry(val)}>
+                                                            <Select >
                                                                 <SelectTrigger id="country" className="w-full">
                                                                     <SelectValue placeholder="Select a country" />
                                                                 </SelectTrigger>
@@ -447,8 +405,8 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Cards Container */}
-                                    <div className="space-y-4 pr-12">
-                                        {dummyCards.map((card, index) => (
+                                    <div className="space-y-4 pr-2">
+                                        {/* {dummyCards.map((card, index) => (
                                             <UserCard
                                                 key={index}
                                                 name={card.name}
@@ -458,8 +416,8 @@ function Dashboard({ auth, users }: Props) {
                                                 rating={card.rating}
                                                 imageSrc={card.imageSrc}
                                             />
-                                        ))}
-                                        {/* {users
+                                        ))} */}
+                                        {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserCard
@@ -471,7 +429,7 @@ function Dashboard({ auth, users }: Props) {
                                                     rating={user.rating || 4.6}
                                                     imageSrc={user.profile_picture || ''}
                                                 />
-                                            ))} */}
+                                            ))}
                                     </div>
                                 </div>
                             </div>

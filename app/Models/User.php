@@ -71,4 +71,21 @@ class User extends Authenticatable
             'can_help_with' => 'array',
         ];
     }
+
+    // public function conversations()
+    // {
+    //     return $this->belongsToMany(Conversation::class)
+    //         ->withTimestamps()
+    //         ->orderByPivot('created_at', 'desc');
+    // }
+
+    public function conversations()
+    {
+        return $this->belongsToMany(\App\Models\Conversation::class, 'conversation_user');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(\App\Models\Message::class);
+    }
 }

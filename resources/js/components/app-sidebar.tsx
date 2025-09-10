@@ -20,7 +20,7 @@ interface PageProps {
             profile_picture: string | null; // Update this line
         };
     };
-    [key: string]: any; // Add index signature to satisfy Inertia's PageProps constraint
+    [key: string]: unknown; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
 // Define the navigation items with href for Inertia
@@ -38,7 +38,7 @@ const navItems: NavItem[] = [
     {
         name: 'Messages',
          icon: `${images.messageIcon}`,
-        href: '/messages',
+        href: '/chats',
     },
     {
         name: 'Directory',

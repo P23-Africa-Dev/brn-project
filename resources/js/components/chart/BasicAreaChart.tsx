@@ -1,125 +1,123 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import ReactApexChart from "react-apexcharts";
-
-
+'use client';
+import axios from 'axios';
+import { format, subDays } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import ReactApexChart from 'react-apexcharts';
 
 interface ChartProps {
-    apiUrl?: string; // Laravel API endpoint
+    userId?: number;
 }
-const BasicAreaChart:  React.FC<ChartProps>  = ({ apiUrl }) => {
-  const [chartData, setChartData] = useState<{
-    series: any[];
-    options: any;
-  }>({
-    series: [
-      {
-        name: "STOCK ABC",
-        data: [], // will be filled in useEffect
-      },
-    ],
+
+interface ChartDataPoint {
+    date: string;
+    minutes_online: number;
+}
+
+interface ChartState {
+    series: {
+        name: string;
+        data: number[];
+    }[];
     options: {
-      chart: {
-        type: "area",
-        height: 350,
-        zoom: { enabled: false },
-      },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: "straight",
-      },
-      // title: {
-      //   text: "Fundamental Analysis of Stocks",
-      //   align: "left",
-      // },
-      // subtitle: {
-      //   text: "Price Movements",
-      //   align: "left",
-      // },
-      labels: [] as string[],
-      xaxis: {
-        type: "datetime",
-      },
-      yaxis: {
-        opposite: false,
-      },
-      legend: {
-        horizontalAlign: "left",
-      },
-    },
-  });
-
-  // 🟢 Load dummy data first
-  useEffect(() => {
-    const dummyData = {
-      prices: [34, 44, 54, 21, 12, 43, 33],
-      dates: [
-        "2025-09-01",
-        "2025-09-02",
-        "2025-09-03",
-        "2025-09-04",
-        "2025-09-05",
-        "2025-09-06",
-        "2025-09-07",
-      ],
+        chart: {
+            type: 'area';
+            height: number;
+            zoom: { enabled: boolean };
+        };
+        dataLabels: {
+            enabled: boolean;
+        };
+        stroke: {
+            curve: string;
+        };
+        labels: string[];
+        xaxis: {
+            type: string;
+        };
+        yaxis: {
+            opposite: boolean;
+        };
+        legend: {
+            horizontalAlign: string;
+        };
     };
+}
 
-    setChartData((prev) => ({
-      ...prev,
-      series: [
-        {
-          name: "STOCK ABC",
-          data: dummyData.prices,
+const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
+    const [chartData, setChartData] = useState<ChartState>({
+        series: [
+            {
+                name: 'Minutes Online',
+                data: [],
+            },
+        ],
+        options: {
+            chart: {
+                type: 'area',
+                height: 350,
+                zoom: { enabled: false },
+            },
+            dataLabels: {
+                enabled: false,
+            },
+            stroke: {
+                curve: 'smooth',
+            },
+            labels: [],
+            xaxis: {
+                type: 'datetime',
+            },
+            yaxis: {
+                opposite: false,
+            },
+            legend: {
+                horizontalAlign: 'left',
+            },
         },
-      ],
-      options: {
-        ...prev.options,
-        labels: dummyData.dates,
-      },
-    }));
-  }, []);
+    });
 
+    useEffect(() => {
+        const targetUserId = userId || 0; // Replace with a default user ID or fetch authenticated user ID
 
-    // 🟢 Fetch API Data
-  // useEffect(() => {
-  //   const apiUrl = "http://localhost:8000/api/chart-data"; // update if deployed
+        axios
+            .get(`/dashboard/${targetUserId}`)
+            .then((response) => {
+                const { data } = response.data;
+                const today = new Date();
+                const last7Days = Array.from({ length: 7 }, (_, i) => {
+                    const date = subDays(today, 6 - i);
+                    return format(date, 'yyyy-MM-dd');
+                });
 
-  //   axios
-  //     .get(apiUrl)
-  //     .then((res) => {
-  //       const { prices, dates } = res.data;
+                const activityData = last7Days.map((date) => ({
+                    date,
+                    minutes_online: data[date] || 0,
+                }));
 
-  //       setChartData((prev) => ({
-  //         ...prev,
-  //         series: [
-  //           {
-  //             name: "STOCK ABC",
-  //             data: prices,
-  //           },
-  //         ],
-  //         options: {
-  //           ...prev.options,
-  //           labels: dates,
-  //         },
-  //       }));
-  //     })
-  //     .catch((err) => {
-  //       console.error("Error fetching chart data:", err);
-  //     });
-  // }, []);
+                setChartData((prev) => ({
+                    ...prev,
+                    series: [
+                        {
+                            name: 'Minutes Online',
+                            data: activityData.map((point) => point.minutes_online),
+                        },
+                    ],
+                    options: {
+                        ...prev.options,
+                        labels: activityData.map((point) => point.date),
+                    },
+                }));
+            })
+            .catch((error) => {
+                console.error('Error fetching activity data:', error);
+            });
+    }, [userId]);
 
-  return (
-    <div className="relative overflow-hidden  bg-transparent ">
-      <ReactApexChart
-        options={chartData.options}
-        series={chartData.series}
-        type="area"
-        height={105}
-      />
-    </div>
-  );
+    return (
+        <div className="relative overflow-hidden bg-transparent">
+            <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={105} />
+        </div>
+    );
 };
 
 export default BasicAreaChart;
