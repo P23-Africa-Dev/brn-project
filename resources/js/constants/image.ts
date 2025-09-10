@@ -37,6 +37,9 @@ import patternUserRight from '../../../public/assets/pattern-right.png';
 import patternUserLeft from '../../../public/assets/patternLeft.png';
 import userCard from '../../../public/assets/user-card-bg.png';
 import mobileCardBG from '../../../public/assets/mobile-bg.png';
+import activeLinkPattern from '../../../public/assets/active-link-pattern.png';
+import man6 from  '../../../public/assets/man6.png';
+import notification from  '../../../public/assets/notification.png';
 
 
 const images = {
@@ -78,6 +81,9 @@ const images = {
     patternUserLeft,
     userCard,
     mobileCardBG,
+    activeLinkPattern,
+    man6,
+    notification
 
 };
 

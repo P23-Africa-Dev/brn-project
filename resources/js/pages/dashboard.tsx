@@ -7,9 +7,12 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
+import { Counter } from '@/hooks/useCounter';
+import { Country, getAfricanCountries } from '@/hooks/useCountryService';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps, type BreadcrumbItem } from '@/types';
 import { Upload } from 'lucide-react';
+import { useEffect, useState } from 'react';
 // import { Upload } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -49,6 +52,26 @@ interface Props extends PageProps {
 }
 
 function Dashboard({ auth, users }: Props) {
+    const [africanCountries, setAfricanCountries] = useState<Country[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            try {
+                const list = await getAfricanCountries();
+                setAfricanCountries(list);
+                console.log(list);
+            } catch (err: any) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchData();
+    }, []);
     const dummyCards = [
         {
             name: 'Thabo Molefe',
@@ -151,15 +174,16 @@ function Dashboard({ auth, users }: Props) {
         <AppLayout breadcrumbs={breadcrumbs}>
             {/* <Head title="Dashboard" /> */}
 
-            <div className="bg-[#031C5B] pt-2 pb-2.5">
+            <div className="bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9] bg-cover bg-no-repeat py-3 bg-blend-overlay"
+                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9]  bg-cover bg-no-repeat bg-blend-overlay lg:py-3"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar flex max-h-[95vh] flex-col gap-2 overflow-y-auto px-12 pb-1">
-                        <div className="mb-1 hidden w-full md:block dark:text-deepBlue">
+                    <div className="no-scrollbar flex max-h-[95vh] w-full flex-col gap-2 overflow-y-auto px-2 pb-1 lg:px-16 lg:py-0">
+                        {/* USER GREETINGS */}
+                        <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
                                 <h3 className="text-3xl font-semibold tracking-wide">
                                     {getGreeting()} <span className="font-bold tracking-tight">{auth.user.name}</span>{' '}
@@ -170,10 +194,41 @@ function Dashboard({ auth, users }: Props) {
                                 </h3>
                             )}
                         </div>
+                        {/* MOBILE GREETINGS */}
+                        <div
+                            className="w-full bg-center bg-no-repeat md:bg-cover lg:hidden"
+                            style={{
+                                backgroundImage: `url(${images.mobileCardBG})`,
+                            }}
+                        >
+                            <div className="grid w-full grid-cols-2 place-content-between px-10 py-10">
+                                <div className="mb-1 w-full place-self-center text-white dark:text-white">
+                                    {auth.user ? (
+                                        <>
+                                            <h3 className="text-2xl font-semibold tracking-wide whitespace-nowrap">
+                                                Hello <span className="font-bold tracking-tight"> Kwame!</span> {/* {auth.user.name}  */}
+                                            </h3>
+                                            <h6 className="text-xs font-light text-white">{getGreeting()} </h6>
+                                        </>
+                                    ) : (
+                                        <h3 className="text-base font-medium">
+                                            Good Morning <span className="font-bold">Kwame</span>{' '}
+                                        </h3>
+                                    )}
+                                </div>
+                                <div className="flex items-center gap-3 place-self-end">
+                                    <img src={images.notification} alt="" />
+                                    <div className="relative h-16 w-16 overflow-hidden rounded-full bg-[#D6E264] p-2">
+                                        <img src={images.man6} alt={` profile`} className="absolute inset-0 h-full w-full object-cover" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* FIRST ROW */}
                         <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                             {/* CHART CONTAINER */}
-                            <div className="grid-card-shadow relative aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 lg:block">
                                 <SplineAreaChart />
                             </div>
 
@@ -196,11 +251,18 @@ function Dashboard({ auth, users }: Props) {
                                     <div className="flex justify-between">
                                         <div className="-mt-4 flex items-center divide-x divide-gray-200">
                                             <div className="pr-5">
-                                                <span className="text-3xl font-bold text-[#F05831]">45k</span> <br />
+                                                <span className="text-3xl font-bold text-[#F05831]">
+                                                    {' '}
+                                                    <Counter end={45000} />
+                                                </span>{' '}
+                                                <br />
                                                 <h6 className="text-[#727677]">Leads</h6>
                                             </div>
                                             <div className="pl-5">
-                                                <span className="text-3xl font-bold text-[#0496FF]">75k</span> <br />
+                                                <span className="text-3xl font-bold text-[#0496FF]">
+                                                    <Counter end={75000} />
+                                                </span>{' '}
+                                                <br />
                                                 <h6 className="text-[#727677]">Connections</h6>
                                             </div>
                                         </div>
@@ -265,7 +327,7 @@ function Dashboard({ auth, users }: Props) {
 
                                         <div className="-ml-10 flex w-full items-start space-x-2">
                                             <div className="relative w-full">
-                                                <div className="rleative">
+                                                <div className="rleative cursor-pointer">
                                                     <input
                                                         type="text"
                                                         placeholder="Search"
@@ -278,6 +340,8 @@ function Dashboard({ auth, users }: Props) {
                                                     />
                                                 </div>
                                             </div>
+
+                                            {/* API INTEGRATION FOR COUNTRY SEARCH */}
                                             <Sheet>
                                                 <SheetTrigger asChild>
                                                     <div className="flex w-[160px] cursor-pointer items-end justify-end self-center">
@@ -296,7 +360,23 @@ function Dashboard({ auth, users }: Props) {
                                                             <label htmlFor="country" className="text-lg font-medium text-gray-700 dark:text-gray-200">
                                                                 Country
                                                             </label>
-                                                            <Select>
+                                                            {/* {loading && <p>Loading countries…</p>}
+                                                            {error && <p className="text-red-500">Error: {error}</p>} */}
+
+                                                            <Select onValueChange={(val) => setSelectedCountry(val)}>
+                                                                <SelectTrigger id="country" className="w-full">
+                                                                    <SelectValue placeholder="Select a country" />
+                                                                </SelectTrigger>
+                                                                <SelectContent>
+                                                                    Nigeria
+                                                                    {/* {africanCountries.map((c) => (
+                                                                        <SelectItem key={c.code} value={c.name}>
+                                                                            {c.name}
+                                                                        </SelectItem>
+                                                                    ))} */}
+                                                                </SelectContent>
+                                                            </Select>
+                                                            {/* <Select>
                                                                 <SelectTrigger
                                                                     id="country"
                                                                     className="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
@@ -308,7 +388,7 @@ function Dashboard({ auth, users }: Props) {
                                                                     <SelectItem value="canada">Canada</SelectItem>
                                                                     <SelectItem value="uk">United Kingdom</SelectItem>
                                                                 </SelectContent>
-                                                            </Select>
+                                                            </Select> */}
                                                         </div>
 
                                                         <div className="space-y-2">
@@ -397,7 +477,7 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* Second child spans 1 column */}
-                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl">
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl bg-white">
                                 <div className="p-6">
                                     <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
 
@@ -409,9 +489,9 @@ function Dashboard({ auth, users }: Props) {
                         </div>
 
                         {/* THIRD ROW */}
-                        <div className="grid auto-rows-min gap-4 md:grid-cols-5">
+                        <div className="hidden auto-rows-min gap-4 md:grid-cols-5 lg:grid">
                             {/* SMART CLIENT */}
-                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl border-2 border-darkGreen">
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl border-2 border-darkGreen bg-white">
                                 <div className="max-w-[150px] pt-3 pb-2 pl-5">
                                     <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-deepBlue">
                                         Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
@@ -424,8 +504,8 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* REMCOMMENDATION LEANDS */}
-                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl">
-                                <div className="mx-auto max-w-xl pt-4">
+                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-white">
+                                <div className="mx-auto max-w-[590px] pt-4">
                                     {/* Header */}
                                     <div className="mb-6 flex items-center justify-between px-3 md:px-0">
                                         <h2 className="text-xl font-bold text-darkBlue dark:text-gray-100">Recommended Leads</h2>
@@ -448,6 +528,73 @@ function Dashboard({ auth, users }: Props) {
                                         ))}
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Nav */}
+                <div className="fixed bottom-0 mx-auto w-full max-w-sm bg-transparent p-4 lg:hidden">
+                    <div className="relative flex h-20 w-full items-center justify-around rounded-3xl border border-[#202730] bg-[#1e2531]">
+                        <div className="absolute -top-8 left-1/2 z-20 flex h-16 w-16 -translate-x-1/2 transform items-center justify-center rounded-full border-4 border-[#121820] bg-[#394d6c] shadow-2xl">
+                            <img src={images.dashboardIcon} alt="" />
+                        </div>
+                        <div className="flex h-full w-full items-center justify-between px-8 pt-4">
+                            <div className="flex items-center space-x-8">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+                                    />
+                                </svg>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    />
+                                </svg>
+                            </div>
+                            <div className="w-16"></div>
+                            <div className="flex items-center space-x-8">
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                                </svg>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-6 w-6 text-white"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                    />
+                                </svg>
                             </div>
                         </div>
                     </div>

@@ -74,13 +74,13 @@ export default function AppSidebar() {
 
     return (
         <div
-            className="bg-[#031C5B]"
+            className="bg-[#031C5B] hidden lg:block sticky w-[210px]  top-0 z-60 left-0 "
             style={{
-                background: 'linear-gradient(100deg, #0B1727 100%, #0B1727 80%, #0B1727 40%)',
+                background: 'linear-gradient(190deg, #0B1727 100%, #0B1727 80%, #0B1727 40%)',
             }}
         >
             <div
-                className="sticky top-0 left-0 hidden h-screen w-[210px]  overflow-hidden text-white md:block"
+                className=" hidden h-screen w-full relative  overflow-hidden text-white md:block"
                 style={{
                     background: 'linear-gradient(180deg, #031C5B 0%, #0B1727 80%, #031C5B 100%)',
                 }}
@@ -92,7 +92,7 @@ export default function AppSidebar() {
                     </div>
 
                     {/* Navigation Items */}
-                    <nav className="flex-1">
+                    <nav className="flex-1 relative">
                         {navItems.map((item: NavItem) => {
                             const isActive: boolean = activeItem === item.name;
                             return (
@@ -100,16 +100,25 @@ export default function AppSidebar() {
                                     key={item.name}
                                     href={item.href}
                                     onClick={() => setActiveItem(item.name)}
-                                    className={`relative flex items-center  cursor-pointer transition-all duration-300 ${
+                                    className={`relative  flex items-center  cursor-pointer transition-all duration-300 ${
                                         isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
                                     }`}
                                 >
                                     {/* Highlight background */}
                                     <div
-                                        className={`absolute top-0 left-0 h-full w-[600px] z-10  transform transition-all duration-300 ${
+                                        className={`absolute top-0 left-0 h-full w-[600px]   transform transition-all duration-300 ${
                                             isActive ? '-translate-x-3 rounded-l-full rounded-r-2xl bg-white' : ''
                                         }`}
                                     ></div>
+                                            {/* Active background image pattern */}
+                                    {/* {isActive && (
+                                        <img
+                                            src={images.activeLinkPattern}
+                                            alt="active pattern"
+                                            className="absolute top-0 left-10 z-[X]  h-full w-[900px]  object-cover"
+                                        />
+                                    )} */}
+
 
                                     {/* Icon + Label */}
                                     <div
@@ -134,6 +143,8 @@ export default function AppSidebar() {
                     {/* User Account Section */}
                     <div className="mt-10 pb-10">
                         <p className="mb-2 text-xs tracking-wider text-gray-400">USER ACCOUNT</p>
+
+                        {/* User Profile  */}
                         <div className="mb-4 flex items-center space-x-1.5">
                             <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
                                 <img
