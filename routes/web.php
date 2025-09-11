@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // })->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/dashboard', [DashboardController::class, 'weeklyActivity']);
-    Route::get('/dashboard/{userId?}', [DashboardController::class, 'weeklyActivity']);
+    Route::get('/api/user/{userId?}', [DashboardController::class, 'weeklyActivity']);
     Route::get('/api/user-activity-change', [DashboardController::class, 'getActivityChange']);
 
     // Route::get('/chats', function () {
