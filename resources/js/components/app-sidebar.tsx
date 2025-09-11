@@ -38,7 +38,7 @@ const navItems: NavItem[] = [
     {
         name: 'Messages',
          icon: `${images.messageIcon}`,
-        href: '/chats',
+        href: '/messages',
     },
     {
         name: 'Directory',

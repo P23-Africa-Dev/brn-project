@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
     conversation: {
+        encrypted_id: any;
         id: number;
         title: string | null;
         participants: User[];
@@ -48,38 +49,21 @@ export default function Show({ conversation, messages: initialMessages, auth }: 
         if (!conversation?.id || !auth?.user?.id) return;
 
         const chan = window.Echo.join(`conversation.${conversation.id}`)
-            .here((users: User[]) => {
-                if (Array.isArray(users)) {
-                    setParticipants(users);
+            .here((users: User[]) => setParticipants(users))
+            .joining((user: User) => setParticipants((p) => [...p, user]))
+            .leaving((user: User) => setParticipants((p) => p.filter((u) => u.id !== user.id)))
+            .listen('MessageSent', (event: { message: Message }) => {
+                // server now sends { message: { ... } }
+                const incoming = event.message;
+                if (incoming.user.id !== auth.user.id) {
+                    setMessages((prev) => [...prev, incoming]);
                 }
             })
-            .joining((user: User) => {
-                if (user?.id) {
-                    setParticipants((p) => [...p, user]);
-                }
-            })
-            .leaving((user: User) => {
-                if (user?.id) {
-                    setParticipants((p) => p.filter((u) => u.id !== user.id));
-                }
-            })
-            .listen('.message.sent', (event: { message: Message }) => {
-                // Note: Changed 'e' to 'event.message'
-                const message = event.message;
-                if (message?.user?.id !== auth.user.id) {
-                    setMessages((prev) => [...prev, message]);
-                }
-            })
-            .listenForWhisper('typing', (event: { user: User }) => {
-                if (event?.user?.id && event.user.id !== auth.user.id) {
-                    setTypingUsers((prev) => {
-                        if (!prev.find((u) => u.id === event.user.id)) {
-                            return [...prev, event.user];
-                        }
-                        return prev;
-                    });
+            .listenForWhisper('typing', (payload: { user: User }) => {
+                if (payload?.user?.id && payload.user.id !== auth.user.id) {
+                    setTypingUsers((prev) => (prev.find((u) => u.id === payload.user.id) ? prev : [...prev, payload.user]));
                     setTimeout(() => {
-                        setTypingUsers((prev) => prev.filter((u) => u.id !== event.user.id));
+                        setTypingUsers((prev) => prev.filter((u) => u.id !== payload.user.id));
                     }, 2000);
                 }
             });
@@ -87,7 +71,12 @@ export default function Show({ conversation, messages: initialMessages, auth }: 
         channelRef.current = chan;
 
         return () => {
-            chan?.leave(`conversation.${conversation.id}`);
+            try {
+                (window as any).Echo.leave(`conversation.${conversation.id}`);
+                channelRef.current = null;
+            } catch (err) {
+                console.warn('Error leaving Echo channel', err);
+            }
         };
     }, [conversation?.id, auth?.user?.id]);
 
@@ -98,10 +87,12 @@ export default function Show({ conversation, messages: initialMessages, auth }: 
     async function sendMessage(e?: React.FormEvent) {
         e?.preventDefault();
         if (!text.trim()) return;
+
         const body = text;
         setText('');
+
         try {
-            const res = await axios.post(`/chats/${conversation.id}/messages`, { body });
+            const res = await axios.post(`/messages/${conversation.encrypted_id}/messages`, { body });
             setMessages((m) => [...m, res.data.message]); // local append
         } catch (err) {
             console.error(err);
@@ -111,9 +102,14 @@ export default function Show({ conversation, messages: initialMessages, auth }: 
 
     function handleTyping(e: React.ChangeEvent<HTMLInputElement>) {
         setText(e.target.value);
+
         try {
-            channelRef.current?.whisper('typing', { user: auth.user });
-        } catch (err) {}
+                    if (channelRef.current && typeof channelRef.current.whisper === 'function') {
+                        channelRef.current.whisper('typing', { user: auth.user });
+                    }
+        } catch (err) {
+            console.error('Error sending typing notification:', err);
+        }
     }
 
     return (
