@@ -86,7 +86,7 @@ export const AppSidebar: React.FC = () => {
                 </div>
 
                 {/* NAV */}
-                <nav className=" px-4 pb-10 border-2 border-red-800">
+                <nav className=" px-4 pb-10 ">
                     <ul className="space-y-2">
                         {NAV_ITEMS.map((item) => {
                             const isActive = activeName === item.name;
