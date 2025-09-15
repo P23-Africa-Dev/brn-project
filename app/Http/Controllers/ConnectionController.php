@@ -18,7 +18,7 @@ class ConnectionController extends Controller
         $userId = Auth::id();
         $connectedUserId = $request->connected_user_id;
         if ($userId == $connectedUserId) {
-            return response()->json(['message' => 'Cannot connect to yourself'], 400);
+            return redirect()->back()->with('error', 'Cannot connect to yourself');
         }
         $connection = Connection::firstOrCreate(
             [
@@ -27,7 +27,7 @@ class ConnectionController extends Controller
             ],
             ['status' => 'pending']
         );
-        return response()->json(['status' => $connection->status]);
+    return redirect()->back()->with('success', 'Connection request sent.');
     }
 
     // Accept a connection request
@@ -40,27 +40,25 @@ class ConnectionController extends Controller
         $requesterId = $request->user_id;
         $connection = Connection::where('user_id', $requesterId)
             ->where('connected_user_id', $userId)
-                            // Always set direction explicitly
-                            if ($conn->user_id == $userId) {
-                                // I sent the request (outgoing)
-                                $pending[] = [
-                                    'id' => $conn->connectedUser->id,
-                                    'name' => $conn->connectedUser->name,
-                                    'email' => $conn->connectedUser->email,
-                                    'profile_picture' => $conn->connectedUser->profile_picture,
-                                    'direction' => 'outgoing',
-                                ];
-                            }
-                            if ($conn->connected_user_id == $userId) {
-                                // I received the request (incoming)
-                                $pending[] = [
-                                    'id' => $conn->user->id,
-                                    'name' => $conn->user->name,
-                                    'email' => $conn->user->email,
-                                    'profile_picture' => $conn->user->profile_picture,
-                                    'direction' => 'incoming',
-                                ];
-                            }
+            ->where('status', 'pending')
+            ->first();
+        if (!$connection) {
+            return redirect()->back()->with('error', 'No pending request found.');
+        }
+        $connection->status = 'accepted';
+        $connection->save();
+        return redirect()->back()->with('success', 'Connection accepted.');
+    }
+
+    // Reject a connection request or revoke outgoing request
+    public function rejectRequest(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ]);
+        $userId = Auth::id();
+        $requesterId = $request->user_id;
+
         // Try to find as incoming (someone sent me a request)
         $connection = Connection::where('user_id', $requesterId)
             ->where('connected_user_id', $userId)
@@ -70,7 +68,7 @@ class ConnectionController extends Controller
         if ($connection) {
             $connection->status = 'rejected';
             $connection->save();
-            return response()->json(['status' => 'rejected']);
+            return redirect()->back()->with('success', 'Connection declined.');
         }
 
         // Try to find as outgoing (I sent a request, so I can revoke/delete it)
@@ -80,10 +78,10 @@ class ConnectionController extends Controller
             ->first();
         if ($connection) {
             $connection->delete();
-            return response()->json(['status' => 'revoked']);
+            return redirect()->back()->with('success', 'Connection revoked.');
         }
 
-        return response()->json(['message' => 'No pending request found'], 404);
+        return redirect()->back()->with('error', 'No pending request found.');
     }
 
     // List all connections and pending requests for the authenticated user
@@ -108,7 +106,7 @@ class ConnectionController extends Controller
                 ];
             } elseif ($conn->status === 'pending') {
                 if ($conn->user_id == $userId) {
-                    // I sent the request (outgoing), show the user I sent to, with direction outgoing
+                    // I sent the request (outgoing)
                     $pending[] = [
                         'id' => $conn->connectedUser->id,
                         'name' => $conn->connectedUser->name,
@@ -116,8 +114,9 @@ class ConnectionController extends Controller
                         'profile_picture' => $conn->connectedUser->profile_picture,
                         'direction' => 'outgoing',
                     ];
-                } elseif ($conn->connected_user_id == $userId) {
-                    // I received the request (incoming), show the user who sent it, with direction incoming
+                }
+                if ($conn->connected_user_id == $userId) {
+                    // I received the request (incoming)
                     $pending[] = [
                         'id' => $conn->user->id,
                         'name' => $conn->user->name,
@@ -128,9 +127,10 @@ class ConnectionController extends Controller
                 }
             }
         }
-        return response()->json([
+        return Inertia::render('connected-users', [
             'connected' => $connected,
             'pending' => $pending,
+            'auth' => ['user' => ['id' => $userId]],
         ]);
     }
 }
