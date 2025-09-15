@@ -15,3 +15,10 @@ Broadcast::channel('conversation.{conversationId}', function ($user, $conversati
 
     return $isParticipant ? ['id' => $user->id, 'name' => $user->name] : false;
 });
+
+// Broadcast::channel('conversation.{conversationId}', function ($user, $conversationId) {
+//     return Conversation::find($conversationId)
+//         ->participants()
+//         ->where('user_id', $user->id)
+//         ->exists();
+// });

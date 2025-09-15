@@ -1,5 +1,4 @@
 import AppLayout from '@/layouts/app-layout';
-import { BreadcrumbItem } from '@/types';
 import { Link } from '@inertiajs/react';
 
 type Props = {
@@ -17,12 +16,6 @@ type Props = {
     };
 };
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Messages',
-        href: '/chats',
-    },
-];
 
 export default function Index({ conversations = [], auth }: Props) {
     // Add this console log
@@ -30,7 +23,7 @@ export default function Index({ conversations = [], auth }: Props) {
     console.log('Auth:', auth);
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
+        <AppLayout>
             <div className="flex h-screen bg-gray-50">
                 <aside className="w-96 border-r bg-white p-6">
                     <h2 className="mb-4 text-xl font-semibold">Direct Messages</h2>
@@ -39,7 +32,7 @@ export default function Index({ conversations = [], auth }: Props) {
                             conversations.map((c) => (
                                 <Link
                                     key={c.id}
-                                    href={`/chats/${c.id}`}
+                                    href={`/messages/${c.id}`}
                                     className="flex items-center justify-between rounded-xl bg-white p-4 shadow hover:bg-gray-50"
                                 >
                                     <div>

@@ -17,15 +17,9 @@ class ChatController extends Controller
             ->orderByDesc('last_message_at')
             ->get();
 
-        // Add this logging
-        \Log::info('Conversations:', [
-            'count' => $conversations->count(),
-            'data' => $conversations->toArray()
-        ]);
-
         $mappedConversations = $conversations->map(function ($c) use ($user) {
             return [
-                'id' => $c->id,
+                'id' => $c->encrypted_id, // Use encrypted ID
                 'title' => $c->title,
                 'participants' => $c->participants->map->only(['id', 'name']),
                 'last_message' => $c->lastMessage ? [
@@ -41,12 +35,16 @@ class ChatController extends Controller
         ]);
     }
 
-    public function show(Request $request, Conversation $conversation)
+    public function show(Request $request, string $encryptedId)
     {
         $user = $request->user();
-
         if (!$user) {
             abort(401);
+        }
+
+        $conversation = Conversation::findByEncryptedId($encryptedId);
+        if (!$conversation) {
+            abort(404);
         }
 
         if (!$conversation->participants()->where('user_id', $user->id)->exists()) {
@@ -68,7 +66,8 @@ class ChatController extends Controller
 
         return Inertia::render('chats/show', [
             'conversation' => [
-                'id' => $conversation->id,
+                'id' => $conversation->id, // raw id for Echo
+                'encrypted_id' => $conversation->encrypted_id, // secure routes
                 'title' => $conversation->title,
                 'participants' => $conversation->participants()
                     ->select(['users.id', 'users.name'])
