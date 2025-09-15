@@ -1,18 +1,21 @@
-import { SidebarInset } from '@/components/ui/sidebar';
-import * as React from 'react';
+// resources/js/components/ui/sidebar/AppContent.tsx
+import React from 'react';
+import { useSidebar } from './sidebar-context';
 
 interface AppContentProps extends React.ComponentProps<'main'> {
-    variant?: 'header' | 'sidebar';
+  variant?: 'header' | 'sidebar';
 }
 
-export function AppContent({ variant = 'header', children, ...props }: AppContentProps) {
-    if (variant === 'sidebar') {
-        return <SidebarInset {...props}>{children}</SidebarInset>;
-    }
+export const AppContent: React.FC<AppContentProps> = ({ children, className = '', ...props }) => {
+  const { open } = useSidebar();
 
-    return (
-        <main className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col gap-4 rounded-xl" {...props}>
-            {children}
-        </main>
-    );
-}
+  // when sidebar collapsed we might want different padding
+  return (
+    <main
+      {...props}
+      className={`relative z-0  flex h-full w-full  flex-1 flex-col gap-4 rounded-xl transition-all  ${className}`}
+    >
+      {children}
+    </main>
+  );
+};

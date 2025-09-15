@@ -1,43 +1,76 @@
-const Loader = () => {
+import images from '@/constants/image';
+import React, { useEffect, useState } from 'react';
+
+const Loader: React.FC = () => {
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress((prev) => {
+                if (prev >= 100) {
+                    clearInterval(interval);
+                    return 100;
+                }
+                return prev + 1;
+            });
+        }, 50);
+        return () => clearInterval(interval);
+    }, []);
+
     return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-white">
-            {/* Animated spinner with different color */}
-            {/* <div className="relative w-50 h-50  rounded-full border-[20px] border-solid border-gray-400/75 animate-spin">
-        <img
-          src={images.spinner}
-          className="absolute -top-6 left-0 w-50 h-50 rounded-full"
-          alt=""
-        />
-      </div> */}
+        <div
+            style={{
+                backgroundImage: `url(${images.formBG})`,
+            }}
+            className="flex h-screen flex-col items-center justify-center bg-white"
+        >
+            {/* Circle Container */}
+            {/* ⬇️ Increase h-[number] w-[number] to make the loader container larger */}
+            <div className="relative h-56 w-56">
+                {/* Background circle */}
+                <svg className="h-full w-full rotate-[-90deg]">
+                    {/* ⬇️ Adjust cx, cy (center) and r (radius) to scale the circle */}
+                    <circle cx="112" cy="112" r="95" stroke="#f1f1f1" strokeWidth="18" /* ⬅️ Stroke thickness */ fill="none" />
+                </svg>
 
-            <div className="flex items-center justify-center">
-                <div className="relative h-40 w-40">
-                    {/* Track */}
-                    <div className="absolute inset-0 rounded-full border-23 border-gray-400/70"></div>
+                {/* Gradient arc */}
+                <svg className="absolute top-0 left-0 h-full w-full rotate-[-90deg]">
+                    <defs>
+                        <linearGradient id="gradient" gradientTransform="rotate(90)">
+                            <stop offset="0%" stopColor="#00CC99" />
+                            <stop offset="50%" stopColor="#D6E264" />
+                            <stop offset="100%" stopColor="#00BFFF" />
+                        </linearGradient>
+                    </defs>
+                    <circle
+                        cx="112"
+                        cy="112"
+                        r="95"
+                        stroke="url(#gradient)"
+                        strokeWidth="18" /* ⬅️ Stroke thickness of gradient arc */
+                        fill="none"
+                        strokeDasharray={2 * Math.PI * 95} /* ⬅️ update with radius */
+                        strokeDashoffset={2 * Math.PI * 95 - (progress / 100) * (2 * Math.PI * 95)}
+                        strokeLinecap="round"
+                        className="animate-spin-slow origin-center"
+                    />
+                </svg>
 
-                    {/* Rotating arc with rounded ends */}
-                    <div className="absolute inset-0 animate-spin">
-                        <div
-                            className="h-full w-full rounded-full"
-                            style={{
-                                background: 'conic-gradient(#111827 0deg 90deg, transparent 90deg 360deg)',
-                                maskImage: 'radial-gradient(farthest-side, transparent calc(100% - 20px), black 0)',
-                                WebkitMaskImage: 'radial-gradient(farthest-side, transparent calc(100% - 26px), black 0)',
-                            }}
-                        ></div>
-
-                        {/* Rounded caps */}
-                        {/* <div className="absolute top-1/2 left-0 h-6 w-6 translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-900"></div>
-                                <div className="absolute top-1/2 -right-0 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-900"></div> */}
-                    </div>
+                {/* Progress Text */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                    {/* ⬇️ Increase text-2xl to text-3xl or higher for larger percentage text */}
+                    <span className="text-3xl font-bold text-[#0B1727]">{progress}%</span>
                 </div>
             </div>
 
-            <h3 className="mt-8 mb-1 text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-black">Preparing Your Dashboard</h3>
-            <p className="mb-4 text-lg lg:text-2xl text-deepBlue">(This will take few seconds)</p>
-            <p className="max-w-xs text-center text-sm text-deepBlue">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-            </p>
+            {/* Loader Text */}
+            <div className="mx-auto max-w-xl text-center">
+                <h3 className="mt-5 mb-1 text-[18px] font-bold text-primary dark:text-black">Preparing Your Dashboard</h3>
+                <p className="mb-2 text-sm font-light text-deepBlue">(This will take few seconds)</p>
+                <p className="mx-auto max-w-sm px-10 text-center text-[12px] text-deepBlue/90">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                </p>
+            </div>
         </div>
     );
 };
