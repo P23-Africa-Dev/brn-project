@@ -22,7 +22,7 @@ type NavItem = { name: string; icon: string; href: string };
 const NAV_ITEMS: NavItem[] = [
     { name: 'Dashboard', icon: images.dashboardIcon, href: '/dashboard' },
     { name: 'Referrals', icon: images.repeatIcon, href: '/referrals' },
-    { name: 'Messages', icon: images.messageIcon, href: '/chats' },
+    { name: 'Messages', icon: images.messageIcon, href: '/messages' },
     { name: 'Directory', icon: images.directoryIcon, href: '/directory' },
     { name: 'Leads', icon: images.LeadsIcon, href: '/leads' },
 ];

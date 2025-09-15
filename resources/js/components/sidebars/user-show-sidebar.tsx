@@ -2,7 +2,8 @@
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
 import { Star } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import UserDetailedSidebar from './user-profile';
 
 interface UserProfileSidebarProps {
@@ -25,7 +26,7 @@ interface UserProfileSidebarProps {
     children: React.ReactNode;
 }
 
-const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
+const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; authUserId: number }> = ({
     name,
     title,
     imageSrc,
@@ -43,7 +44,40 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     responseRate,
     successfulDealsRate,
     children,
+    userId,
+    authUserId,
 }) => {
+    // Connection state: 'none', 'pending', 'accepted'
+    const [connectionStatus, setConnectionStatus] = useState<'none' | 'pending' | 'accepted'>('none');
+    const [loading, setLoading] = useState(false);
+
+    React.useEffect(() => {
+        // Optionally, fetch connection status between authUserId and userId
+        if (userId && authUserId && userId !== authUserId) {
+            axios.get('/connections/list').then(res => {
+                const { connected, pending } = res.data;
+                if (connected.some((u: any) => u.id === userId)) {
+                    setConnectionStatus('accepted');
+                } else if (pending.some((u: any) => u.id === userId)) {
+                    setConnectionStatus('pending');
+                } else {
+                    setConnectionStatus('none');
+                }
+            });
+        }
+    }, [userId, authUserId]);
+
+    const handleConnect = async () => {
+        setLoading(true);
+        try {
+            await axios.post('/connections/send', { connected_user_id: userId });
+            setConnectionStatus('pending');
+        } catch (e) {
+            // Optionally show error
+        }
+        setLoading(false);
+    };
+
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -132,16 +166,22 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
 
                             {/* Action Buttons */}
                             <div className="mt-8 flex space-x-3">
-                                <button className="flex gap-2 rounded-xl bg-[#A47AF0] px-2 py-1 justify-center items-center whitespace-nowrap text-secondaryWhite">
-                                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
-                                        <img src={images.connectLink} className="h-4 w-4" alt="" />
-                                    </span>
-                                    <span>Connect Now</span>
-                                </button>
+                                {userId !== authUserId && (
+                                    <button
+                                        className={`flex gap-2 rounded-xl px-2 py-1 justify-center items-center whitespace-nowrap text-secondaryWhite ${connectionStatus === 'pending' ? 'bg-gray-400' : 'bg-[#A47AF0]'}`}
+                                        onClick={handleConnect}
+                                        disabled={connectionStatus !== 'none' || loading}
+                                    >
+                                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
+                                            <img src={images.connectLink} className="h-4 w-4" alt="" />
+                                        </span>
+                                        <span>
+                                            {connectionStatus === 'pending' ? 'Pending' : connectionStatus === 'accepted' ? 'Connected' : loading ? 'Connecting...' : 'Connect Now'}
+                                        </span>
+                                    </button>
+                                )}
                                 <button className="flex gap-2 rounded-full bg-transparent px-3 py-2 whitespace-nowrap text-secondaryWhite">
-                                    {/* <span className="flex h-7 w-7 items-center justify-center rounded-full bg-transparent"> */}
-                                        <img src={images.bookmark} className="h-6 w-6" alt="" />
-                                    {/* </span> */}
+                                    <img src={images.bookmark} className="h-6 w-6" alt="" />
                                     <span>Save for later</span>
                                 </button>
                             </div>

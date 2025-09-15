@@ -37,6 +37,7 @@ class User extends Authenticatable
         'number_of_employees',
         'selected_outcome',
         'goals',
+        'direction',
     ];
 
     /**
@@ -87,5 +88,15 @@ class User extends Authenticatable
     public function messages()
     {
         return $this->hasMany(\App\Models\Message::class);
+    }
+
+        public function connections()
+    {
+        return $this->hasMany(\App\Models\Connection::class, 'user_id');
+    }
+
+    public function connectedWith()
+    {
+        return $this->hasMany(\App\Models\Connection::class, 'connected_user_id');
     }
 }

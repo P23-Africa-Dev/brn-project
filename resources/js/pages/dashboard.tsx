@@ -138,15 +138,14 @@ function Dashboard({ auth, users }: Props) {
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1">
                                                 <span
-                                                    className={`text-xl leading-10 font-medium ${
-                                                        activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
-                                                    }`}
+                                                    className={`text-xl leading-10 font-medium ${activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
+                                                        }`}
                                                 >
                                                     {Math.abs(activityChange.change)}%
                                                 </span>
                                                 <span>
                                                     <img
-                                                     className='w-6 h-6'
+                                                        className="h-6 w-6"
                                                         src={activityChange.isIncrease ? images.arrowUp : images.arrowDown}
                                                         alt={activityChange.isIncrease ? 'Increase' : 'Decrease'}
                                                     />
@@ -330,29 +329,40 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
 
-                                    {dummyCards.map((card, index) => (
-                                        <UserProfileSidebar
-                                            key={index}
-                                            name={card.name}
-                                            title={card.title}
-                                            imageSrc={card.imageSrc}
-                                            experience={card.experience}
-                                            industry={card.industry}
-                                            interest={card.interest}
-                                            reviews={card.reviews}
-                                            baseLocation={card.baseLocation}
-                                            operatesIn={card.operatesIn}
-                                            bio={card.bio}
-                                            companyStage={card.companyStage}
-                                            keyStrength={card.keyStrength}
-                                            topGoal={card.topGoal}
-                                            brnMemberSince={card.brnMemberSince}
-                                            responseRate={card.responseRate}
-                                            successfulDealsRate={card.successfulDealsRate}
-                                        >
-                                            <UserCard {...card} />
-                                        </UserProfileSidebar>
-                                    ))}
+                                    {users
+                                        ?.filter((user) => auth.user && user.id !== auth.user.id)
+                                        .map((user) => (
+                                            <UserProfileSidebar
+                                                userId={user.id}           // The user being viewed
+                                                authUserId={auth.user?.id ?? 0}
+                                                key={user.id}
+                                                name={user.name}
+                                                title={user.position || 'Position not specified'}
+                                                imageSrc={user.profile_picture || ''}
+                                                experience={user.years_of_operation || 'N/A'}
+                                                industry={user.industry || 'N/A'}
+                                                interest={user.categories || 'N/A'}
+                                                reviews={user.rating ? user.rating.toString() : '0'}
+                                                baseLocation={user.country || 'N/A'}
+                                                operatesIn={user.country || 'N/A'}
+                                                bio={user.company_description || ''}
+                                                companyStage={user.selected_outcome || ''}
+                                                keyStrength={user.great_at || ''}
+                                                topGoal={user.goals || ''}
+                                                brnMemberSince={user.created_at || ''}
+                                                responseRate={'N/A'}
+                                                successfulDealsRate={'N/A'}
+                                            >
+                                                <UserCard
+                                                    name={user.name}
+                                                    location={user.country || 'Location not specified'}
+                                                    title={user.position || 'Position not specified'}
+                                                    industry={user.industry || 'N/A'}
+                                                    rating={user.rating || 0}
+                                                    imageSrc={user.profile_picture || ''}
+                                                />
+                                            </UserProfileSidebar>
+                                        ))}
 
                                     {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
