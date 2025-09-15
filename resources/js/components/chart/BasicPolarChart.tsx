@@ -78,7 +78,7 @@ const BasicPolarChart: React.FC<ChartProps> = ({ apiUrl }) => {
     }, [apiUrl]);
 
     return (
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden z-10">
             <ReactApexChart options={chartData.options} series={chartData.series} type="polarArea" height={300} />
         </div>
     );

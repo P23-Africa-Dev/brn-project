@@ -124,7 +124,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             <input
                                 type="text"
                                 {...register('companyName')}
-                                         className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
+                                         className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
                             />
                             {errors.companyName && <p className="text-sm text-red-500">{errors.companyName.message}</p>}
                         </div>
@@ -137,7 +137,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                             <input
                                 type="text"
                                 {...register('companyDo')}
-                                      className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none"
+                                      className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
                             />
                             {errors.companyDo && <p className="text-sm text-red-500">{errors.companyDo.message}</p>}
                         </div>
@@ -151,7 +151,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                 onValueChange={(value) => setValue('industry', value)}
                                 onOpenChange={(open) => setOpenIndustrySelect(open)}
                             >
-                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-1 border-primary py-6 pl-11 ring-[#0B1727] ring-1 font-semibold text-gray-900  outline-none">
+                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-1 border-primary py-6 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none">
                              
                                     <SelectValue className="w-full whitespace-nowrap  " placeholder="Choose an industry" />
                                     {openIndustrySelect ? (
@@ -177,7 +177,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
 
                         {/* Categories */}
                         {selectedIndustry && (
-                            <div className="mx-5 md:-mt-0">
+                            <div className="mx-5 md:-mt-0  w-full xl:max-w-lg">
                                 <p className="pl-1 text-sm text-grayLight">Select from 3 broad categories</p>
                                 <div className="flex flex-wrap gap-3 px-1 py-2">
                                     {categoriesForIndustry.map((cat) => {

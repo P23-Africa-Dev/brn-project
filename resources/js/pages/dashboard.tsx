@@ -3,24 +3,17 @@ import UserCard from '@/components/cards/UserCard';
 import UserCardLead from '@/components/cards/UserCardLead';
 import SplineAreaChart from '@/components/chart/BasicAreaChart';
 import BasicPolarChart from '@/components/chart/BasicPolarChart';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { FilterSidebar } from '@/components/sidebars/dashbord-filter';
+import UserProfileSidebar from '@/components/sidebars/user-show-sidebar';
 import images from '@/constants/image';
+import { dummyCards, dummyLeads } from '@/dummyDatas/users';
 import { Counter } from '@/hooks/useCounter';
 import AppLayout from '@/layouts/app-layout';
-import { PageProps, type BreadcrumbItem } from '@/types';
+import { PageProps } from '@/types';
 import axios from 'axios';
 import { Upload } from 'lucide-react';
 import { useEffect, useState } from 'react';
 // import { Upload } from 'lucide-react';
-
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: '/dashboard',
-    },
-];
 
 type User = {
     id: number;
@@ -46,7 +39,6 @@ type User = {
     selected_outcome?: string;
     goals?: string;
 };
-
 interface Props extends PageProps {
     users: User[];
 }
@@ -71,97 +63,6 @@ function Dashboard({ auth, users }: Props) {
             });
     }, []);
 
-    const dummyLeads = [
-        {
-            name: 'Thabo Ladi',
-            email: 'Username@gmail.com',
-            title: 'COO',
-
-            rating: 4.6,
-            iconSrc: `${images.userCheck}`,
-        },
-        {
-            name: 'P23 Africa',
-            email: 'P23africa.com',
-            title: 'Business',
-
-            rating: 4.6,
-            iconSrc: `${images.userCheck}`,
-        },
-        {
-            name: 'Kwame Nkrumah',
-            email: 'kwame.n@example.com',
-            title: 'CEO',
-            rating: 4.6,
-            iconSrc: `${images.userCheck}`,
-        },
-        {
-            name: 'M-Pesa Holdings',
-            email: 'contact@mpesa.com',
-            title: 'Fintech',
-            rating: 4.6,
-            iconSrc: `${images.userCheck}`,
-        },
-        {
-            name: 'Lola Adeoye',
-            email: 'lola.a@example.com',
-            title: 'CTO',
-            rating: 4.6,
-            iconSrc: `${images.userCheck}`,
-        },
-    ];
-
-    const dummyCards = [
-        {
-            name: 'Thabo Molefe',
-            location: 'Johannesburg, South Africa',
-            title: 'CFO',
-            industry: 'Renewable Energy',
-            rating: 4.6,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Amina Diop',
-            location: 'Dakar, Senegal',
-            title: 'COO',
-            industry: 'Francophone Africa Startups',
-            rating: 4.6,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Suresh Kumar',
-            location: 'Mumbai, India',
-            title: 'CTO',
-            industry: 'Fintech',
-            rating: 4.8,
-            imageSrc: `${images.man4}`,
-        },
-        {
-            name: 'Maria Garcia',
-            location: 'Mexico City, Mexico',
-            title: 'CEO',
-            industry: 'E-commerce',
-            rating: 4.5,
-            imageSrc: `${images.man3}`,
-        },
-        {
-            name: 'Chen Wei',
-            location: 'Beijing, China',
-            title: 'VP of Sales',
-            industry: 'Artificial Intelligence',
-            rating: 4.7,
-            imageSrc: `${images.man2}`,
-        },
-        {
-            name: 'Fatima Al-Hamad',
-            location: 'Dubai, UAE',
-            title: 'Head of Marketing',
-            industry: 'Luxury Goods',
-            rating: 4.9,
-            imageSrc: `${images.man3}`,
-        },
-    ];
-
     const getGreeting = () => {
         const hour = new Date().getHours();
         if (hour < 12) return 'Good Morning';
@@ -170,17 +71,15 @@ function Dashboard({ auth, users }: Props) {
     };
 
     return (
-        <AppLayout breadcrumbs={breadcrumbs}>
-            {/* <Head title="Dashboard" /> */}
-
-            <div className="bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
+        <AppLayout>
+            <div className="relative z-0 bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative flex flex-1 rounded-4xl bg-[#f9f9f9] bg-cover bg-no-repeat bg-blend-overlay lg:py-3"
+                    className="relative flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-3"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar flex max-h-[95vh] w-full flex-col gap-2 overflow-y-auto px-2 pb-1 lg:px-16 lg:py-0">
+                    <div className="no-scrollbar flex h-screen max-h-[95vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
                         {/* USER GREETINGS */}
                         <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
@@ -232,12 +131,12 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* CONNECTIONS CONTAINER */}
-                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-xl lg:block">
-                                <div className="flex flex-col p-3">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl lg:block">
+                                <div className="flex flex-col p-3 pl-6">
                                     <div className="flex justify-between">
                                         <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
                                         <div>
-                                            <h5 className="flex items-center justify-end gap-1.5">
+                                            <h5 className="flex items-center justify-end gap-1">
                                                 <span
                                                     className={`text-xl leading-10 font-medium ${
                                                         activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
@@ -247,6 +146,7 @@ function Dashboard({ auth, users }: Props) {
                                                 </span>
                                                 <span>
                                                     <img
+                                                     className='w-6 h-6'
                                                         src={activityChange.isIncrease ? images.arrowUp : images.arrowDown}
                                                         alt={activityChange.isIncrease ? 'Increase' : 'Decrease'}
                                                     />
@@ -339,10 +239,10 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/*-------------------------//////////////////////----------------- THIRD ROW MOBILE----------------//////////////////////------------------------- */}
-                            <img  className='block lg:hidden' src={images.mobileGraph} alt="" />
+                            <img className="block lg:hidden" src={images.mobileGraph} alt="" />
 
                             {/*-------------------------//////////////////////----------------- FOURTH ROW MOBILE----------------//////////////////////------------------------- */}
-                            <div className='block lg:hidden'>
+                            <div className="block lg:hidden">
                                 <div className="grid grid-cols-3 place-items-center rounded-full border border-[#F9F9F9] bg-[#F1EEEE] py-0.5 shadow-md">
                                     <button className="rounded-full bg-transparent px-4 py-1.5 text-[13px] font-normal whitespace-nowrap text-primary">
                                         Connections
@@ -357,11 +257,11 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* COMMUNITY CONTAINER */}
-                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-xl lg:block">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl lg:block">
                                 <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-5">
                                     <div className="grid grid-cols-2 gap-3">
-                                        <div className="mt-8 ml-2 pr-3">
-                                            <h4 className="text-lg leading-5 font-semibold text-white">Let’s Join Our Community</h4>
+                                        <div className="mt-9 ml-2 pr-3">
+                                            <h4 className="mt-2 text-lg leading-5 font-semibold text-white">Let’s Join Our Community</h4>
 
                                             <div className="mt-4 flex items-center gap-1">
                                                 <div className="flex">
@@ -380,7 +280,7 @@ function Dashboard({ auth, users }: Props) {
                                             </div>
                                         </div>
                                         <div className="relative w-[210px]">
-                                            <img className="absolute right-10 -bottom-10" src={images.flowerPattern} alt="" />
+                                            <img className="absolute right-10 -bottom-7" src={images.flowerPattern} alt="" />
                                         </div>
                                     </div>
                                 </div>
@@ -389,34 +289,32 @@ function Dashboard({ auth, users }: Props) {
 
                         {/*-------------------------//////////////////////----------------- FIFTH ROW MOBILE----------------//////////////////////------------------------- */}
 
-                        <div className='pt-3 px-2 bg-[#0B1727]'>
-                            
-                        </div>
-
                         {/* SECOND ROW */}
-                        <div className=" lg:auto-rows-[392px] auto-rows-max gap-4 md:grid-cols-5 hidden lg:grid">
+                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-[385px]">
                             {/* First child spans 2 columns */}
-                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-xl p-10 shadow-md">
-                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-white">
+                            <div className="grid-card-shadow pt relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-[#0B1727] p-4 shadow-md lg:bg-white lg:pr-14 lg:pl-12">
+                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-transparent">
                                     {/* Absolute positioning for the half-circles on the sides */}
 
-                                    <div className="absolute top-[15%] left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-1/2 left-0 -ml-4 h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-[15%] right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
-                                    <div className="absolute top-1/2 right-0 -mr-4 h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white"></div>
+                                    <div className="absolute top-[25%] left-0 -ml-4 hidden h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white lg:block"></div>
+                                    <div className="absolute top-[57%] left-0 -ml-4 hidden h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white lg:block"></div>
+                                    <div className="absolute top-[25%] right-0 -mr-4 hidden h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white lg:block"></div>
+                                    <div className="absolute top-[57%] right-0 -mr-4 hidden h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white lg:block"></div>
+
                                     {/* Search Header */}
-                                    <div className="sticky top-0 z-10 flex items-center justify-between border-b-3 bg-white pb-3">
-                                        <h2 className="text-xl font-normal text-gray-800 italic">
-                                            Let's find your <span className="text-2xl leading-3 font-bold text-deepBlue">next deal</span>
+                                    <div className="sticky top-0 z-10 flex items-center justify-between border-b-3 bg-[#0B1727] pt-4 pb-3 lg:bg-white">
+                                        <h2 className="w-[170px] text-lg leading-1.5 font-normal text-white italic lg:text-[17px] lg:leading-6 lg:text-gray-800">
+                                            Let's find your{' '}
+                                            <span className="tex-white text-base font-bold lg:text-2xl lg:leading-3 lg:text-deepBlue">next deal</span>
                                         </h2>
 
-                                        <div className="-ml-10 flex w-full items-start space-x-2">
-                                            <div className="relative w-full">
+                                        <div className="flex w-full items-start space-x-2">
+                                            <div className="relative lg:w-full">
                                                 <div className="rleative cursor-pointer">
                                                     <input
                                                         type="text"
                                                         placeholder="Search"
-                                                        className="w-full rounded-full border-0 bg-[#27E6A729] px-4 py-3 pl-10 text-primary/60 placeholder:text-primary/80 focus:ring focus:ring-primary/30 focus:outline-none dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-3 pl-10 text-primary/60 placeholder:text-primary/80 focus:ring focus:ring-primary/30 focus:outline-none lg:bg-[#27E6A729] dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
                                                     />
                                                     <img
                                                         src={images.aiSearch}
@@ -425,126 +323,38 @@ function Dashboard({ auth, users }: Props) {
                                                     />
                                                 </div>
                                             </div>
-
-                                            {/* API INTEGRATION FOR COUNTRY SEARCH */}
-                                            <Sheet>
-                                                <SheetTrigger asChild>
-                                                    <div className="flex w-[160px] cursor-pointer items-end justify-end self-center">
-                                                        <img src={images.sliderHorizontal} className="h-10 w-10 cursor-pointer" alt="" />
-                                                    </div>
-                                                </SheetTrigger>
-                                                <SheetContent className="w-[300px] px-5 sm:w-[400px] dark:bg-gray-800 dark:text-gray-100">
-                                                    <SheetHeader>
-                                                        <SheetTitle className="mb-4 text-2xl font-bold dark:text-gray-100">Filter By;</SheetTitle>
-                                                        <SheetDescription className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-                                                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                                                        </SheetDescription>
-                                                    </SheetHeader>
-                                                    <div className="grid gap-6 py-4">
-                                                        <div className="space-y-2">
-                                                            <label htmlFor="country" className="text-lg font-medium text-gray-700 dark:text-gray-200">
-                                                                Country
-                                                            </label>
-                                                            {/* {loading && <p>Loading countries…</p>}
-                                                            {error && <p className="text-red-500">Error: {error}</p>} */}
-
-                                                            <Select>
-                                                                <SelectTrigger id="country" className="w-full">
-                                                                    <SelectValue placeholder="Select a country" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="px-3 py-4">
-                                                                    Nigeria
-                                                                    {/* {africanCountries.map((c) => (
-                                                                        <SelectItem key={c.code} value={c.name}>
-                                                                            {c.name}
-                                                                        </SelectItem>
-                                                                    ))} */}
-                                                                </SelectContent>
-                                                            </Select>
-                                                            {/* <Select>
-                                                                <SelectTrigger
-                                                                    id="country"
-                                                                    className="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                                                                >
-                                                                    <SelectValue placeholder="Select a category" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="dark:bg-gray-700 dark:text-gray-100">
-                                                                    <SelectItem value="usa">USA</SelectItem>
-                                                                    <SelectItem value="canada">Canada</SelectItem>
-                                                                    <SelectItem value="uk">United Kingdom</SelectItem>
-                                                                </SelectContent>
-                                                            </Select> */}
-                                                        </div>
-
-                                                        <div className="space-y-2">
-                                                            <label
-                                                                htmlFor="industry"
-                                                                className="text-lg font-medium text-gray-700 dark:text-gray-200"
-                                                            >
-                                                                Industry
-                                                            </label>
-                                                            <Select>
-                                                                <SelectTrigger
-                                                                    id="industry"
-                                                                    className="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                                                                >
-                                                                    <SelectValue placeholder="Select a category" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="dark:bg-gray-700 dark:text-gray-100">
-                                                                    <SelectItem value="tech">Technology</SelectItem>
-                                                                    <SelectItem value="finance">Finance</SelectItem>
-                                                                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-
-                                                        <div className="space-y-2">
-                                                            <label
-                                                                htmlFor="position"
-                                                                className="text-lg font-medium text-gray-700 dark:text-gray-200"
-                                                            >
-                                                                Position
-                                                            </label>
-                                                            <Select>
-                                                                <SelectTrigger
-                                                                    id="position"
-                                                                    className="w-full dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100"
-                                                                >
-                                                                    <SelectValue placeholder="Select a category" />
-                                                                </SelectTrigger>
-                                                                <SelectContent className="dark:bg-gray-700 dark:text-gray-100">
-                                                                    <SelectItem value="ceo">CEO</SelectItem>
-                                                                    <SelectItem value="cto">CTO</SelectItem>
-                                                                    <SelectItem value="cfo">CFO</SelectItem>
-                                                                </SelectContent>
-                                                            </Select>
-                                                        </div>
-                                                    </div>
-                                                    <Button
-                                                        className="mt-8 w-full py-3 text-lg font-semibold text-white"
-                                                        style={{ backgroundColor: '#193E47' }}
-                                                    >
-                                                        Search
-                                                    </Button>
-                                                </SheetContent>
-                                            </Sheet>
+                                            {/* FILTER SIDEBAR INTEGRATION FOR SEARCH */}
+                                            <FilterSidebar />
                                         </div>
                                     </div>
 
                                     {/* Cards Container */}
-                                    <div className="space-y-4 pr-2">
-                                        {dummyCards.map((card, index) => (
-                                            <UserCard
-                                                key={index}
-                                                name={card.name}
-                                                location={card.location}
-                                                title={card.title}
-                                                industry={card.industry}
-                                                rating={card.rating}
-                                                imageSrc={card.imageSrc}
-                                            />
-                                        ))}
-                                        {/* {users
+
+                                    {dummyCards.map((card, index) => (
+                                        <UserProfileSidebar
+                                            key={index}
+                                            name={card.name}
+                                            title={card.title}
+                                            imageSrc={card.imageSrc}
+                                            experience={card.experience}
+                                            industry={card.industry}
+                                            interest={card.interest}
+                                            reviews={card.reviews}
+                                            baseLocation={card.baseLocation}
+                                            operatesIn={card.operatesIn}
+                                            bio={card.bio}
+                                            companyStage={card.companyStage}
+                                            keyStrength={card.keyStrength}
+                                            topGoal={card.topGoal}
+                                            brnMemberSince={card.brnMemberSince}
+                                            responseRate={card.responseRate}
+                                            successfulDealsRate={card.successfulDealsRate}
+                                        >
+                                            <UserCard {...card} />
+                                        </UserProfileSidebar>
+                                    ))}
+
+                                    {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserCard
@@ -557,17 +367,32 @@ function Dashboard({ auth, users }: Props) {
                                                     imageSrc={user.profile_picture || ''}
                                                 />
                                             ))} */}
-                                    </div>
                                 </div>
                             </div>
 
                             {/* Second child spans 1 column */}
-                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl bg-white hidden lg:block">
+                            <div className="grid-card-shadow relative col-span-2 hidden aspect-auto overflow-hidden rounded-3xl bg-white lg:block">
                                 <div className="p-6">
-                                    <h2 className="mb-3 text-xl font-semibold text-[#414D55] italic dark:text-gray-100">Message Stats</h2>
+                                    <h2 className="mb-3 pl-12 text-xl font-semibold text-[#414D55] dark:text-gray-100">Message Stats</h2>
 
-                                    <div>
-                                        <div>{typeof window !== 'undefined' && <BasicPolarChart />}</div>
+                                    {/* <div className="relative mx-auto max-w-sm bg-cover bg-no-repeat lg:py-3">
+                                        <img
+                                            src={images.lineCHart}
+                                            alt={`charts background`}
+                                            className="absolute inset-0 h-full w-full max-w-[90px] rounded-l-xl object-cover"
+                                        />
+                                        <div className="z-10">{typeof window !== 'undefined' && <BasicPolarChart />}</div>
+                                    </div> */}
+                                    <div className="relative mx-auto max-w-sm bg-no-repeat lg:py-3">
+                                        {/* Background image behind */}
+                                        <img
+                                            src={images.lineCHart}
+                                            alt="charts background"
+                                            className="absolute inset-0 mx-auto h-full w-full object-contain opacity-70"
+                                        />
+
+                                        {/* Chart in front */}
+                                        <div className="relative z-0 flex justify-center">{typeof window !== 'undefined' && <BasicPolarChart />}</div>
                                     </div>
                                 </div>
                             </div>
@@ -576,10 +401,10 @@ function Dashboard({ auth, users }: Props) {
                         {/* THIRD ROW */}
                         <div className="hidden auto-rows-min gap-4 md:grid-cols-5 lg:grid">
                             {/* SMART CLIENT */}
-                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-xl border-2 border-darkGreen bg-white">
+                            <div className="grid-card-shadow relative col-span-2 aspect-auto overflow-hidden rounded-2xl border-2 border-darkGreen bg-white">
                                 <div className="max-w-[150px] pt-3 pb-2 pl-5">
-                                    <h2 className="font-lighter text-xl tracking-wider text-gray-800 italic dark:text-deepBlue">
-                                        Your Smart <span className="text-2xl leading-3 font-bold tracking-normal text-deepBlue">Matches</span>
+                                    <h2 className="font-lighter text-lg tracking-wider text-gray-800 italic dark:text-deepBlue">
+                                        Your Smart <span className="text-2xl leading-4 font-extrabold tracking-normal text-deepBlue">Matches</span>
                                     </h2>
                                 </div>
 
@@ -589,12 +414,12 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/* REMCOMMENDATION LEANDS */}
-                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-xl bg-white">
+                            <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-white">
                                 <div className="mx-auto max-w-[590px] pt-4">
                                     {/* Header */}
                                     <div className="mb-6 flex items-center justify-between px-3 md:px-0">
-                                        <h2 className="text-xl font-bold text-darkBlue dark:text-gray-100">Recommended Leads</h2>
-                                        <div className="rounded-xl bg-[#59AFD6] px-6 py-0.5 text-sm font-medium text-white hover:bg-[#59AFD6]/80 dark:bg-blue-900">
+                                        <h2 className="text-xl font-bold text-[#193E47] dark:text-gray-100">Recommended Leads</h2>
+                                        <div className="rounded bg-[#59AFD6] px-6 py-0.5 text-sm font-extralight text-white italic hover:bg-[#59AFD6]/80 dark:bg-blue-900">
                                             Verified
                                         </div>
                                     </div>

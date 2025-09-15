@@ -45,14 +45,14 @@ export default function StepFourForm({ onNext }: StepFourProps) {
         <div className="w-full  p-8 lg:overflow-y-auto xl:ml-16">
             <div className="relative z-10 mx-auto max-w-md xl:max-w-lg">
                 {/* Heading */}
-                <div className="mb-10">
+                <div className="mb-15">
                     <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">Control your visibility</h2>
                     <p className="pr-10 text-[17px] font-normal text-primary dark:text-black">You can change these anytime.</p>
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-8">
+                <form onSubmit={handleSubmit} className="space-y-12">
                     {/* Visibility Options */}
-                    <div className="space-y-5">
+                    <div className="space-y-2">
                         {VISIBILITY_OPTIONS.map((opt, idx) => (
                             <div key={opt.title} className="flex items-center justify-between rounded-xl py-4">
                                 <div className="flex-1">

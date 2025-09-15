@@ -1,15 +1,8 @@
-'use client';
-
+// resources/js/components/ui/sidebar/AppSidebar.tsx
 import images from '@/constants/image';
 import { Link, usePage } from '@inertiajs/react';
-import { Headphones, LucideIcon, Settings } from 'lucide-react';
-import { useEffect, useState } from 'react';
-
-interface NavItem {
-    name: string;
-    icon: string;
-    href: string;
-}
+import React, { useEffect, useMemo, useState } from 'react';
+import { useSidebar } from './sidebar-context';
 
 interface PageProps {
     auth: {
@@ -23,44 +16,47 @@ interface PageProps {
     [key: string]: unknown; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
-// Define the navigation items with href for Inertia
-const navItems: NavItem[] = [
-    {
-        name: 'Dashboard',
-        icon: `${images.dashboardIcon}`,
-        href: '/dashboard',
-    },
-    {
-        name: 'Referrals',
-       icon: `${images.repeatIcon}`,
-        href: '/referrals',
-    },
-    {
-        name: 'Messages',
-         icon: `${images.messageIcon}`,
-        href: '/chats',
-    },
-    {
-        name: 'Directory',
-        icon: `${images.directoryIcon}`,
-        href: '/directory',
-    },
-    {
-        name: 'Leads',
-        icon: `${images.LeadsIcon}`,
-        href: '/leads',
-    },
+type NavItem = { name: string; icon: string; href: string };
+
+const NAV_ITEMS: NavItem[] = [
+    { name: 'Dashboard', icon: images.dashboardIcon, href: '/dashboard' },
+    { name: 'Referrals', icon: images.repeatIcon, href: '/referrals' },
+    { name: 'Messages', icon: images.messageIcon, href: '/chats' },
+    { name: 'Directory', icon: images.directoryIcon, href: '/directory' },
+    { name: 'Leads', icon: images.LeadsIcon, href: '/leads' },
 ];
 
 const userAccountItems: NavItem[] = [
-    { name: 'Settings',   icon: `${images.accountSettingsIcon}`, href: '/settings' },
-    { name: 'Help',   icon: `${images.profileIcon}`, href: '/help' },
+    { name: 'Settings', icon: `${images.accountSettingsIcon}`, href: '/settings' },
+    { name: 'Help', icon: `${images.profileIcon}`, href: '/help' },
 ];
-
-export default function AppSidebar() {
+export const AppSidebar: React.FC = () => {
     const { auth } = usePage<PageProps>().props;
-    const [activeItem, setActiveItem] = useState<string>('Dashboard');
-    const profileImage: string = `${images.man1}`;
+    const { open, setOpen } = useSidebar();
+    const [activePath, setActivePath] = useState<string>('');
+
+    const profileImage: string = `${images.man6}`;
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            setActivePath(window.location.pathname);
+        }
+    }, [usePage]); // run on mount & when page changes
+
+    // derive active item name from path
+    const activeName = useMemo(() => {
+        const match = NAV_ITEMS.find((n) => activePath.startsWith(n.href));
+        return match?.name ?? 'Dashboard';
+    }, [activePath]);
+
+    // 👉 On mount: open sidebar, then collapse after 3s
+    useEffect(() => {
+        setOpen(true); // expanded first
+        const timer = setTimeout(() => {
+            setOpen(false); // auto-collapse
+        }, 4000);
+        return () => clearTimeout(timer);
+    }, [setOpen]);
 
     // Add this function to clean the URL
     const getProfilePicture = () => {
@@ -73,116 +69,174 @@ export default function AppSidebar() {
     }, [auth.user.profile_picture]);
 
     return (
-        <div
-            className="bg-[#031C5B] hidden lg:block sticky w-[210px]  top-0 z-60 left-0 "
-            style={{
-                background: 'linear-gradient(190deg, #0B1727 100%, #0B1727 80%, #0B1727 40%)',
-            }}
+        <aside
+            className={`sticky top-0 left-0 z-0 h-screen transition-all duration-300 select-none ${open ? 'w-56' : 'w-20'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
+            aria-expanded={open}
+            // 👉 expand on hover, collapse on leave
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
         >
-            <div
-                className=" hidden h-screen w-full relative  overflow-hidden text-white md:block"
-                style={{
-                    background: 'linear-gradient(180deg, #031C5B 0%, #0B1727 80%, #031C5B 100%)',
-                }}
-            >
-                <div className="flex h-full flex-col justify-between pl-6">
-                    {/* Logo Section */}
-                    <div className="mb-20 flex items-center space-x-2 pt-8">
-                        <img src={images.brnLogo} alt="" />
+            <div className="flex h-full flex-col justify-between overflow-visible">
+                {/* Logo */}
+                <div className="mb-18 px-4 pt-14">
+                    {/* <div className="mb-20 px-4 pt-14"> */}
+                    <div className="flex items-center gap-2">
+                        <img src={images.brnLogo} alt="logo" />
                     </div>
+                </div>
 
-                    {/* Navigation Items */}
-                    <nav className="flex-1 relative">
-                        {navItems.map((item: NavItem) => {
-                            const isActive: boolean = activeItem === item.name;
+                {/* NAV */}
+                <nav className=" px-4 pb-10 border-2 border-red-800">
+                    <ul className="space-y-2">
+                        {NAV_ITEMS.map((item) => {
+                            const isActive = activeName === item.name;
                             return (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    onClick={() => setActiveItem(item.name)}
-                                    className={`relative  flex items-center  cursor-pointer transition-all duration-300 ${
-                                        isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
-                                    }`}
-                                >
-                                    {/* Highlight background */}
-                                    <div
-                                        className={`absolute top-0 left-0 h-full w-[600px]   transform transition-all duration-300 ${
-                                            isActive ? '-translate-x-3 rounded-l-full rounded-r-2xl bg-white' : ''
+                                <li key={item.name} className="relative">
+                                    <Link
+                                        href={item.href}
+                                        onClick={() => setActivePath(item.href)}
+                                        className={`relative  flex cursor-pointer items-center transition-all duration-300 ${
+                                            isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
                                         }`}
-                                    ></div>
-                                            {/* Active background image pattern */}
-                                    {/* {isActive && (
-                                        <img
-                                            src={images.activeLinkPattern}
-                                            alt="active pattern"
-                                            className="absolute top-0 left-10 z-[X]  h-full w-[900px]  object-cover"
-                                        />
-                                    )} */}
-
-
-                                    {/* Icon + Label */}
-                                    <div
-                                        className={`relative z-10 flex w-full   items-center rounded-lg py-2 transition-colors duration-300 ${
-                                            isActive ? 'text-primary font-bold py-2.5' : 'text-white font-light'
-                                        }`}
+                                        aria-current={isActive ? 'page' : undefined}
                                     >
+                                        {/* Active background image pattern */}
+                                        {/* 👉 Curved background */}
+                                        {isActive && (
+                                            <div className="">
+                                                {/* <svg
+                                                    className="absolute top-0 left-0 h-full w-8 translate-x-[175px]"
+                                                    viewBox="0 0 24 100"
+                                                    preserveAspectRatio="none"
+                                                >
+                                                   
+                                                    <path d="M24 0 C-10 25 -10 75 24 100 L0 100 L0 0 Z" fill="#0B1727" />
+                                                 
+                                                    <path d="M24 0 C-5 25 -5 75 24 100" stroke="#fff" strokeWidth="0" fill="none" />
+                                                </svg> */}
+{/* 
+                                                <svg
+                                                className="absolute top-0 left-0 h-full w-24 translate-x-[175px]" 
+                                                viewBox="0 0 60 100"
+                                                preserveAspectRatio="none"
+                                                >
+                                                <path
+                                                    d="M60 0 
+                                                    A30 30 0 0 0 30 30 
+                                                    L60 30 Z"
+                                                    fill="#0B1727"
+                                                />
+
+                                                <path
+                                                    d="M60 100 
+                                                    A30 30 0 0 1 30 70 
+                                                    L60 70 Z"
+                                                    fill="#0B1727"
+                                                />
+                                                </svg> */}
+
+                                            </div>
+                                        )}
+
+                                        {/* Highlight background */}
                                         <div
-                                            className={`flex rounded-full mr-3 bg-[#263D5C8F] p-2 justify-center items-center${
-                                                isActive ? ' bg-primary  text-center text-white' : ''
+                                            className={`absolute top-0 z-0  left-0 h-full w-[600px] transform transition-all duration-300 ${
+                                                isActive ? '-translate-x-3 rounded-l-full rounded-r-2xl bg-white' : ''
+                                            }`}
+                                        ></div>
+
+                                        {/* Icon + Label */}
+                                        <div
+                                            className={`relative flex w-full items-center rounded-lg py-2 transition-colors duration-300 ${
+                                                isActive ? 'py-2.5 font-bold text-deepBlack' : 'font-light text-white'
                                             }`}
                                         >
-                                            <img src={item.icon} alt="" />
+                                            <div
+                                                className={`mr-3 flex items-center justify-center rounded-full p-2 ${
+                                                    isActive ? 'bg-[#0B1727] text-center text-white' : 'bg-[#263D5C8F]'
+                                                }`}
+                                            >
+                                                <img src={item.icon} alt="" />
+                                            </div>
+                                            <span
+                                                className={`overflow-hidden text-ellipsis whitespace-nowrap transition-all duration-200 ${
+                                                    open ? 'w-auto opacity-100' : 'w-0 opacity-0'
+                                                }`}
+                                            >
+                                                {item.name}
+                                            </span>
                                         </div>
-                                        <span>{item.name}</span>
-                                    </div>
-                                </Link>
+                                    </Link>
+                                </li>
                             );
                         })}
-                    </nav>
+                    </ul>
+                </nav>
 
-                    {/* User Account Section */}
-                    <div className="mt-10 pb-10">
-                        <p className="mb-2 text-xs tracking-wider text-gray-400">USER ACCOUNT</p>
-
-                        {/* User Profile  */}
-                        <div className="mb-4 flex items-center space-x-1.5">
-                            <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
-                                <img
-                                    src={getProfilePicture()}
-                                    alt={`${auth.user.name}'s Profile`}
-                                    className="absolute inset-0 mr-4 h-full w-full rounded-full border-2 border-gray-400 object-center"
-                                    onError={(e) => {
-                                        e.currentTarget.src = profileImage;
-                                    }}
-                                />
-                            </div>
-
-                            <div>
-                                <h3 className="text-sm font-semibold">{auth.user.name}</h3>
-                                <p className="text-xs text-gray-400">
-                                    {auth.user.position && auth.user.company_name
-                                        ? `${auth.user.position} at ${auth.user.company_name}`
-                                        : auth.user.position || auth.user.company_name || ''}
-                                </p>
-                            </div>
+                {/* Bottom: user */}
+                {/* <div className="px-4 pb-6">
+                    <div className={`mb-3 flex items-center gap-3 ${open ? '' : 'justify-center'}`}>
+                        <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-1">
+                            <img
+                                src={auth.user?.profile_picture ? auth.user.profile_picture : images.man1}
+                                alt={auth.user?.name ?? 'User'}
+                                className="h-full w-full rounded-full object-cover"
+                                onError={(e) => {
+                                    (e.currentTarget as HTMLImageElement).src = images.man1;
+                                }}
+                            />
                         </div>
-                        <div className="space-y-1">
-                            {userAccountItems.map((item: NavItem) => (
-                                <Link
-                                    key={item.name}
-                                    href={item.href}
-                                    className="flex items-center pb-2.5 text-white  transition-colors duration-200 hover:text-white/70  font-light"
-                                >
-                                    <div className="relative flex items-center rounded-lg transition-colors duration-300">
-                                        <img src={item.icon} className='mr-3' alt="" />
-                                        <span>{item.name}</span>
-                                    </div>
-                                </Link>
-                            ))}
+                        {open && (
+                            <div className="min-w-0">
+                                <div className="text-sm leading-tight font-semibold">{auth.user?.name}</div>
+                                <div className="text-xs text-gray-300">{auth.user?.position ?? auth.user?.company_name ?? ''}</div>
+                            </div>
+                        )}
+                    </div>
+                </div> */}
+                {/* User Account Section */}
+                <div className="mt-5 px-4">
+                    {/* <div className="mt-10 px-4 pb-10"> */}
+                    <p className={`mb-2 text-xs tracking-wider text-gray-400 ${open ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>USER ACCOUNT</p>
+
+                    {/* User Profile  */}
+                    <div className="mb-4 flex items-center space-x-1.5">
+                        <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
+                            <img
+                                src={getProfilePicture()}
+                                alt={`${auth.user.name}'s Profile`}
+                                className="absolute inset-0 mr-4 h-full w-full rounded-full border-2 border-gray-400 object-center"
+                                onError={(e) => {
+                                    e.currentTarget.src = profileImage;
+                                }}
+                            />
                         </div>
+
+                        <div className={`w-auto transition-all duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>
+                            <h3 className="text-[12px] font-semibold">{auth.user.name}</h3>
+                            <p className="text-[11px] font-light text-white/75">
+                                {auth.user.position && auth.user.company_name
+                                    ? `${auth.user.position} at ${auth.user.company_name}`
+                                    : auth.user.position || auth.user.company_name || ''}
+                            </p>
+                        </div>
+                    </div>
+                    <div className="space-y-1">
+                        {userAccountItems.map((item: NavItem) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="flex items-center pb-2.5 font-light text-white transition-colors duration-200 hover:text-white/70"
+                            >
+                                <div className="relative flex items-center rounded-lg transition-colors duration-300">
+                                    <img src={item.icon} className="mr-5" alt="" />
+                                    <span className={`text-sm transition-all duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>{item.name}</span>
+                                </div>
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>
-        </div>
+        </aside>
     );
-}
+};
