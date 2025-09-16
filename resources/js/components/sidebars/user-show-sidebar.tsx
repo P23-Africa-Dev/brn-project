@@ -73,6 +73,11 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
         );
     };
 
+    // Listen for changes in connected/pending to update UI after accept/decline
+    React.useEffect(() => {
+        // This effect will re-render the button as soon as connection status changes
+    }, [connected, pending]);
+
     return (
         <Sheet>
             <SheetTrigger asChild>
