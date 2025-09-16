@@ -261,6 +261,7 @@ function Dashboard({ auth, users }: Props) {
                                 <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-5">
                                     <div className="grid grid-cols-2 gap-3">
                                         <div className="mt-9 ml-2 pr-3">
+                                            
                                             <h4 className="mt-2 text-lg leading-5 font-semibold text-white">Let’s Join Our Community</h4>
 
                                             <div className="mt-4 flex items-center gap-1">

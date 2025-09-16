@@ -55,6 +55,7 @@ import userList from '../../../public/assets/user-list.png';
 import videoCamera from '../../../public/assets/video-camera-ai.png';
 import connectLink from '../../../public/assets/pin-link.png';
 import bookmark from '../../../public/assets/collections-bookmark.png';
+import dealBgCard from '../../../public/assets/deal-card.png';
 
 // star
 // userList
@@ -121,6 +122,7 @@ const images = {
     mailVoice,
     videoCamera,
     messageO,
+    dealBgCard,
 
     arrowDown: '/images/arrow-down.svg',
 };
