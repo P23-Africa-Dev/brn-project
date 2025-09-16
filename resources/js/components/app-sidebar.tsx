@@ -16,6 +16,7 @@ interface PageProps {
     [key: string]: unknown; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
+
 type NavItem = { name: string; icon: string; href: string };
 
 const NAV_ITEMS: NavItem[] = [

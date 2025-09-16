@@ -37,22 +37,4 @@ class UserActivity extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-    /**
-     * Scope a query to get activities within the last 7 days.
-     */
-    public function scopeLastWeek($query)
-    {
-        return $query->where('created_at', '>=', now()->subDays(6)->startOfDay());
-    }
-
-    /**
-     * Get total minutes online for a specific date.
-     */
-    public static function getTotalMinutesForDate($userId, $date)
-    {
-        return self::where('user_id', $userId)
-            ->whereDate('created_at', $date)
-            ->sum('minutes_online');
-    }
 }

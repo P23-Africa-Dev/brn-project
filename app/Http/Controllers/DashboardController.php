@@ -23,24 +23,29 @@ class DashboardController extends Controller
 
     public function weeklyActivity(Request $request, $userId = null)
     {
-        // Use provided userId or fallback to authenticated user
         $userId = $userId ?? Auth::id();
-
-        $lastWeek = Carbon::now()->subDays(6);
+        $lastWeek = now()->subDays(6)->startOfDay();
+        $today = now()->endOfDay();
 
         $activities = UserActivity::where('user_id', $userId)
-            ->where('created_at', '>=', $lastWeek)
+            ->whereBetween('created_at', [$lastWeek, $today])
+            ->orderBy('created_at')
             ->get()
-            ->groupBy(function ($date) {
-                return Carbon::parse($date->created_at)->format('Y-m-d');
+            ->groupBy(function ($activity) {
+                return $activity->created_at->format('Y-m-d');
             })
             ->map(function ($group) {
                 return $group->sum('minutes_online');
             });
 
-        return response()->json([
-            'data' => $activities
-        ]);
+        // Fill in missing dates with zero
+        $result = collect();
+        for ($date = $lastWeek; $date <= $today; $date->addDay()) {
+            $dateStr = $date->format('Y-m-d');
+            $result[$dateStr] = $activities[$dateStr] ?? 0;
+        }
+
+        return response()->json(['data' => $result]);
     }
 
     public function getActivityChange()

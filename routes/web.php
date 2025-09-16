@@ -33,15 +33,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // })->name('dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/dashboard', [DashboardController::class, 'weeklyActivity']);
-    Route::get('/dashboard/{userId?}', [DashboardController::class, 'weeklyActivity']);
+    Route::get('/api/user/{userId?}', [DashboardController::class, 'weeklyActivity']);
     Route::get('/api/user-activity-change', [DashboardController::class, 'getActivityChange']);
 
     // Route::get('/chats', function () {
     //     return Inertia::render('chats/index');  // Note the lowercase path
     // })->name('chats.index');
-    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
-    Route::get('/chats/{conversation}', [ChatController::class, 'show'])->name('chats.show');
-    Route::post('/chats/{conversation}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
+    Route::get('/messages', [ChatController::class, 'index'])->name('chats.index');
+    Route::get('/messages/{encryptedId}', [ChatController::class, 'show'])->name('chats.show');
+    Route::post('/messages/{encryptedId}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
 
     // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     // Route::post('/api/payment/initialize', [PaymentController::class, 'initializePayment'])->name('payment.initialize');
