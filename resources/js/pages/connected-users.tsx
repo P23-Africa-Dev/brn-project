@@ -22,7 +22,7 @@ const ConnectedUsersPage: React.FC = () => {
 
     // Debug: log pending array to inspect structure
     React.useEffect(() => {
-        // eslint-disable-next-line no-console
+         
         console.log('Pending connections:', pending);
     }, [pending]);
 
