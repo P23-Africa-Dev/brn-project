@@ -37,7 +37,6 @@ class User extends Authenticatable
         'number_of_employees',
         'selected_outcome',
         'goals',
-        'direction',
     ];
 
     /**
