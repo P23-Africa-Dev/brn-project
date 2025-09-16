@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Services\FlutterwaveService;
 use App\Services\CurrencyService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Vite;
 use Inertia\Inertia;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,5 +34,9 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
         ]);
+
+        if ($this->app->environment('testing')) {
+            Vite::useBuildDirectory('fake-build'); // avoid manifest lookup
+        }
     }
 }
