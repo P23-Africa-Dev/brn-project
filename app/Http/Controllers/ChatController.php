@@ -19,9 +19,17 @@ class ChatController extends Controller
 
         $mappedConversations = $conversations->map(function ($c) use ($user) {
             return [
-                'id' => $c->encrypted_id, // Use encrypted ID
+                'id' => $c->encrypted_id, // Use encrypted ID for frontend routing
+                'encrypted_id' => $c->encrypted_id, // Always provide encrypted_id
                 'title' => $c->title,
-                'participants' => $c->participants->map->only(['id', 'name']),
+                'participants' => $c->participants->map(function ($p) {
+                    return [
+                        'id' => $p->id,
+                        'name' => $p->name,
+                        // Always use accessor for full URL
+                        'profile_picture' => $p->getAttribute('profile_picture'),
+                    ];
+                }),
                 'last_message' => $c->lastMessage ? [
                     'body' => $c->lastMessage->body,
                     'created_at' => $c->lastMessage->created_at->toDateTimeString()
@@ -31,8 +39,41 @@ class ChatController extends Controller
 
         return Inertia::render('chats/index', [
             'conversations' => $mappedConversations,
-            'auth' => ['user' => $user->only('id', 'name', 'email')],
+            'auth' => ['user' => $user->only('id', 'name', 'email', 'profile_picture')],
         ]);
+    }
+
+    /**
+     * Start or find a direct conversation with a user and redirect to it.
+     */
+    public function startDirect(Request $request)
+    {
+        $user = $request->user();
+        $otherUserId = $request->input('user_id');
+        if (!$user || !$otherUserId || $user->id == $otherUserId) {
+            return redirect()->back()->with('error', 'Invalid user.');
+        }
+
+        // Find existing direct conversation (2 participants, no title)
+        $existing = $user->conversations()
+            ->whereDoesntHave('participants', function ($q) use ($user, $otherUserId) {
+                $q->whereNotIn('users.id', [$user->id, $otherUserId]);
+            })
+            ->whereHas('participants', function ($q) use ($otherUserId) {
+                $q->where('users.id', $otherUserId);
+            })
+            ->whereRaw('(select count(*) from conversation_user where conversation_id = conversations.id) = 2')
+            ->first();
+
+        if ($existing) {
+            return redirect()->route('chats.show', ['encryptedId' => $existing->encrypted_id]);
+        }
+
+        // Create new conversation
+        $conversation = \App\Models\Conversation::create();
+        $conversation->participants()->attach([$user->id, $otherUserId]);
+
+        return redirect()->route('chats.show', ['encryptedId' => $conversation->encrypted_id]);
     }
 
     public function show(Request $request, string $encryptedId)
@@ -59,23 +100,30 @@ class ChatController extends Controller
                 return [
                     'id' => $m->id,
                     'body' => $m->body,
-                    'user' => $m->user ? $m->user->only(['id', 'name']) : null,
+                    'user' => $m->user ? $m->user->only(['id', 'name', 'profile_picture']) : null,
                     'created_at' => $m->created_at->toDateTimeString(),
                 ];
             });
+
+        // Get participants with profile_picture
+        $participants = $conversation->participants()
+            ->select(['users.id', 'users.name', 'users.profile_picture'])
+            ->get();
+
+        // Get latest message (last in the list)
+        $latestMessage = $messages->count() ? $messages->last() : null;
 
         return Inertia::render('chats/show', [
             'conversation' => [
                 'id' => $conversation->id, // raw id for Echo
                 'encrypted_id' => $conversation->encrypted_id, // secure routes
                 'title' => $conversation->title,
-                'participants' => $conversation->participants()
-                    ->select(['users.id', 'users.name'])
-                    ->get(),
+                'participants' => $participants,
             ],
             'messages' => $messages,
+            'latestMessage' => $latestMessage,
             'auth' => [
-                'user' => $user->only(['id', 'name'])
+                'user' => $user->only(['id', 'name', 'profile_picture'])
             ],
         ]);
     }

@@ -48,7 +48,12 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
     authUserId,
 }) => {
     // Use Inertia page props for connection status, which must be provided by the parent page (from database)
-    const { connected, pending } = usePage().props as { connected?: any[]; pending?: any[] };
+    const {
+        connected,
+        pending,
+        conversations = [],
+        auth,
+    } = usePage().props as { connected?: any[]; pending?: any[]; conversations?: any[]; auth?: any };
     let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
     if (!connected || !pending) {
         // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
@@ -59,6 +64,44 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
         connectionStatus = 'pending';
     }
     const [loading, setLoading] = useState(false);
+
+    // Find existing conversation with this user (if any)
+    let conversationLink: string | null = null;
+    if (Array.isArray(conversations) && auth?.user?.id) {
+        const found = conversations.find((c) => {
+            // Direct message: only 2 participants, and the other is userId
+            if (c.participants && c.participants.length === 2) {
+                return c.participants.some((p: any) => p.id === userId) && c.participants.some((p: any) => p.id === auth.user.id);
+            }
+            return false;
+        });
+        if (found && found.id) {
+            conversationLink = `/messages/${found.id}`;
+        } else if (found && found.encrypted_id) {
+            conversationLink = `/messages/${found.encrypted_id}`;
+        }
+    }
+
+    // Handler to start a new conversation if none exists
+    const handleStartConversation = () => {
+        if (conversationLink) {
+            router.visit(conversationLink);
+        } else {
+            // POST to a route to create a new conversation, then redirect
+            setLoading(true);
+            router.post(
+                '/messages/start',
+                { user_id: userId },
+                {
+                    preserveScroll: true,
+                    onFinish: () => setLoading(false),
+                    onSuccess: () => {
+                        // Expect backend to redirect to the new conversation
+                    },
+                },
+            );
+        }
+    };
 
     const handleConnect = () => {
         setLoading(true);
@@ -170,7 +213,8 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                     (connectionStatus === 'accepted' ? (
                                         <button
                                             className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-2 py-1 whitespace-nowrap text-secondaryWhite"
-                                            // onClick: navigate to message page or open chat
+                                            onClick={handleStartConversation}
+                                            disabled={loading}
                                         >
                                             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
                                                 <img src={images.messageO} className="h-4 w-4" alt="" />
