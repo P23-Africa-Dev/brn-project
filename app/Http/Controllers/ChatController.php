@@ -39,7 +39,7 @@ class ChatController extends Controller
 
         return Inertia::render('chats/index', [
             'conversations' => $mappedConversations,
-            'auth' => ['user' => $user->only('id', 'name', 'email', 'profile_picture')],
+            'auth' => ['user' => $user->only(['id', 'name', 'email', 'profile_picture'])],
         ]);
     }
 

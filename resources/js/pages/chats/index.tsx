@@ -17,13 +17,14 @@ type Props = {
     };
 };
 
-
 export default function Index({ conversations = [], auth }: Props) {
     // Helper to get the other participant (for 1:1 chat)
     function getOtherParticipant(participants: { id: number; name: string; profile_picture?: string }[], currentUserId: number) {
         if (!participants || participants.length < 2) return null;
         return participants.find((u) => u.id !== currentUserId) || null;
     }
+
+    console.log('Participant: ', conversations);
 
     return (
         <AppLayout>
