@@ -16,6 +16,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // if ($this->app->environment('testing')) {
+        //     Vite::useBuildDirectory('fake-build'); // avoid manifest lookup
+        // }
+
         Inertia::share([
             'auth' => function () {
                 return [
@@ -34,9 +38,5 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
         ]);
-
-        if ($this->app->environment('testing')) {
-            Vite::useBuildDirectory('fake-build'); // avoid manifest lookup
-        }
     }
 }
