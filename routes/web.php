@@ -31,7 +31,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('dashboard', function () {
     //     return Inertia::render('dashboard');
     // })->name('dashboard');
-    Route::get('/connected-users', [\App\Http\Controllers\DashboardController::class, 'connectedUsers'])->name('connected.users');
+    // Route::get('/connected-users', [\App\Http\Controllers\DashboardController::class, 'connectedUsers'])->name('connected.users');
     Route::post('/connections/send', [\App\Http\Controllers\ConnectionController::class, 'sendRequest']);
     Route::post('/connections/accept', [\App\Http\Controllers\ConnectionController::class, 'acceptRequest']);
     Route::post('/connections/reject', [\App\Http\Controllers\ConnectionController::class, 'rejectRequest']);

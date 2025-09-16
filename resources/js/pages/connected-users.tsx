@@ -16,8 +16,15 @@ interface PageProps {
 }
 
 const ConnectedUsersPage: React.FC = () => {
-    const { connected = [], pending = [] } = usePage<PageProps & { auth: { user: { id: number } } }>().props;
+    const { connected = [], pending = [], auth } = usePage<PageProps & { auth: { user: { id: number } } }>().props;
+    const myId = auth?.user?.id;
     const [loadingId, setLoadingId] = React.useState<number | null>(null);
+
+    // Debug: log pending array to inspect structure
+    React.useEffect(() => {
+        // eslint-disable-next-line no-console
+        console.log('Pending connections:', pending);
+    }, [pending]);
 
     const handleAction = (userId: number, action: 'accept' | 'reject' | 'revoke') => {
         setLoadingId(userId);
@@ -61,7 +68,8 @@ const ConnectedUsersPage: React.FC = () => {
                 ) : (
                     <ul className="space-y-2">
                         {pending.map((user) => {
-                            const isIncoming = user.direction === 'incoming';
+                            // Fallback: if direction is missing, treat as incoming if user.id is not myId
+                            const isIncoming = user.direction ? user.direction === 'incoming' : typeof myId === 'number' && user.id !== myId;
                             return (
                                 <li key={user.id} className="flex items-center gap-3 rounded border p-2">
                                     {user.profile_picture && <img src={user.profile_picture} alt={user.name} className="h-10 w-10 rounded-full" />}

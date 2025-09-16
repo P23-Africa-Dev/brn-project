@@ -1,9 +1,9 @@
 'use client';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
+import { router, usePage } from '@inertiajs/react';
 import { Star } from 'lucide-react';
 import React, { useState } from 'react';
-import axios from 'axios';
 import UserDetailedSidebar from './user-profile';
 
 interface UserProfileSidebarProps {
@@ -47,35 +47,30 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
     userId,
     authUserId,
 }) => {
-    // Connection state: 'none', 'pending', 'accepted'
-    const [connectionStatus, setConnectionStatus] = useState<'none' | 'pending' | 'accepted'>('none');
+    // Use Inertia page props for connection status, which must be provided by the parent page (from database)
+    const { connected, pending } = usePage().props as { connected?: any[]; pending?: any[] };
+    let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
+    if (!connected || !pending) {
+        // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
+        console.warn('Sidebar: connected/pending props missing. Ensure parent page provides them from database.');
+    } else if (connected.some((u) => u.id === userId)) {
+        connectionStatus = 'accepted';
+    } else if (pending.some((u) => u.id === userId)) {
+        connectionStatus = 'pending';
+    }
     const [loading, setLoading] = useState(false);
 
-    React.useEffect(() => {
-        // Optionally, fetch connection status between authUserId and userId
-        if (userId && authUserId && userId !== authUserId) {
-            axios.get('/connections/list').then(res => {
-                const { connected, pending } = res.data;
-                if (connected.some((u: any) => u.id === userId)) {
-                    setConnectionStatus('accepted');
-                } else if (pending.some((u: any) => u.id === userId)) {
-                    setConnectionStatus('pending');
-                } else {
-                    setConnectionStatus('none');
-                }
-            });
-        }
-    }, [userId, authUserId]);
-
-    const handleConnect = async () => {
+    const handleConnect = () => {
         setLoading(true);
-        try {
-            await axios.post('/connections/send', { connected_user_id: userId });
-            setConnectionStatus('pending');
-        } catch (e) {
-            // Optionally show error
-        }
-        setLoading(false);
+        router.post(
+            '/connections/send',
+            { connected_user_id: userId },
+            {
+                preserveScroll: true,
+                onFinish: () => setLoading(false),
+                onSuccess: () => router.reload({ only: ['connected', 'pending'] }),
+            },
+        );
     };
 
     return (
@@ -101,7 +96,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                     {/* Content Section */}
                     <div className="h-[40%] w-full px-4 pt-4 pb-2">
                         {/* Details Grid */}
-                        <div className="flex h-full w-full flex-col rounded-tl-4xl rounded-br-4xl rounded-bl-4xl bg-darkBlue py-3 px-5 pl-4">
+                        <div className="flex h-full w-full flex-col rounded-tl-4xl rounded-br-4xl rounded-bl-4xl bg-darkBlue px-5 py-3 pl-4">
                             <div className="flex flex-row pl-5">
                                 <div className="flex flex-col gap-4">
                                     <div className="flex flex-wrap gap-4">
@@ -126,7 +121,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                     </div>
                                 </div>
                                 <div className="mt-6 flex items-center justify-between">
-                                    <div className="-mt-5 flex flex-col gap-2 w-full">
+                                    <div className="-mt-5 flex w-full flex-col gap-2">
                                         {/* The "Users" button now triggers the new UserDetailedSidebar */}
                                         <UserDetailedSidebar
                                             name={name}
@@ -166,20 +161,29 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
 
                             {/* Action Buttons */}
                             <div className="mt-8 flex space-x-3">
-                                {userId !== authUserId && (
-                                    <button
-                                        className={`flex gap-2 rounded-xl px-2 py-1 justify-center items-center whitespace-nowrap text-secondaryWhite ${connectionStatus === 'pending' ? 'bg-gray-400' : 'bg-[#A47AF0]'}`}
-                                        onClick={handleConnect}
-                                        disabled={connectionStatus !== 'none' || loading}
-                                    >
-                                        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
-                                            <img src={images.connectLink} className="h-4 w-4" alt="" />
-                                        </span>
-                                        <span>
-                                            {connectionStatus === 'pending' ? 'Pending' : connectionStatus === 'accepted' ? 'Connected' : loading ? 'Connecting...' : 'Connect Now'}
-                                        </span>
-                                    </button>
-                                )}
+                                {userId !== authUserId &&
+                                    (connectionStatus === 'accepted' ? (
+                                        <button
+                                            className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-2 py-1 whitespace-nowrap text-secondaryWhite"
+                                            // onClick: navigate to message page or open chat
+                                        >
+                                            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
+                                                <img src={images.messageO} className="h-4 w-4" alt="" />
+                                            </span>
+                                            <span>Message</span>
+                                        </button>
+                                    ) : (
+                                        <button
+                                            className={`flex items-center justify-center gap-2 rounded-xl px-2 py-1 whitespace-nowrap text-secondaryWhite ${connectionStatus === 'pending' ? 'bg-gray-400' : 'bg-[#A47AF0]'}`}
+                                            onClick={handleConnect}
+                                            disabled={connectionStatus !== 'none' || loading}
+                                        >
+                                            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
+                                                <img src={images.connectLink} className="h-4 w-4" alt="" />
+                                            </span>
+                                            <span>{connectionStatus === 'pending' ? 'Pending' : loading ? 'Connecting...' : 'Connect Now'}</span>
+                                        </button>
+                                    ))}
                                 <button className="flex gap-2 rounded-full bg-transparent px-3 py-2 whitespace-nowrap text-secondaryWhite">
                                     <img src={images.bookmark} className="h-6 w-6" alt="" />
                                     <span>Save for later</span>
