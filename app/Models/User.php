@@ -88,4 +88,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(\App\Models\Message::class);
     }
+
+        public function connections()
+    {
+        return $this->hasMany(\App\Models\Connection::class, 'user_id');
+    }
+
+    public function connectedWith()
+    {
+        return $this->hasMany(\App\Models\Connection::class, 'connected_user_id');
+    }
 }

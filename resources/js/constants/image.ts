@@ -29,6 +29,7 @@ import dropDownArrow from '../../../public/assets/dropdown-arrow.png';
 import errorBg from '../../../public/assets/error-bg.png';
 import flowerPattern from '../../../public/assets/flower.png';
 import sliderHorizontal from '../../../public/assets/horizontal.png';
+import preferenceHorizontal from '../../../public/assets/preference-horizontal.png';
 import lineCHart from '../../../public/assets/line-pattern-chat.png';
 import cardlocation from '../../../public/assets/location-05.png';
 import location from '../../../public/assets/location.png';
@@ -55,7 +56,19 @@ import userList from '../../../public/assets/user-list.png';
 import videoCamera from '../../../public/assets/video-camera-ai.png';
 import connectLink from '../../../public/assets/pin-link.png';
 import bookmark from '../../../public/assets/collections-bookmark.png';
-import dealBgCard from '../../../public/assets/deal-card.png';
+import dealBgCard from '../../../public/assets/deal-bg.png';
+import loginDropdown from '../../../public/assets/login-dropdown.png';
+import sideBarBG from '../../../public/assets/sidebarBG.png';
+import desktopSearch from '../../../public/assets/desktop-ai-search-02.png';
+import desktopLocation from '../../../public/assets/desktop-location-05.png';
+import desktopSlide from '../../../public/assets/desktop-preference-horizontal (1).png';
+import mobileActiveDashIcon from '../../../public/assets/mobile-dashboard-square.png';
+import bubbleChat from '../../../public/assets/bubble-chat (1).png';
+import repeatmobileIcon from '../../../public/assets/repeat-b.png';
+import searchList from '../../../public/assets/m-search-list-02 (1).png';
+import shareKnowledgemobile from '../../../public/assets/share-knowledge (1).png';
+import topActiveBg from '../../../public/assets/top-active-bg.png';
+import BottomActiveBg from '../../../public/assets/bottom-active-bg.png';
 
 // star
 // userList
@@ -66,7 +79,18 @@ import dealBgCard from '../../../public/assets/deal-card.png';
 // messageO
 const images = {
     uploadBg,
+    BottomActiveBg,
+    topActiveBg,
+    shareKnowledgemobile,
+    bubbleChat,
+    repeatmobileIcon,
+    searchList,
+    mobileActiveDashIcon,
+    desktopSearch,
+    preferenceHorizontal,
+    desktopLocation,
     messagepeople,
+    desktopSlide,
     bookmark,
     connectLink,
     stepFormsBg,
@@ -83,6 +107,8 @@ const images = {
     arrowUp,
     man1,
     man2,
+    loginDropdown,
+    sideBarBG,
     man3,
     man4,
     flowerPattern,

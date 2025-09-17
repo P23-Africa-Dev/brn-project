@@ -20,11 +20,11 @@ const industryData: Record<string, string[]> = {
     ],
     'Finance & Insurance': ['Business', 'Engineering', 'Investment Advisory', 'Insurance Brokers', 'Tax Services', 'Crypto & Web3 Finance'],
     Technology: [
-        'Software Development',
+        'Software Development ',
         'Business',
         'Engineering',
         'Investment Advisory',
-        'SaaS Platforms',
+        'Sales',
         'UI/UX & Product Design',
         'Cybersecurity',
         'AI & Data Analytics',
@@ -151,16 +151,16 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                 onValueChange={(value) => setValue('industry', value)}
                                 onOpenChange={(open) => setOpenIndustrySelect(open)}
                             >
-                                <SelectTrigger className="flex w-full justify-between whitespace-nowrap rounded-2xl border-1 border-primary py-6 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none">
+                                <SelectTrigger className="[&_svg]:hidden flex w-full justify-between whitespace-nowrap rounded-2xl border-1 border-primary py-6 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none">
                              
                                     <SelectValue className="w-full whitespace-nowrap  " placeholder="Choose an industry" />
                                     {openIndustrySelect ? (
-                                        <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 rotate-180 transform text-gray-400">
-                                            <img src={images.dropDownArrow} alt="" />
+                                        <span className="pointer-events-none absolute top-1/2 right-8 -translate-y-1/2 rotate-180 transform text-gray-400">
+                                            <img src={images.loginDropdown} className='w-auto h-3' alt="" />
                                         </span>
                                     ) : (
-                                        <span className="pointer-events-none absolute top-1/2 right-4 -translate-y-1/2 transform text-gray-400">
-                                            <img src={images.dropDownArrow} alt="" />
+                                        <span className="pointer-events-none absolute top-1/2 right-8 -translate-y-1/2 transform text-gray-400">
+                                            <img src={images.loginDropdown} className='w-auto h-3' alt="" />
                                         </span>
                                     )}
                                 </SelectTrigger>
@@ -189,7 +189,7 @@ export default function StepTwoForm({ defaultValues, onNext }: StepTwoProps) {
                                                 type="button"
                                                 key={cat}
                                                 onClick={() => toggleCategory(cat)}
-                                                className={`flex items-center space-x-2 rounded-3xl bg-white px-8 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
+                                                className={`flex items-center space-x-2 rounded-3xl bg-white px-10 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
                                                     isSelected ? 'bg-transparent font-bold text-[#0B1727]' : 'font-semibold text-[#0B1727]/60'
                                                 } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
                                             >

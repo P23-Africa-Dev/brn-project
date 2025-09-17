@@ -1,0 +1,8 @@
+{
+  "resources/js/pages/auth/login.tsx": {
+    "file": "fake-login.js"
+  },
+  "resources/js/pages/auth/register.tsx": {
+    "file": "fake-register.js"
+  }
+}

@@ -31,6 +31,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route::get('dashboard', function () {
     //     return Inertia::render('dashboard');
     // })->name('dashboard');
+    // Route::get('/connected-users', [\App\Http\Controllers\DashboardController::class, 'connectedUsers'])->name('connected.users');
+    Route::post('/connections/send', [\App\Http\Controllers\ConnectionController::class, 'sendRequest']);
+    Route::post('/connections/accept', [\App\Http\Controllers\ConnectionController::class, 'acceptRequest']);
+    Route::post('/connections/reject', [\App\Http\Controllers\ConnectionController::class, 'rejectRequest']);
+    Route::get('/connections/list', [\App\Http\Controllers\ConnectionController::class, 'listConnections']);
+
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Route::get('/dashboard', [DashboardController::class, 'weeklyActivity']);
     Route::get('/api/user/{userId?}', [DashboardController::class, 'weeklyActivity']);
@@ -74,3 +80,5 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
+
+// require __DIR__ . '/connections.php';

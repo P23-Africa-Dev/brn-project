@@ -15,8 +15,49 @@ class DashboardController extends Controller
     {
         $users = User::all();
 
+        // Fetch connected and pending users for the authenticated user
+        $user = Auth::user();
+        $userId = $user->id;
+
+        $connections = \App\Models\Connection::where(function ($q) use ($userId) {
+            $q->where('user_id', $userId)
+                ->orWhere('connected_user_id', $userId);
+        })->get();
+
+        $connected = [];
+        $pending = [];
+        foreach ($connections as $conn) {
+            if ($conn->status === 'accepted') {
+                $otherUser = $conn->user_id == $userId ? $conn->connectedUser : $conn->user;
+                $connected[] = [
+                    'id' => $otherUser->id,
+                    'name' => $otherUser->name,
+                    'email' => $otherUser->email,
+                    'profile_picture' => $otherUser->profile_picture,
+                ];
+            } elseif ($conn->status === 'pending') {
+                if ($conn->connected_user_id == $userId) {
+                    $pending[] = [
+                        'id' => $conn->user->id,
+                        'name' => $conn->user->name,
+                        'email' => $conn->user->email,
+                        'profile_picture' => $conn->user->profile_picture,
+                    ]; // incoming
+                } else {
+                    $pending[] = [
+                        'id' => $conn->connectedUser->id,
+                        'name' => $conn->connectedUser->name,
+                        'email' => $conn->connectedUser->email,
+                        'profile_picture' => $conn->connectedUser->profile_picture,
+                    ]; // outgoing
+                }
+            }
+        }
+
         return Inertia::render('dashboard', [
             'users' => $users,
+            'connected' => $connected, // array of connected users
+            'pending' => $pending,     // array of pending users
         ]);
     }
 
@@ -79,4 +120,50 @@ class DashboardController extends Controller
             'isIncrease' => $percentageChange >= 0
         ]);
     }
+
+    // public function connectedUsers()
+    // {
+    //     $user = Auth::user();
+    //     $userId = $user->id;
+
+    //     $connections = \App\Models\Connection::where(function ($q) use ($userId) {
+    //         $q->where('user_id', $userId)
+    //             ->orWhere('connected_user_id', $userId);
+    //     })->get();
+
+    //     $connected = [];
+    //     $pending = [];
+    //     foreach ($connections as $conn) {
+    //         if ($conn->status === 'accepted') {
+    //             $otherUser = $conn->user_id == $userId ? $conn->connectedUser : $conn->user;
+    //             $connected[] = [
+    //                 'id' => $otherUser->id,
+    //                 'name' => $otherUser->name,
+    //                 'email' => $otherUser->email,
+    //                 'profile_picture' => $otherUser->profile_picture,
+    //             ];
+    //         } elseif ($conn->status === 'pending') {
+    //             if ($conn->connected_user_id == $userId) {
+    //                 $pending[] = [
+    //                     'id' => $conn->user->id,
+    //                     'name' => $conn->user->name,
+    //                     'email' => $conn->user->email,
+    //                     'profile_picture' => $conn->user->profile_picture,
+    //                 ]; // incoming
+    //             } else {
+    //                 $pending[] = [
+    //                     'id' => $conn->connectedUser->id,
+    //                     'name' => $conn->connectedUser->name,
+    //                     'email' => $conn->connectedUser->email,
+    //                     'profile_picture' => $conn->connectedUser->profile_picture,
+    //                 ]; // outgoing
+    //             }
+    //         }
+    //     }
+
+    //     return Inertia::render('connected-users', [
+    //         'connected' => $connected,
+    //         'pending' => $pending,
+    //     ]);
+    // }
 }

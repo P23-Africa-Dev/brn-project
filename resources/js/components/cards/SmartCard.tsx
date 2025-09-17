@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Link, Star } from 'lucide-react';
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -27,10 +27,23 @@ interface SmartMatchCardProps {
 
 const SmartMatchCard: React.FC<SmartMatchCardProps> = ({ match }) => {
     return (
-        <Card className="relative flex h-[202px] max-w-[250px] w-full flex-col justify-end overflow-hidden rounded-xl  shadow-lg ">
-            <img src={match.imageSrc} alt={match.name} className="absolute inset-0 z-0 h-full w-full object-cover" />
+        <Card className="relative flex h-[202px] w-full max-w-[250px] flex-col justify-end overflow-hidden rounded-xl shadow-lg">
+            {/* <img src={match.imageSrc} alt={match.name} className="absolute inset-0 z-0 h-full w-full object-cover" /> */}
+            {/* Placeholder for the image, replace with actual image source */}
+            <div
+                style={{
+                    backgroundImage: `url(${match.imageSrc})`,
+                }}
+                className="absolute inset-0 z-0 h-full w-full overflow-hidden bg-cover bg-top bg-no-repeat object-cover"
+            >
+                {/* <img
+                        src={imageSrc}
+                        alt={`${name}'s profile`}
+                        className="absolute inset-0 mt-3 h-full w-full max-w-[90px] object-contain lg:rounded-l-xl"
+                    /> */}
+            </div>
             {/* Overlay for text readability */}
-            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/40 to-transparent"></div>
+            <div className="absolute inset-0 z-10 bg-gradient-to-t from-black/50 to-transparent"></div>
 
             <div className="relative -bottom-7 z-20 bg-[#FFFFFFCC]/80 p-4">
                 <h3 className="text-sm font-bold text-darkBlue">Chidi Nwonsu</h3>
@@ -53,19 +66,19 @@ interface SwiperCarouselProps {
 
 const SwiperCarousel: React.FC<SwiperCarouselProps> = ({ matches }) => {
     return (
-  <Swiper
-  slidesPerView={2.3}   // Show 2 and a half slides
-  spaceBetween={16}     // Add spacing between cards (adjust px value as needed)
-  freeMode={true}
-  pagination={{ clickable: true }}
-  className="mySwiper"
->
-  {matches.map((match, index) => (
-    <SwiperSlide key={index} className="w-full">
-      <SmartMatchCard match={match} />
-    </SwiperSlide>
-  ))}
-</Swiper>
+        <Swiper
+            slidesPerView={2.3} // Show 2 and a half slides
+            spaceBetween={16} // Add spacing between cards (adjust px value as needed)
+            freeMode={true}
+            pagination={{ clickable: true }}
+            className="mySwiper"
+        >
+            {matches.map((match, index) => (
+                <SwiperSlide key={index} className="w-full">
+                    <SmartMatchCard match={match} />
+                </SwiperSlide>
+            ))}
+        </Swiper>
     );
 };
 

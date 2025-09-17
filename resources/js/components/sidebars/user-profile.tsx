@@ -52,8 +52,17 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                     <div className="flex w-[40%] flex-col rounded-l-3xl bg-[#A7D5DD] p-6 shadow-2xl">
                         {/***************************** Top Area */}
                         <div className="flex flex-col items-center text-center">
+                            {/* <div className="relative h-28 w-28 overflow-hidden rounded-full">
+                                <img src={imageSrc} alt={`${name}'s profile`} className="h-full bg-top  w-full object-cover" />
+                            </div> */}
+
                             <div className="relative h-28 w-28 overflow-hidden rounded-full">
-                                <img src={imageSrc} alt={`${name}'s profile`} className="h-full w-full object-cover" />
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${imageSrc})`,
+                                    }}
+                                    className="aboslute left-0 h-full w-full max-w-full overflow-hidden bg-cover bg-top bg-no-repeat"
+                                ></div>
                             </div>
 
                             {/* Headings */}
@@ -98,8 +107,8 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                         </div>
                     </div>
                     {/* Right Column - Detailed Info */}
-                    <div className="w-[60%] p-6 max-h-max overflow-y-auto no-scrollbar">
-                        <div className=''>
+                    <div className="no-scrollbar max-h-max w-[60%] overflow-y-auto p-6">
+                        <div className="">
                             <div className="text-darkBlue">
                                 <h2 className="text-lg font-extrabold">Bio</h2>
                                 <p className="mt-1 text-sm font-medium">{bio}</p>
@@ -133,23 +142,23 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                         </div>
 
                         {/* Activity */}
-                        <div className="mt-10 bg-darkBlue text-white rounded-br-4xl px-5 pb-20 py-7">
-                            <h2 className=" text-lg font-bold">Activity & Reputation</h2>
+                        <div className="mt-10 rounded-br-4xl bg-darkBlue px-5 py-7 pb-20 text-white">
+                            <h2 className="text-lg font-bold">Activity & Reputation</h2>
                             <div className="mt-8 flex flex-col gap-y-4 text-sm">
                                 <div>
                                     <p className="font-bold">BRN Member Since</p>
-                                    <p className="font-light text-sm ">{brnMemberSince}</p>
+                                    <p className="text-sm font-light">{brnMemberSince}</p>
                                 </div>
                                 <div>
                                     <p className="font-bold">Response Rate</p>
-                                    <p className="font-light text-sm ">{responseRate}</p>
+                                    <p className="text-sm font-light">{responseRate}</p>
                                 </div>
                                 <div className="col-span-2">
                                     <p className="font-bold">Successful Deals Rate</p>
-                                    <p className="font-light text-sm ">{successfulDealsRate}</p>
+                                    <p className="text-sm font-light">{successfulDealsRate}</p>
                                 </div>
                             </div>
-                            
+
                             <a href="#" className="mt-10 block text-sm font-medium underline">
                                 View Reviews
                             </a>

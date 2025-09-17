@@ -283,25 +283,29 @@ body .apexcharts-toolbar {
 }
 
 .rounded-edge {
-  --r: 35px; /* radius */
+    --r: 35px; /* radius */
 
-  width: 200px;
-  z-index: -10;
-  position: absolute;
-  top: -15px;
-  left: 30px;
-  aspect-ratio: 1.5;
-  background: #519548;
-  border-radius: var(--r) 0/calc(2*var(--r)) 0;
-  padding-block: var(--r);
-  --_m:#0000 100%,#000 calc(100% + 20px);
-  mask:
-    conic-gradient(#000 0 0) content-box,
-    radial-gradient(var(--r) at 100% 100%,var(--_m)) 0 100% no-repeat,
-    radial-gradient(var(--r) at 0    0   ,var(--_m)) 100% 0 no-repeat;
-  mask-size: var(--r) var(--r);
+    width: 200px;
+    z-index: -10;
+    position: absolute;
+    top: -15px;
+    left: 30px;
+    aspect-ratio: 1.5;
+    background: #519548;
+    border-radius: var(--r) 0 / calc(2 * var(--r)) 0;
+    padding-block: var(--r);
+    --_m: #0000 100%, #000 calc(100% + 20px);
+    mask:
+        conic-gradient(#000 0 0) content-box,
+        radial-gradient(var(--r) at 100% 100%, var(--_m)) 0 100% no-repeat,
+        radial-gradient(var(--r) at 0 0, var(--_m)) 100% 0 no-repeat;
+    mask-size: var(--r) var(--r);
 }
 
 /* .grid-card-shadow-card {
 box-shadow: 0px 23px 0px -1px rgba(0,0,0,0.1);
 } */
+
+.active-link-bg {
+    background-image: url('../../public/assets/dashboardBg.png');
+}
