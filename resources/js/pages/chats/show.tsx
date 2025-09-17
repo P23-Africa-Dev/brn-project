@@ -133,11 +133,11 @@ export default function Show({ conversation, messages: initialMessages, latestMe
                         <div className="flex items-center gap-3">
                             {/* Use real profile image from backend, fallback to default */}
                             <img
-                                src={otherUser.profile_picture || '/assets/brn-logo.png'}
+                                src={otherUser.profile_picture || '/images/no-user-dp.png'}
                                 alt={otherUser.name}
                                 className="h-12 w-12 rounded-full border object-cover"
                                 onError={(e) => {
-                                    (e.target as HTMLImageElement).src = '/assets/brn-logo.png';
+                                    (e.target as HTMLImageElement).src = '/images/no-user-dp.png';
                                 }}
                             />
                             <div>

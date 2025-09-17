@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Conversation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 class ChatController extends Controller
@@ -76,6 +77,36 @@ class ChatController extends Controller
         return redirect()->route('chats.show', ['encryptedId' => $conversation->encrypted_id]);
     }
 
+    // public function show($encryptedId)
+    // {
+    //     $conversation = Conversation::whereEncryptedId($encryptedId)
+    //         ->with(['participants', 'messages.user'])
+    //         ->firstOrFail();
+
+    //     // load all conversations for the sidebar
+    //     $conversations = Conversation::whereHas('participants', function ($q) {
+    //         $q->where('user_id', Auth::id());
+    //     })
+    //         ->with(['participants', 'lastMessage'])
+    //         ->get();
+
+    //     if (request()->wantsJson()) {
+    //         return response()->json([
+    //             'conversation' => $conversation,
+    //             'messages' => $conversation->messages,
+    //             'conversations' => $conversations, // ✅ send sidebar too
+    //         ]);
+    //     }
+
+    //     return Inertia::render('Chats/Index', [
+    //         'conversation' => $conversation,
+    //         'messages' => $conversation->messages,
+    //         'conversations' => $conversations, // ✅ sidebar data
+    //         'auth' => ['user' => Auth::user()],
+    //     ]);
+    // }
+
+
     public function show(Request $request, string $encryptedId)
     {
         $user = $request->user();
@@ -84,6 +115,7 @@ class ChatController extends Controller
         }
 
         $conversation = Conversation::findByEncryptedId($encryptedId);
+
         if (!$conversation) {
             abort(404);
         }
@@ -91,6 +123,12 @@ class ChatController extends Controller
         if (!$conversation->participants()->where('user_id', $user->id)->exists()) {
             abort(403);
         }
+
+        $conversations = Conversation::whereHas('participants', function ($q) {
+            $q->where('user_id', Auth::id());
+        })
+            ->with(['participants', 'lastMessage'])
+            ->get();
 
         $messages = $conversation->messages()
             ->with('user')
@@ -117,10 +155,11 @@ class ChatController extends Controller
             return response()->json([
                 'conversation' => $conversation,
                 'messages' => $messages,
+                'conversations' => $conversations, // ✅ send sidebar too
             ]);
         }
 
-        return Inertia::render('chats/show', [
+        return Inertia::render('chats/index', [
             'conversation' => [
                 'id' => $conversation->id, // raw id for Echo
                 'encrypted_id' => $conversation->encrypted_id, // secure routes
@@ -129,6 +168,7 @@ class ChatController extends Controller
             ],
             'messages' => $messages,
             'latestMessage' => $latestMessage,
+            'conversations' => $conversations, // ✅ sidebar data
             'auth' => [
                 'user' => $user->only(['id', 'name', 'profile_picture'])
             ],

@@ -53,4 +53,67 @@ class MessageController extends Controller
             'message' => $message->load('user')
         ], 201);
     }
+
+    public function update(Request $request, string $encryptedId, $messageId)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        $conversation = \App\Models\Conversation::findByEncryptedId($encryptedId);
+        if (!$conversation) {
+            return response()->json(['error' => 'Conversation not found'], 404);
+        }
+
+        $message = $conversation->messages()->where('id', $messageId)->first();
+        if (!$message) {
+            return response()->json(['error' => 'Message not found'], 404);
+        }
+
+        if ($message->user_id !== $user->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $validated = $request->validate([
+            'body' => 'required|string|max:5000',
+        ]);
+
+        $message->body = $validated['body'];
+        $message->save();
+
+        // Optionally broadcast message updated event here
+
+        return response()->json([
+            'message' => $message->load('user')
+        ]);
+    }
+
+    public function destroy(Request $request, string $encryptedId, $messageId)
+    {
+        $user = $request->user();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthenticated'], 401);
+        }
+
+        $conversation = \App\Models\Conversation::findByEncryptedId($encryptedId);
+        if (!$conversation) {
+            return response()->json(['error' => 'Conversation not found'], 404);
+        }
+
+        $message = $conversation->messages()->where('id', $messageId)->first();
+        if (!$message) {
+            return response()->json(['error' => 'Message not found'], 404);
+        }
+
+        if ($message->user_id !== $user->id) {
+            return response()->json(['error' => 'Unauthorized'], 403);
+        }
+
+        $message->delete();
+
+        // Optionally broadcast message deleted event here
+
+        return response()->json(['success' => true]);
+    }
 }

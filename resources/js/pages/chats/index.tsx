@@ -54,6 +54,8 @@ export default function Index({ conversations = [], auth }: Props) {
     // Chat state for selected conversation
     const [messages, setMessages] = useState<Message[]>([]);
     const [text, setText] = useState('');
+    const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
+    const [editText, setEditText] = useState('');
     const [typingUsers, setTypingUsers] = useState<User[]>([]);
     const [participants, setParticipants] = useState<User[]>([]);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
@@ -213,6 +215,11 @@ export default function Index({ conversations = [], auth }: Props) {
 
     async function sendMessage(e?: React.FormEvent) {
         e?.preventDefault();
+        if (editingMessageId !== null) {
+            // Save edited message
+            await handleSaveEdit(editingMessageId);
+            return;
+        }
         if (!text.trim() || !selectedConversation) return;
         const body = text;
         setText('');
@@ -227,6 +234,42 @@ export default function Index({ conversations = [], auth }: Props) {
         } catch (err) {
             console.error('Send message failed', err);
             setText(body);
+        }
+    }
+
+    // Edit message handlers
+    function handleEditMessage(messageId: number, currentBody: string) {
+        setEditingMessageId(messageId);
+        setEditText(currentBody);
+    }
+
+    function handleCancelEdit() {
+        setEditingMessageId(null);
+        setEditText('');
+    }
+
+    async function handleSaveEdit(messageId: number) {
+        if (!editText.trim() || !selectedConversation) return;
+        try {
+            // TODO: Replace with actual backend PATCH endpoint
+            await axios.patch(`/messages/${selectedConversation.encrypted_id}/messages/${messageId}`, { body: editText });
+            setMessages((msgs) => msgs.map((msg) => (msg.id === messageId ? { ...msg, body: editText } : msg)));
+            setEditingMessageId(null);
+            setEditText('');
+        } catch (err) {
+            console.error('Edit message failed', err);
+        }
+    }
+
+    async function handleDeleteMessage(messageId: number) {
+        if (!selectedConversation) return;
+        if (!window.confirm('Are you sure you want to delete this message?')) return;
+        try {
+            // TODO: Replace with actual backend DELETE endpoint
+            await axios.delete(`/messages/${selectedConversation.encrypted_id}/messages/${messageId}`);
+            setMessages((msgs) => msgs.filter((msg) => msg.id !== messageId));
+        } catch (err) {
+            console.error('Delete message failed', err);
         }
     }
 
@@ -271,15 +314,15 @@ export default function Index({ conversations = [], auth }: Props) {
                                     <button
                                         key={c.encrypted_id}
                                         onClick={() => handleSelectConversation(c.encrypted_id)}
-                                        className={`flex w-full items-center gap-3 rounded-xl p-4 shadow hover:bg-gray-50 ${selectedEncryptedId === c.encrypted_id ? 'bg-indigo-50' : 'bg-white'}`}
+                                        className={`flex w-full cursor-pointer items-center gap-3 rounded-xl p-4 shadow hover:bg-gray-50 ${selectedEncryptedId === c.encrypted_id ? 'bg-indigo-50' : 'bg-white'}`}
                                         style={{ border: selectedEncryptedId === c.encrypted_id ? '2px solid #6366f1' : undefined }}
                                     >
                                         <img
-                                            src={other?.profile_picture || '/assets/brn-logo.png'}
+                                            src={other?.profile_picture || '/images/no-user-dp.png'}
                                             alt={other?.name || 'User'}
                                             className="h-10 w-10 rounded-full border object-cover"
                                             onError={(e) => {
-                                                (e.target as HTMLImageElement).src = '/assets/brn-logo.png';
+                                                (e.target as HTMLImageElement).src = '/images/no-user-dp.png';
                                             }}
                                         />
                                         <div className="min-w-0 flex-1 text-left">
@@ -301,7 +344,7 @@ export default function Index({ conversations = [], auth }: Props) {
                 <div className="flex flex-1 flex-col bg-white">
                     {selectedConversation ? (
                         <>
-                            <div className="mb-6 flex items-center gap-3 p-8 pb-0">
+                            <div className="relative mb-6 flex items-center gap-3 px-8 py-4 pb-0">
                                 {(() => {
                                     const other = getOtherParticipant(selectedConversation.participants, auth.user.id);
                                     // Find the last message from the other participant, or just the last message
@@ -314,35 +357,170 @@ export default function Index({ conversations = [], auth }: Props) {
                                     return (
                                         <>
                                             <img
-                                                src={other?.profile_picture || '/assets/brn-logo.png'}
+                                                src={other?.profile_picture || '/images/no-user-dp.png'}
                                                 alt={other?.name || 'User'}
                                                 className="h-12 w-12 rounded-full border object-cover"
                                                 onError={(e) => {
-                                                    (e.target as HTMLImageElement).src = '/assets/brn-logo.png';
+                                                    (e.target as HTMLImageElement).src = '/images/no-user-dp.png';
                                                 }}
                                             />
                                             <div>
                                                 <h3 className="text-lg font-semibold">{other?.name || 'User'}</h3>
-                                                <div className="mt-1 max-w-xs truncate text-sm text-gray-500">
-                                                    {lastMsg ? lastMsg.body : 'No messages yet'}
-                                                </div>
                                             </div>
+                                            {/* Close icon */}
+                                            <button
+                                                onClick={() => {
+                                                    setSelectedEncryptedId(null);
+                                                    setSelectedConversation(null);
+                                                    setMessages([]);
+                                                    setParticipants([]);
+                                                    setText('');
+                                                    // Optionally update the URL to remove the conversation id
+                                                    router.replace({ url: '/messages' });
+                                                }}
+                                                className="absolute top-2 right-2 rounded-full p-2 hover:bg-gray-200 focus:outline-none"
+                                                title="Close chat"
+                                                type="button"
+                                            >
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    className="h-5 w-5 text-gray-500"
+                                                    viewBox="0 0 20 20"
+                                                    fill="currentColor"
+                                                >
+                                                    <path
+                                                        fillRule="evenodd"
+                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                        clipRule="evenodd"
+                                                    />
+                                                </svg>
+                                            </button>
                                         </>
                                     );
                                 })()}
                             </div>
                             <div className="flex-1 overflow-auto bg-gray-50 p-6">
                                 <div className="mx-auto max-w-3xl space-y-4">
-                                    {messages.map((m) => (
-                                        <div key={m.id} className={`flex ${m.user.id === auth.user.id ? 'justify-end' : 'justify-start'}`}>
-                                            <div
-                                                className={`${m.user.id === auth.user.id ? 'bg-indigo-600 text-white' : 'bg-white'} max-w-[70%] rounded-lg p-3 shadow`}
-                                            >
-                                                <div className="text-sm">{m.body}</div>
-                                                <div className="mt-1 text-xs text-gray-400">{new Date(m.created_at).toLocaleString()}</div>
+                                    {messages.map((m) => {
+                                        const isOwn = m.user.id === auth.user.id;
+                                        const isEditing = editingMessageId === m.id;
+                                        return (
+                                            <div key={m.id} className={`flex ${isOwn ? 'justify-end' : 'justify-start'} group`}>
+                                                <div
+                                                    className={`${isOwn ? 'bg-indigo-600 text-white' : 'bg-white'} relative max-w-[70%] rounded-lg p-3 shadow`}
+                                                >
+                                                    {isEditing ? (
+                                                        <form
+                                                            onSubmit={(e) => {
+                                                                e.preventDefault();
+                                                                handleSaveEdit(m.id);
+                                                            }}
+                                                            className="flex items-center gap-2"
+                                                        >
+                                                            <input
+                                                                value={editText}
+                                                                onChange={(e) => setEditText(e.target.value)}
+                                                                className="flex-1 rounded border px-2 py-1 text-white focus:outline-none"
+                                                                autoFocus
+                                                            />
+                                                            {/* Save icon */}
+                                                            <button type="submit" title="Save" className="ml-1 rounded p-1 hover:bg-gray-200">
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4 text-green-600"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={2}
+                                                                        d="M5 13l4 4L19 7"
+                                                                    />
+                                                                </svg>
+                                                            </button>
+                                                            {/* Cancel icon */}
+                                                            <button
+                                                                type="button"
+                                                                title="Cancel"
+                                                                onClick={handleCancelEdit}
+                                                                className="ml-1 rounded p-1 hover:bg-gray-200"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    className="h-4 w-4 text-gray-400"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke="currentColor"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={2}
+                                                                        d="M6 18L18 6M6 6l12 12"
+                                                                    />
+                                                                </svg>
+                                                            </button>
+                                                        </form>
+                                                    ) : (
+                                                        <>
+                                                            <div className="text-sm break-words">{m.body}</div>
+                                                            <div className="mt-1 text-xs text-gray-400">
+                                                                {new Date(m.created_at).toLocaleString()}
+                                                            </div>
+                                                            {isOwn && (
+                                                                <div className="flex w-full justify-end">
+                                                                    <div className="absolute right-0 bottom-1 left-0 flex justify-end gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+                                                                        <button
+                                                                            title="Edit"
+                                                                            className="rounded p-1 hover:bg-gray-200"
+                                                                            onClick={() => handleEditMessage(m.id, m.body)}
+                                                                        >
+                                                                            <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="h-4 w-4 text-gray-500"
+                                                                                fill="none"
+                                                                                viewBox="0 0 24 24"
+                                                                                stroke="currentColor"
+                                                                            >
+                                                                                <path
+                                                                                    strokeLinecap="round"
+                                                                                    strokeLinejoin="round"
+                                                                                    strokeWidth={2}
+                                                                                    d="M15.232 5.232l3.536 3.536M9 13l6.586-6.586a2 2 0 112.828 2.828L11.828 15.828a4 4 0 01-1.414.828l-4 1a1 1 0 01-1.263-1.263l1-4a4 4 0 01.828-1.414z"
+                                                                                />
+                                                                            </svg>
+                                                                        </button>
+                                                                        <button
+                                                                            title="Delete"
+                                                                            className="rounded p-1 hover:bg-gray-200"
+                                                                            onClick={() => handleDeleteMessage(m.id)}
+                                                                        >
+                                                                            <svg
+                                                                                xmlns="http://www.w3.org/2000/svg"
+                                                                                className="h-4 w-4 text-gray-500"
+                                                                                fill="none"
+                                                                                viewBox="0 0 24 24"
+                                                                                stroke="currentColor"
+                                                                            >
+                                                                                <path
+                                                                                    strokeLinecap="round"
+                                                                                    strokeLinejoin="round"
+                                                                                    strokeWidth={2}
+                                                                                    d="M6 18L18 6M6 6l12 12"
+                                                                                />
+                                                                            </svg>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
                                     <div ref={messagesEndRef}></div>
                                 </div>
                             </div>

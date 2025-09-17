@@ -52,7 +52,7 @@ class User extends Authenticatable
     public function getProfilePictureAttribute($value)
     {
         if (!$value) {
-            return null;
+            return '/images/no-user-dp.png';
         }
 
         if (str_starts_with($value, 'http')) {
