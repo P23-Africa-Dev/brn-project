@@ -11,7 +11,6 @@ class ChatController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-
         $conversations = $user->conversations()
             ->with(['participants', 'lastMessage.user'])
             ->orderByDesc('last_message_at')
@@ -19,7 +18,8 @@ class ChatController extends Controller
 
         $mappedConversations = $conversations->map(function ($c) use ($user) {
             return [
-                'id' => $c->encrypted_id, // Use encrypted ID for frontend routing
+                // 'id' => $c->encrypted_id, // Use encrypted ID for frontend routing
+                'id' => $c->id, // raw numeric id for Echo channels
                 'encrypted_id' => $c->encrypted_id, // Always provide encrypted_id
                 'title' => $c->title,
                 'participants' => $c->participants->map(function ($p) {
@@ -112,6 +112,13 @@ class ChatController extends Controller
 
         // Get latest message (last in the list)
         $latestMessage = $messages->count() ? $messages->last() : null;
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'conversation' => $conversation,
+                'messages' => $messages,
+            ]);
+        }
 
         return Inertia::render('chats/show', [
             'conversation' => [

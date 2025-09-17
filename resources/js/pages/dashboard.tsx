@@ -338,7 +338,7 @@ function Dashboard({ auth, users }: Props) {
                                                 key={user.id}
                                                 name={user.name}
                                                 title={user.position || 'Position not specified'}
-                                                imageSrc={user.profile_picture || ''}
+                                                imageSrc={user.profile_picture || 'images/no-user-dp.png'}
                                                 experience={user.years_of_operation || 'N/A'}
                                                 industry={user.industry || 'N/A'}
                                                 interest={user.categories || 'N/A'}
@@ -359,7 +359,7 @@ function Dashboard({ auth, users }: Props) {
                                                     title={user.position || 'Position not specified'}
                                                     industry={user.industry || 'N/A'}
                                                     rating={user.rating || 0}
-                                                    imageSrc={user.profile_picture || ''}
+                                                    imageSrc={user.profile_picture || 'images/no-user-dp.png'}
                                                 />
                                             </UserProfileSidebar>
                                         ))}
