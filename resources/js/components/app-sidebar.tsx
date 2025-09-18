@@ -1,8 +1,10 @@
-// resources/js/components/ui/sidebar/AppSidebar.tsx
 import images from '@/constants/image';
 import { Link, usePage } from '@inertiajs/react';
-import { AnimatePresence, motion } from 'framer-motion'; // install if not already
+import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { HiOutlineUserGroup } from 'react-icons/hi2';
+import { IoPerson } from 'react-icons/io5';
+import { SlSettings } from 'react-icons/sl';
 import { useSidebar } from './sidebar-context';
 
 interface PageProps {
@@ -19,6 +21,17 @@ interface PageProps {
 
 type NavItem = { name: string; icon: string; href: string };
 type MobileNavItem = { name: string; icon: string; activeIcon: string; href: string };
+type ProfileNavItem = {
+    name: string;
+    href: string;
+    icon: React.ReactNode;
+};
+
+const PROFILE_SHOWCASE_ITEMS: ProfileNavItem[] = [
+    { name: 'Personal Profile', href: '/profile', icon: <IoPerson className="h-5 w-5" /> },
+    { name: 'Company Profile', href: '/company', icon: <HiOutlineUserGroup className="h-5 w-5" /> },
+    { name: 'Settings', href: '/settings', icon: <SlSettings className="h-5 w-5" /> },
+];
 
 const NAV_ITEMS: NavItem[] = [
     { name: 'Dashboard', icon: images.dashboardIcon, href: '/dashboard' },
@@ -43,9 +56,9 @@ export const AppSidebar: React.FC = () => {
     const { auth } = usePage<PageProps>().props;
     const { open, setOpen } = useSidebar();
     const [activePath, setActivePath] = useState<string>('');
-    const [profileOpen, setProfileOpen] = useState(false); // 👈 toggle state
+    const [profileOpen, setProfileOpen] = useState(false);
 
-    const profileRef = useRef<HTMLDivElement>(null); // 👈 ref for dropdown
+    const profileRef = useRef<HTMLDivElement>(null);
 
     // 👉 Detect outside click
     useEffect(() => {
@@ -338,7 +351,6 @@ export const AppSidebar: React.FC = () => {
             </div>
 
             {/* Slide-in Profile Showcase */}
-            {/* Profile Dropdown */}
             <AnimatePresence>
                 {profileOpen && (
                     <motion.div
@@ -348,10 +360,10 @@ export const AppSidebar: React.FC = () => {
                         exit={{ opacity: 0, y: 50, scale: 0.95 }}
                         transition={{ duration: 0.3 }}
                         onClick={() => setProfileOpen(false)}
-                        className="absolute bottom-16 left-50 z-[10] w-56 rounded-xl bg-[#0B1727] p-4 text-sm shadow-xl"
+                        className="absolute bottom-3 left-60 z-[10] w-62 rounded-xl bg-deepBlack p-4 text-sm shadow-xl"
                     >
-                        <div className="absolute left-[-8px] top-[50%] h-4 w-4 rotate-45 bg-[#0B1727]"></div>
-                        <div className="mb-3 flex items-center space-x-3 border-b border-white/20 pb-3">
+                        <div className="absolute top-[60%] left-[-8px] h-4 w-4 rotate-45 bg-deepBlack"></div>
+                        <div className=" flex items-center space-x-3  pb-2">
                             <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-[#D6E264] p-2">
                                 <img
                                     src={getProfilePicture()}
@@ -369,21 +381,52 @@ export const AppSidebar: React.FC = () => {
                             </div>
                         </div>
 
-                        <div className="space-y-2 text-white/80">
-                            <Link href="/profile" className="flex items-center gap-2 hover:text-white">
-                                <span>👤</span> Personal Profile
-                            </Link>
-                            <Link href="/company" className="flex items-center gap-2 hover:text-white">
-                                <span>🏢</span> Company Profile
-                            </Link>
-                            <Link href="/settings" className="flex items-center gap-2 hover:text-white">
-                                <span>⚙️</span> General Settings
-                            </Link>
-                            <hr className="my-2 border-white/20" />
-                            <Link href="/logout" className="flex items-center gap-2 text-red-400 hover:text-red-500">
-                                <span>🚪</span> Logout
-                            </Link>
-                        </div>
+                        <ul className="space-y-1 border-b border-secondaryWhite mb-2 pb-2">
+                            {PROFILE_SHOWCASE_ITEMS.map((item) => {
+                                const isActive = activePath === item.href;
+
+                                return (
+                                    <li key={item.name} className="relative">
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setActivePath(item.href)}
+                                            className={`relative z-[1] flex cursor-pointer items-center transition-all duration-300 ${
+                                                isActive ? 'font-bold text-deepBlack' : 'text-white/80 hover:text-white'
+                                            }`}
+                                            aria-current={isActive ? 'page' : undefined}
+                                        >
+                                            {/* highlight background */}
+                                            {isActive && <div className="absolute top-0 left-0 z-0 h-full w-full rounded-lg bg-secondaryWhite"></div>}
+
+                                            {/* Icon + Label */}
+                                            <div
+                                                className={`relative flex w-full items-center rounded-lg px-2 py-2 transition-colors duration-300 ${
+                                                    isActive ? 'font-bold text-deepBlack' : 'font-light text-white hover:text-white/80'
+                                                }`}
+                                            >
+                                                <div
+                                                    className={`mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
+                                                        isActive ? 'bg-deepBlack text-white' : 'bg-transparent text-white'
+                                                    }`}
+                                                >
+                                                    {item.icon}
+                                                </div>
+                                                <span>{item.name}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+
+                        {/* LOGOUT */}
+                        <Link href="/profile" className="flex w-full items-center justify-start gap-2 rounded-xl bg-transparent text-secondaryWhite">
+                            <span className="m-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-deepBlack text-secondaryWhite">
+                                <img src={images.logout} alt="" />
+                                {/* <HiOutlineUserGroup className="h-6 w-6 fill-secondaryWhite text-secondaryWhite" /> */}
+                            </span>
+                            Logout
+                        </Link>
                     </motion.div>
                 )}
             </AnimatePresence>

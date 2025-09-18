@@ -77,6 +77,7 @@ import TopactivesmallBG from '../../../public/assets/top-bg-smal.png';
 import BottomactivesmallBG from '../../../public/assets/bottom-bg-smal.png';
 import userMailVoice from '../../../public/assets/user-mail-voice.png';
 import userMessage from '../../../public/assets/user-message.png';
+import logout from '../../../public/assets/logout.png';
 
 // star
 // userList
@@ -88,6 +89,7 @@ import userMessage from '../../../public/assets/user-message.png';
 
 const images = {
     userMessage,
+    logout,
     uploadBg,
     userMailVoice,
     TopactivesmallBG,
