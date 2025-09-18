@@ -126,7 +126,7 @@ function Dashboard({ auth, users }: Props) {
                         {/* FIRST ROW */}
                         <div className="grid auto-rows-min gap-4 lg:grid-cols-3">
                             {/* CHART CONTAINER */}
-                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 lg:block">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#A47AF0]/60 p-2 lg:block">
                                 <SplineAreaChart />
                             </div>
 
@@ -296,7 +296,7 @@ function Dashboard({ auth, users }: Props) {
                                 // style={{
                                 //     backgroundImage: `url(${images.dealBgCard})`,
                                 // }}
-                                className="relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 lg:bg-transparent lg:pr-18 lg:pl-12"
+                                className="relative col-span-3 aspect-auto overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 lg:bg-transparent lg:pr-18 lg:pl-12"
                             >
                                 {/* <div className="relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-deepBlack p-4 lg:bg-transparent lg:pr-18 lg:pl-12"> */}
                                 <img

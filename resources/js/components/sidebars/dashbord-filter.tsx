@@ -71,7 +71,7 @@ export const FilterSidebar = () => {
                                         </span>
                                     )}
                                 </SelectTrigger>
-                                <SelectContent className="w-full [&_svg]:hidden">
+                                <SelectContent className="w-full [&_svg]:hidden py-1 select-dropdown-shadow">
                                     {/* <div className="sticky top-0 z-10 mb-2 bg-white dark:bg-gray-700">
                                     <input
                                         type="text"
@@ -84,7 +84,7 @@ export const FilterSidebar = () => {
                                     {countries
                                         .filter((c) => c.toLowerCase().includes(searchCountry.toLowerCase()))
                                         .map((c, i) => (
-                                            <SelectItem key={i} value={c}>
+                                            <SelectItem className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={c}>
                                                 {c}
                                             </SelectItem>
                                         ))}
@@ -116,20 +116,20 @@ export const FilterSidebar = () => {
                                     )}
                                 </SelectTrigger>
 
-                                <SelectContent position="popper" sideOffset={4} className="max-h-60 w-[245px] overflow-y-auto border [&_svg]:hidden">
+                                <SelectContent position="popper" sideOffset={4} className="max-h-60 w-[245px] overflow-y-auto border [&_svg]:hidden select-dropdown-shadow">
                                     <div className="sticky top-0 z-10 mt-0 mb-2 bg-white dark:bg-gray-700">
                                         <input
                                             type="text"
                                             placeholder="Search industry..."
                                             value={searchIndustry}
                                             onChange={(e) => setSearchIndustry(e.target.value)}
-                                            className="mb-2 w-full rounded-none border-b px-2 py-1 text-sm focus:ring-0 focus:outline-0"
+                                            className="mb-2 w-full rounded-none border-b px-2 py-2 text-sm focus:ring-0 focus:outline-0"
                                         />
                                     </div>
                                     {industries
                                         .filter((ind) => ind.toLowerCase().includes(searchIndustry.toLowerCase()))
                                         .map((ind, i) => (
-                                            <SelectItem key={i} value={ind}>
+                                            <SelectItem   className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={ind}>
                                                 {ind}
                                             </SelectItem>
                                         ))}
@@ -164,7 +164,7 @@ export const FilterSidebar = () => {
                                 <SelectContent
                                     position="popper"
                                     sideOffset={4}
-                                    className="max-h-60 w-[245px] overflow-y-auto border focus:ring-0 focus:ring-offset-0 [&_svg]:hidden"
+                                    className="max-h-60 w-[245px] overflow-y-auto border focus:ring-0 focus:ring-offset-0 [&_svg]:hidden select-dropdown-shadow"
                                 >
                                     <div className="sticky top-0 z-10 mb-2">
                                         <input
@@ -172,13 +172,13 @@ export const FilterSidebar = () => {
                                             placeholder="Search position..."
                                             value={searchPosition}
                                             onChange={(e) => setSearchPosition(e.target.value)}
-                                            className="mb-2 w-full rounded-none border-b px-2 py-1 text-sm focus:ring-0 focus:outline-0"
+                                            className="mb-2 w-full rounded-none border-b px-2 py-2 text-sm focus:ring-0 focus:outline-0"
                                         />
                                     </div>
                                     {positions
                                         .filter((p) => p.toLowerCase().includes(searchPosition.toLowerCase()))
                                         .map((p, i) => (
-                                            <SelectItem key={i} value={p}>
+                                            <SelectItem className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={p}>
                                                 {p}
                                             </SelectItem>
                                         ))}
@@ -188,7 +188,7 @@ export const FilterSidebar = () => {
                     </div>
                 </div>
 
-                <Button className="mt-8 w-full rounded-full py-4 text-lg font-semibold text-white" style={{ backgroundColor: '#193E47' }}>
+                <Button className="mt-4 w-full rounded-full py-6 shadow-xl text-lg font-semibold text-white" style={{ backgroundColor: '#193E47' }}>
                     Search
                 </Button>
             </SheetContent>

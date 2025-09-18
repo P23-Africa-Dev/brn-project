@@ -362,9 +362,9 @@ export const AppSidebar: React.FC = () => {
                         onClick={() => setProfileOpen(false)}
                         className="absolute bottom-3 left-60 z-[10] w-62 rounded-xl bg-deepBlack p-4 text-sm shadow-xl"
                     >
-                        <div className="absolute top-[60%] left-[-8px] h-4 w-4 rotate-45 bg-deepBlack"></div>
+                        <div className="absolute top-[65%] left-[-8px] h-4 w-4 rotate-45 bg-deepBlack"></div>
                         <div className=" flex items-center space-x-3  pb-2">
-                            <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-[#D6E264] p-2">
+                            <div className="relative h-10 w-10  rounded-full bg-[#D6E264] p-2">
                                 <img
                                     src={getProfilePicture()}
                                     alt={`${auth.user.name}'s Profile`}
