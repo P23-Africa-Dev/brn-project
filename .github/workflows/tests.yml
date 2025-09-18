@@ -48,8 +48,11 @@ jobs:
       - name: Generate Application Key
         run: php artisan key:generate
 
-      - name: Clear Config Cache
-        run: php artisan config:clear
+      - name: Clear Config and Route Cache
+        run: |
+          php artisan config:clear
+          php artisan route:clear
+          php artisan view:clear
 
       - name: Install Node Dependencies
         run: npm ci
@@ -71,4 +74,13 @@ jobs:
           chmod -R 775 bootstrap/cache
 
       - name: Run Tests
+        env:
+          APP_ENV: testing
+          APP_DEBUG: true
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+          CACHE_DRIVER: array
+          SESSION_DRIVER: array
+          QUEUE_CONNECTION: sync
+          MAIL_MAILER: array
         run: ./vendor/bin/pest --display-errors --display-warnings
