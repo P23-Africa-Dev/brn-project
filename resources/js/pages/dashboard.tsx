@@ -72,14 +72,14 @@ function Dashboard({ auth, users }: Props) {
 
     return (
         <AppLayout>
-            <div className="relative border-0  bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
+            <div className="relative border-0 bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative  flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-2"
+                    className="relative flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-2"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar relative z-[10] flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
+                    <div className="relative z-[10] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
                         {/* USER GREETINGS */}
                         <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
@@ -290,7 +290,7 @@ function Dashboard({ auth, users }: Props) {
                         {/*-------------------------//////////////////////----------------- FIFTH ROW MOBILE----------------//////////////////////------------------------- */}
 
                         {/* SECOND ROW */}
-                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-min">
+                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-[400px]">
                             {/* First child spans 2 columns */}
                             <div
                                 // style={{
@@ -302,8 +302,15 @@ function Dashboard({ auth, users }: Props) {
                                 <img
                                     src={images.dealBgCard}
                                     alt={`lead card bg`}
-                                    className="absolute inset-0 hidden h-full w-full rounded-3xl object-cover lg:block"
+                                    className="absolute inset-0 hidden h-[410px] w-full rounded-3xl object-center lg:block"
                                 />
+
+                                {/* <div
+                                    style={{
+                                        backgroundImage: `url(${images.dealBgCard})`,
+                                    }}
+                                    className=" absolute inset-0 border z-[2] hidden h-full w-full overflow-hidden rounded-full bg-cover bg-top bg-no-repeat"
+                                ></div> */}
                                 <div className="relative no-scrollbar max-h-[55vh] overflow-y-auto bg-transparent pb-20 lg:max-h-[50vh] lg:pb-0">
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 flex items-center justify-between overflow-hidden border-b-0 bg-deepBlack px-3 pt-4 pb-3 lg:border-b-3 lg:bg-white lg:px-0">
@@ -339,8 +346,7 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="divide-y divide-white/30">
-
-                                         {dummyCards.map((card, index) => (
+                                        {dummyCards.map((card, index) => (
                                             <UserProfileSidebar
                                                 key={index}
                                                 name={card.name}
@@ -397,8 +403,6 @@ function Dashboard({ auth, users }: Props) {
                                                     />
                                                 </UserProfileSidebar>
                                             ))} */}
-
-                                   
                                     </div>
 
                                     {/* {users
