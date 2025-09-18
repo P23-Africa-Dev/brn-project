@@ -44,7 +44,7 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
     children,
 }) => {
     return (
-        <Sheet>
+        <Sheet >
             <SheetTrigger asChild>{children}</SheetTrigger>
             
             <SheetContent side="right" className="border-none bg-transparent sm:max-w-md lg:max-w-[800px]">
