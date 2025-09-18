@@ -26,7 +26,7 @@ interface UserProfileSidebarProps {
     children: React.ReactNode;
 }
 
-const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number }> = ({
+const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     name,
     title,
     imageSrc,
@@ -44,19 +44,18 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number }>
     responseRate,
     successfulDealsRate,
     children,
-    userId,
 }) => {
     // Use Inertia page props for connection status, which must be provided by the parent page (from database)
     const {
         connected,
         pending,
-        conversations = [],
-        auth,
+        // conversations = [],
+        // auth,
     } = usePage().props as {
         connected?: { id: number }[];
         pending?: { id: number }[];
-        conversations?: { id?: string; encrypted_id?: string; participants?: { id: number }[] }[];
-        auth?: { user?: { id: number } };
+        // conversations?: { id?: string; encrypted_id?: string; participants?: { id: number }[] }[];
+        // auth?: { user?: { id: number } };
     };
     // Connection status logic (currently not displayed in UI but calculated for future use)
     // let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
