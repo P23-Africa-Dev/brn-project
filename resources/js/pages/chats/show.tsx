@@ -48,14 +48,6 @@ export default function Show({ conversation, messages: initialMessages, latestMe
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const channelRef = useRef<{ whisper?: (event: string, data: unknown) => void } | null>(null);
 
-    // Add validation check after hooks
-    if (!auth?.user?.id) {
-        return <div className="p-4 text-red-500">Authentication required</div>;
-    }
-
-    // Find the other participant (for 1:1 chat)
-    const otherUser = getOtherParticipant(conversation?.participants || [], auth.user.id);
-
     useEffect(() => scrollToBottom(), [messages]);
 
     useEffect(() => {
@@ -92,6 +84,14 @@ export default function Show({ conversation, messages: initialMessages, latestMe
             }
         };
     }, [conversation?.id, auth?.user?.id]);
+
+    // Add validation check after all hooks
+    if (!auth?.user?.id) {
+        return <div className="p-4 text-red-500">Authentication required</div>;
+    }
+
+    // Find the other participant (for 1:1 chat)
+    const otherUser = getOtherParticipant(conversation?.participants || [], auth.user.id);
 
     function scrollToBottom() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

@@ -3,7 +3,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
 import { usePage } from '@inertiajs/react';
 import { Star } from 'lucide-react';
-import React, { useState } from 'react';
+import React from 'react';
 import UserDetailedSidebar from './user-profile';
 
 interface UserProfileSidebarProps {
@@ -26,7 +26,7 @@ interface UserProfileSidebarProps {
     children: React.ReactNode;
 }
 
-const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; authUserId: number }> = ({
+const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number }> = ({
     name,
     title,
     imageSrc,
@@ -45,7 +45,6 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
     successfulDealsRate,
     children,
     userId,
-    authUserId,
 }) => {
     // Use Inertia page props for connection status, which must be provided by the parent page (from database)
     const {
@@ -60,33 +59,33 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
         auth?: { user?: { id: number } };
     };
     // Connection status logic (currently not displayed in UI but calculated for future use)
-    let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
-    if (!connected || !pending) {
-        // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
-        console.warn('Sidebar: connected/pending props missing. Ensure parent page provides them from database.');
-    } else if (connected.some((u) => u.id === userId)) {
-        connectionStatus = 'accepted';
-    } else if (pending.some((u) => u.id === userId)) {
-        connectionStatus = 'pending';
-    }
-    const [loading, setLoading] = useState(false);
+    // let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
+    // if (!connected || !pending) {
+    //     // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
+    //     console.warn('Sidebar: connected/pending props missing. Ensure parent page provides them from database.');
+    // } else if (connected.some((u) => u.id === userId)) {
+    //     connectionStatus = 'accepted';
+    // } else if (pending.some((u) => u.id === userId)) {
+    //     connectionStatus = 'pending';
+    // }
+    // const [loading, setLoading] = useState(false);
 
-    // Find existing conversation with this user (if any)
-    let conversationLink: string | null = null;
-    if (Array.isArray(conversations) && auth?.user?.id) {
-        const found = conversations.find((c) => {
-            // Direct message: only 2 participants, and the other is userId
-            if (c.participants && c.participants.length === 2 && auth.user) {
-                return c.participants.some((p) => p.id === userId) && c.participants.some((p) => p.id === auth.user.id);
-            }
-            return false;
-        });
-        if (found && found.id) {
-            conversationLink = `/messages/${found.id}`;
-        } else if (found && found.encrypted_id) {
-            conversationLink = `/messages/${found.encrypted_id}`;
-        }
-    }
+    // Find existing conversation with this user (if any) - currently not used in UI
+    // let conversationLink: string | null = null;
+    // if (Array.isArray(conversations) && auth?.user?.id) {
+    //     const found = conversations.find((c) => {
+    //         // Direct message: only 2 participants, and the other is userId
+    //         if (c.participants && c.participants.length === 2 && auth.user) {
+    //             return c.participants.some((p) => p.id === userId) && c.participants.some((p) => p.id === auth.user.id);
+    //         }
+    //         return false;
+    //     });
+    //     if (found && found.id) {
+    //         conversationLink = `/messages/${found.id}`;
+    //     } else if (found && found.encrypted_id) {
+    //         conversationLink = `/messages/${found.encrypted_id}`;
+    //     }
+    // }
 
     // Handler to start a new conversation if none exists (currently not used in UI)
     // const handleStartConversation = () => {
