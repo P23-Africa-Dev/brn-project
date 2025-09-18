@@ -86,8 +86,8 @@ export default function Index({ conversations = [], auth }: Props) {
                 const payload = res.data?.props ? res.data.props : res.data;
 
                 // Try to get conversation and messages from payload (matches ChatController::show)
-                let conversation = payload?.conversation ?? payload?.props?.conversation ?? null;
-                let msgs = payload?.messages ?? payload?.props?.messages ?? null;
+                const conversation = payload?.conversation ?? payload?.props?.conversation ?? null;
+                const msgs = payload?.messages ?? payload?.props?.messages ?? null;
 
                 // Sometimes server may return in different shapes — try to detect
                 // If `conversation` doesn't contain raw id, attempt to infer or fallback

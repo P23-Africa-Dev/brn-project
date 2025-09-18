@@ -209,17 +209,10 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
 
                             {/* Action Buttons */}
                             <div className=" flex space-x-3">
-                                <button className="flex items-center justify-center gap-2 rounded-lg bg-[#A47AF0] px-2 py-1 whitespace-nowrap text-secondaryWhite">
-                                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
-                                        <img src={images.connectLink} className="h-4 w-4" alt="" />
-                                    </span>
-                                    <span className='text-[14px]'>Connect Now</span>
-                                </button>
-                                {/* {userId !== authUserId &&
+                                {userId !== authUserId &&
                                     (connectionStatus === 'accepted' ? (
                                         <button
                                             className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-2 py-1 whitespace-nowrap text-secondaryWhite"
-
                                             onClick={handleStartConversation}
                                             disabled={loading}
                                         >
@@ -239,7 +232,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                             </span>
                                             <span>{connectionStatus === 'pending' ? 'Pending' : loading ? 'Connecting...' : 'Connect Now'}</span>
                                         </button>
-                                    ))} */}
+                                    ))}
                                 <button className="flex gap-2  items-center rounded-full bg-transparent px-3 py-2 whitespace-nowrap text-secondaryWhite">
                                     <img src={images.bookmark} className="h-6 w-6" alt="" />
                                     <span className='text-[14px]'>Save for later</span>
