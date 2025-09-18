@@ -309,3 +309,7 @@ box-shadow: 0px 23px 0px -1px rgba(0,0,0,0.1);
 .active-link-bg {
     background-image: url('../../public/assets/dashboardBg.png');
 }
+
+[data-radix-sheet-overlay] {
+  background-color: rgba(0, 0, 0, 0.3) !important; /* reduce darkness */
+}

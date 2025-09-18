@@ -72,14 +72,14 @@ function Dashboard({ auth, users }: Props) {
 
     return (
         <AppLayout>
-            <div className="relative border-0 bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
+            <div className="relative border-0  bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative z-0 flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-2"
+                    className="relative  flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-2"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
+                    <div className="no-scrollbar relative z-[10] flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
                         {/* USER GREETINGS */}
                         <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
@@ -304,7 +304,7 @@ function Dashboard({ auth, users }: Props) {
                                     alt={`lead card bg`}
                                     className="absolute inset-0 hidden h-full w-full rounded-3xl object-cover lg:block"
                                 />
-                                <div className="relative no-scrollbar max-h-[55vh] lg:max-h-[50vh] overflow-y-auto bg-transparent pb-20 lg:pb-0">
+                                <div className="relative no-scrollbar max-h-[55vh] overflow-y-auto bg-transparent pb-20 lg:max-h-[50vh] lg:pb-0">
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 flex items-center justify-between overflow-hidden border-b-0 bg-deepBlack px-3 pt-4 pb-3 lg:border-b-3 lg:bg-white lg:px-0">
                                         <h2 className="text-[12px] leading-2 font-normal text-white italic lg:w-[170px] lg:text-[17px] lg:leading-6 lg:text-gray-800">
@@ -339,7 +339,8 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="divide-y divide-white/30">
-                                        {dummyCards.map((card, index) => (
+
+                                         {dummyCards.map((card, index) => (
                                             <UserProfileSidebar
                                                 key={index}
                                                 name={card.name}
@@ -362,42 +363,43 @@ function Dashboard({ auth, users }: Props) {
                                                 <UserCard {...card} />
                                             </UserProfileSidebar>
                                         ))}
-                                    </div>
-
-                                    {/* {users
-                                        ?.filter((user) => auth.user && user.id !== auth.user.id)
-                                        .map((user) => (
-                                            <UserProfileSidebar
-                                                userId={user.id}          
-                                                authUserId={auth.user?.id ?? 0}
-                                                key={user.id}
-                                                name={user.name}
-                                                title={user.position || 'Position not specified'}
-                                                imageSrc={user.profile_picture || ''}
-                                                experience={user.years_of_operation || 'N/A'}
-                                                industry={user.industry || 'N/A'}
-                                                interest={user.categories || 'N/A'}
-                                                reviews={user.rating ? user.rating.toString() : '0'}
-                                                baseLocation={user.country || 'N/A'}
-                                                operatesIn={user.country || 'N/A'}
-                                                bio={user.company_description || ''}
-                                                companyStage={user.selected_outcome || ''}
-                                                keyStrength={user.great_at || ''}
-                                                topGoal={user.goals || ''}
-                                                brnMemberSince={user.created_at || ''}
-                                                responseRate={'N/A'}
-                                                successfulDealsRate={'N/A'}
-                                            >
-                                                <UserCard
+                                        {/* {users
+                                            ?.filter((user) => auth.user && user.id !== auth.user.id)
+                                            .map((user) => (
+                                                <UserProfileSidebar
+                                                    userId={user.id}
+                                                    authUserId={auth.user?.id ?? 0}
+                                                    key={user.id}
                                                     name={user.name}
-                                                    location={user.country || 'Location not specified'}
                                                     title={user.position || 'Position not specified'}
-                                                    industry={user.industry || 'N/A'}
-                                                    rating={user.rating || 0}
                                                     imageSrc={user.profile_picture || ''}
-                                                />
-                                            </UserProfileSidebar>
-                                        ))} */}
+                                                    experience={user.years_of_operation || 'N/A'}
+                                                    industry={user.industry || 'N/A'}
+                                                    interest={user.categories || 'N/A'}
+                                                    reviews={user.rating ? user.rating.toString() : '0'}
+                                                    baseLocation={user.country || 'N/A'}
+                                                    operatesIn={user.country || 'N/A'}
+                                                    bio={user.company_description || ''}
+                                                    companyStage={user.selected_outcome || ''}
+                                                    keyStrength={user.great_at || ''}
+                                                    topGoal={user.goals || ''}
+                                                    brnMemberSince={user.created_at || ''}
+                                                    responseRate={'N/A'}
+                                                    successfulDealsRate={'N/A'}
+                                                >
+                                                    <UserCard
+                                                        name={user.name}
+                                                        location={user.country || 'Location not specified'}
+                                                        title={user.position || 'Position not specified'}
+                                                        industry={user.industry || 'N/A'}
+                                                        rating={user.rating || 0}
+                                                        imageSrc={user.profile_picture || ''}
+                                                    />
+                                                </UserProfileSidebar>
+                                            ))} */}
+
+                                   
+                                    </div>
 
                                     {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)

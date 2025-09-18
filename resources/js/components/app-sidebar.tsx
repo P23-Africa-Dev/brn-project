@@ -1,7 +1,8 @@
 // resources/js/components/ui/sidebar/AppSidebar.tsx
 import images from '@/constants/image';
 import { Link, usePage } from '@inertiajs/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion'; // install if not already
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useSidebar } from './sidebar-context';
 
 interface PageProps {
@@ -42,6 +43,28 @@ export const AppSidebar: React.FC = () => {
     const { auth } = usePage<PageProps>().props;
     const { open, setOpen } = useSidebar();
     const [activePath, setActivePath] = useState<string>('');
+    const [profileOpen, setProfileOpen] = useState(false); // 👈 toggle state
+
+    const profileRef = useRef<HTMLDivElement>(null); // 👈 ref for dropdown
+
+    // 👉 Detect outside click
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+                setProfileOpen(false); // close if clicked outside
+            }
+        }
+
+        if (profileOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [profileOpen]);
 
     const profileImage: string = `${images.man6}`;
 
@@ -80,11 +103,11 @@ export const AppSidebar: React.FC = () => {
         <div className="">
             {/* Desktop Navigation */}
             <aside
-                style={{
-                    backgroundImage: `url(${images.sideBarBG})`,
-                }}
-                className={`sticky top-0 left-0 z-0 hidden h-screen overflow-hidden bg-cover bg-center transition-all duration-400 select-none lg:block ${open ? 'w-56' : 'w-20'} text-white`}
-                // className={`sticky top-0 left-0 z-0 hidden h-screen overflow-x-visible transition-all duration-400 outline-none select-none lg:block ${open ? 'w-56' : 'w-20'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
+                // style={{
+                //     backgroundImage: `url(${images.sideBarBG})`,
+                // }}
+                // className={`sticky top-0 left-0 z-0 hidden h-screen overflow-hidden bg-cover bg-center transition-all duration-400 select-none lg:block ${open ? 'w-56' : 'w-20'} text-white`}
+                className={`sticky top-0 left-0 z-[2] hidden h-screen overflow-hidden transition-all duration-400 outline-none select-none lg:block ${open ? 'w-56' : 'w-20 overflow-x-hidden'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
                 aria-expanded={open}
                 // 👉 expand on hover, collapse on leave
                 onMouseEnter={() => setOpen(true)}
@@ -109,7 +132,7 @@ export const AppSidebar: React.FC = () => {
                                         <Link
                                             href={item.href}
                                             onClick={() => setActivePath(item.href)}
-                                            className={`relative z-0 flex cursor-pointer items-center transition-all duration-300 ${
+                                            className={`relative z-[1] flex cursor-pointer items-center transition-all duration-300 ${
                                                 // className={`relative flex z-0 !overflow-x-hidden  cursor-pointer items-center transition-all duration-300 ${
                                                 isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
                                             }`}
@@ -117,21 +140,47 @@ export const AppSidebar: React.FC = () => {
                                         >
                                             {/* Highlight background */}
                                             <div
-                                                // style={{
-                                                //     backgroundImage: `url(${images.uibg})`,
-                                                // }}
-                                                className={`absolute top-0 left-0 z-0 h-full w-[600px] transform bg-cover bg-center bg-no-repeat transition-all duration-300 ${
-                                                    isActive ? `active-link-bg -translate-x-3 rounded-l-full rounded-r-2xl` : ''
+                                                className={`absolute top-0 left-0 z-0 h-full w-[250px] transform bg-cover bg-center bg-no-repeat transition-all duration-300 ${
+                                                    isActive ? `active-link-bg -translate-x-3 rounded-l-full` : ''
                                                 }`}
                                             ></div>
 
+                                            {isActive && (
+                                                <img
+                                                    src={images.TopactivesmallBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? '-top-[71px] left-[1680px] -z-[5] h-20' : '-top-[40px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                />
+                                            )}
+                                            {isActive && (
+                                                <img
+                                                    src={images.BottomactivesmallBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? 'top-[71px] left-[1680px] -z-[5] h-20' : '-bottom-[44px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                />
+                                            )}
                                             {/* {isActive && (
-                                            <img
-                                                src={images.activelinkpattern}
-                                                alt="active pattern"
-                                                className="absolute  -top-5 left-[35px]  -z-10 h-[100px] w-[660px] object-cover"
-                                            />
-                                        )} */}
+                                                <img
+                                                    src={images.activetopBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2]  transform transition-all duration-300 ${open ? 'hidden' : 'left-[45px] block h-[130px] w-[200px] '} `}
+                                                />
+                                            )} */}
+
+                                            {isActive && (
+                                                <img
+                                                    src={images.topActiveBg}
+                                                    alt="active pattern"
+                                                    className="absolute -top-[71px] left-[160px] h-20 w-auto transform"
+                                                />
+                                            )}
+                                            {isActive && (
+                                                <img
+                                                    src={images.BottomActiveBg}
+                                                    alt="active pattern"
+                                                    className="absolute -bottom-[70px] left-[172px] h-20 w-auto transform"
+                                                />
+                                            )}
 
                                             {/* Icon + Label */}
                                             <div
@@ -165,19 +214,16 @@ export const AppSidebar: React.FC = () => {
                     </nav>
 
                     {/* User Account Section */}
-                    <div className="mt-5 px-5">
-                        {/* <p className={`mb-2 text-xs tracking-wider text-gray-400 ${open ? 'opacity-60' : 'opacity-0'}`}>USER ACCOUNT</p> */}
+                    {/* User Account Section */}
+                    <div className="relative mt-5 px-5">
                         <p
-                            className={`mb-2 text-xs tracking-wider text-gray-400 transition-all duration-400 ${
-                                open ? 'max-w-[150px] opacity-60' : 'max-w-0 opacity-0'
-                            } overflow-hidden`}
+                            className={`mb-2 text-xs tracking-wider text-gray-400 transition-all duration-400 ${open ? 'max-w-[150px] opacity-60' : 'max-w-0 opacity-0'} overflow-hidden`}
                         >
                             USER ACCOUNT
                         </p>
 
-                        {/* User Profile  */}
-
-                        <div className="mb-4 flex items-center space-x-2">
+                        {/* User Profile Trigger */}
+                        <div onClick={() => setProfileOpen(!profileOpen)} className="mb-4 flex cursor-pointer items-center space-x-2">
                             <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-[#D6E264] p-2">
                                 <img
                                     src={getProfilePicture()}
@@ -290,6 +336,57 @@ export const AppSidebar: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Slide-in Profile Showcase */}
+            {/* Profile Dropdown */}
+            <AnimatePresence>
+                {profileOpen && (
+                    <motion.div
+                        ref={profileRef}
+                        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 50, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => setProfileOpen(false)}
+                        className="absolute bottom-16 left-50 z-[10] w-56 rounded-xl bg-[#0B1727] p-4 text-sm shadow-xl"
+                    >
+                        <div className="absolute left-[-8px] top-[50%] h-4 w-4 rotate-45 bg-[#0B1727]"></div>
+                        <div className="mb-3 flex items-center space-x-3 border-b border-white/20 pb-3">
+                            <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-[#D6E264] p-2">
+                                <img
+                                    src={getProfilePicture()}
+                                    alt={`${auth.user.name}'s Profile`}
+                                    className="h-full w-full rounded-full object-cover"
+                                    onError={(e) => {
+                                        e.currentTarget.src = profileImage;
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <h4 className="text-[13px] font-semibold text-white">{auth.user.name}</h4>
+                                <p className="text-[11px] text-gray-300">{auth.user.position || 'Member'}</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-2 text-white/80">
+                            <Link href="/profile" className="flex items-center gap-2 hover:text-white">
+                                <span>👤</span> Personal Profile
+                            </Link>
+                            <Link href="/company" className="flex items-center gap-2 hover:text-white">
+                                <span>🏢</span> Company Profile
+                            </Link>
+                            <Link href="/settings" className="flex items-center gap-2 hover:text-white">
+                                <span>⚙️</span> General Settings
+                            </Link>
+                            <hr className="my-2 border-white/20" />
+                            <Link href="/logout" className="flex items-center gap-2 text-red-400 hover:text-red-500">
+                                <span>🚪</span> Logout
+                            </Link>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 };

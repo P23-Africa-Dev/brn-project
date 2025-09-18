@@ -76,35 +76,35 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                 <form onSubmit={handleSubmit(onSubmit)} className="mr-6 space-y-7">
                     {/* Name */}
                     <div className="relative w-full">
-                        <label htmlFor="name" className="absolute -top-2.5 left-8 bg-white text-[#0B1727]/70  px-4 text-sm">
+                        <label htmlFor="name" className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]/70">
                             Full Name
                         </label>
                         <input
                             id="name"
                             type="text"
                             {...register('name', { required: 'Name is required' })}
-                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
                     </div>
 
                     {/* Email */}
                     <div className="relative w-full">
-                        <label htmlFor="email" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm ">
+                        <label htmlFor="email" className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]">
                             Email
                         </label>
                         <input
                             id="email"
                             type="email"
                             {...register('email', { required: 'Email is required' })}
-                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                     </div>
 
                     {/* Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password" className="absolute -top-2.5 text-[#0B1727] left-8 bg-white px-4 text-sm ">
+                        <label htmlFor="password" className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]">
                             Password
                         </label>
                         <input
@@ -113,14 +113,14 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             {...register('password', {
                                 required: 'Enter your password',
                             })}
-                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
                     </div>
 
                     {/* Confirm Password */}
                     <div className="relative w-full">
-                        <label htmlFor="password_confirmation" className="absolute text-[#0B1727] -top-2.5 left-8 bg-white px-4 text-sm ">
+                        <label htmlFor="password_confirmation" className="absolute -top-2.5 left-8 bg-white px-4 text-sm text-[#0B1727]">
                             Confirm Password
                         </label>
                         <input
@@ -130,7 +130,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 required: 'Enter your password',
                                 validate: (value) => value === password || "Password doesn't match",
                             })}
-                                  className="w-full rounded-2xl border-1 border-primary py-3 pl-11 ring-[#0B1727]/80 ring-2 font-semibold text-gray-900  outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.password_confirmation && <p className="text-sm text-red-500">{errors.password_confirmation.message}</p>}
                     </div>
@@ -160,7 +160,12 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                     </span>
                                 </div>
                             ) : (
-                                <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+                                <div
+                                    style={{
+                                        backgroundImage: `url(${preview})`,
+                                    }}
+                                    className="h-full w-full bg-cover bg-top bg-no-repeat"
+                                ></div>
                             )}
                         </label>
 
@@ -172,7 +177,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Submit */}
-                    <div className=" flex flex-col items-center">
+                    <div className="flex flex-col items-center">
                         <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
                         </Button>

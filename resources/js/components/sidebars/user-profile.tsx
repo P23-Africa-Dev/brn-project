@@ -46,34 +46,31 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
     return (
         <Sheet>
             <SheetTrigger asChild>{children}</SheetTrigger>
-            <SheetContent side="right" className="border-none bg-transparent sm:max-w-md lg:max-w-4xl">
+            
+            <SheetContent side="right" className="border-none bg-transparent sm:max-w-md lg:max-w-[800px]">
                 <div className="flex h-full w-full rounded-3xl bg-white p-4 shadow-lg">
                     {/* Left Column - User Profile */}
                     <div className="flex w-[40%] flex-col rounded-l-3xl bg-[#A7D5DD] p-6 shadow-2xl">
                         {/***************************** Top Area */}
                         <div className="flex flex-col items-center text-center">
-                            {/* <div className="relative h-28 w-28 overflow-hidden rounded-full">
-                                <img src={imageSrc} alt={`${name}'s profile`} className="h-full bg-top  w-full object-cover" />
-                            </div> */}
-
-                            <div className="relative h-28 w-28 overflow-hidden rounded-full">
+                            <div className="relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-tr from-[#325A64] via-[#325A64] to-[#AC7CEE] p-1">
                                 <div
                                     style={{
                                         backgroundImage: `url(${imageSrc})`,
                                     }}
-                                    className="aboslute left-0 h-full w-full max-w-full overflow-hidden bg-cover bg-top bg-no-repeat"
+                                    className="left-0 h-36 w-36 overflow-hidden rounded-full bg-cover bg-top bg-no-repeat"
                                 ></div>
                             </div>
 
                             {/* Headings */}
                             <div className="mt-5 mb-4 space-y-0.5 text-darkBlue">
-                                <h1 className="text-3xl leading-3.5 font-extrabold">{name}</h1>
-                                <p className="text-xl font-normal">{title}</p>
+                                <h1 className="text-2xl leading-3.5 font-extrabold">{name}</h1>
+                                <p className="text-[18px] font-normal">{title}</p>
                             </div>
 
                             {/* Descriptions */}
 
-                            <p className="mt-4 text-[13px] font-medium text-darkBlue">"{topGoal}"</p>
+                            <p className="mt-2 text-[13px] font-medium text-darkBlue">"{topGoal}"</p>
 
                             <div className="mt-4 flex items-center space-x-1">
                                 <p className="text-xl font-bold text-darkBlue underline">{reviews}</p>
@@ -85,22 +82,22 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                             <div className="w-full space-y-2 text-left">
                                 <h3 className="text-base font-bold text-darkBlue">
                                     Base Location
-                                    <span className="block text-sm font-light">{baseLocation}</span>
+                                    <span className="block text-sm font-normal">{baseLocation}</span>
                                 </h3>
                                 <h3 className="text-base font-bold text-darkBlue">
                                     Operates In
-                                    <span className="block text-sm font-light">{operatesIn}</span>
+                                    <span className="block text-sm font-normal">{operatesIn}</span>
                                 </h3>
                             </div>
                             <div className="mt-8 flex w-full items-start space-x-2">
                                 <button className="flex items-center justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
-                                    <img src={images.mailVoice} className="h-6 w-6" alt="" />
+                                    <img src={images.userMailVoice} className="h-7 w-7" alt="" />
                                 </button>
                                 <button className="flex items-center justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
-                                    <img src={images.messagepeople} className="h-6 w-6" alt="" />
+                                    <img src={images.userMessage} className="h-7 w-7" alt="" />
                                 </button>
 
-                                <button className="flex items-center justify-center gap-2 rounded-xl bg-darkBlue p-3 text-sm whitespace-nowrap text-secondaryWhite shadow-2xl">
+                                <button className="flex items-center font-semibold justify-center gap-2 rounded-full bg-darkBlue p-3 py-3.5 text-sm whitespace-nowrap text-[#D7F6EC] shadow-2xl">
                                     Request Contact
                                 </button>
                             </div>
@@ -111,38 +108,38 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                         <div className="">
                             <div className="text-darkBlue">
                                 <h2 className="text-lg font-extrabold">Bio</h2>
-                                <p className="mt-1 text-sm font-medium">{bio}</p>
+                                <p className="mt-1 text-[13px] font-medium">{bio}</p>
                             </div>
                             <div className="mt-10 grid grid-cols-2 gap-y-4 text-sm text-darkBlue">
                                 <div>
                                     <p className="text-base font-bold">Experience</p>
-                                    <p className="text-sm font-light">{experience}</p>
+                                    <p className="text-sm font-normal">{experience}</p>
                                 </div>
                                 <div>
                                     <p className="text-base font-bold">Interest</p>
-                                    <p className="text-sm font-light">{interest}</p>
+                                    <p className="text-sm font-normal">{interest}</p>
                                 </div>
                                 <div>
                                     <p className="text-base font-bold">Industry</p>
-                                    <p className="text-sm font-light">{industry}</p>
+                                    <p className="text-sm font-normal">{industry}</p>
                                 </div>
                                 <div>
                                     <p className="text-base font-bold">Company Stage</p>
-                                    <p className="text-sm font-light">{companyStage}</p>
+                                    <p className="text-sm font-normal">{companyStage}</p>
                                 </div>
                                 <div className="col-span-2">
                                     <p className="text-base font-bold">Key Strength</p>
-                                    <p className="text-sm font-light">{keyStrength}</p>
+                                    <p className="text-sm font-normal">{keyStrength}</p>
                                 </div>
                                 <div className="col-span-2">
                                     <p className="text-base font-bold">Top Goal</p>
-                                    <p className="text-sm font-light">{topGoal}</p>
+                                    <p className="text-sm font-normal">{topGoal}</p>
                                 </div>
                             </div>
                         </div>
 
                         {/* Activity */}
-                        <div className="mt-10 rounded-br-4xl bg-darkBlue px-5 py-7 pb-20 text-white">
+                        <div className="mt-10 rounded-br-4xl bg-darkBlue px-5 py-7 pb-20 text-secondaryWhite">
                             <h2 className="text-lg font-bold">Activity & Reputation</h2>
                             <div className="mt-8 flex flex-col gap-y-4 text-sm">
                                 <div>
@@ -159,7 +156,7 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                                 </div>
                             </div>
 
-                            <a href="#" className="mt-10 block text-sm font-medium underline">
+                            <a href="#" className="mt-10 block text-sm italic font-medium underline">
                                 View Reviews
                             </a>
                         </div>
