@@ -81,28 +81,52 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
             try {
                 const response = await axios.get(`/api/user/${userId || ''}`);
                 const { data } = response.data;
-                
+
                 const today = new Date();
                 const last7Days = Array.from({ length: 7 }, (_, i) => {
                     const date = subDays(today, 6 - i);
                     return format(date, 'yyyy-MM-dd');
                 });
 
-                const activityData = last7Days.map(date => ({
+                const activityData = last7Days.map((date) => ({
                     date,
-                    minutes_online: data[date] || 0
+                    minutes_online: data[date] || 0,
                 }));
 
-                setChartData(prev => ({
+                setChartData((prev) => ({
                     ...prev,
-                    series: [{
-                        name: 'Minutes Online',
-                        data: activityData.map(point => point.minutes_online)
-                    }],
+                    series: [
+                        {
+                            name: 'Minutes Online',
+                            data: activityData.map((point) => point.minutes_online),
+                        },
+                    ],
+                
                     options: {
                         ...prev.options,
-                        labels: activityData.map(point => point.date)
-                    }
+                        labels: activityData.map((point) => point.date),
+                        grid: {
+                            xaxis: {
+                                lines: {
+                                    show: false, // 🔥 Hides the vertical grid lines
+                                },
+                            },
+                            yaxis: {
+                                lines: {
+                                    show: false, // you can keep y-axis lines if you like
+                                },
+                            },
+                        },
+                        xaxis: {
+                            type: 'datetime',
+                            axisBorder: {
+                                show: false, // hide x-axis border
+                            },
+                            axisTicks: {
+                                show: false, // hide ticks
+                            },
+                        },
+                    },
                 }));
             } catch (error) {
                 console.error('Error fetching activity data:', error);
@@ -120,12 +144,7 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
 
     return (
         <div className="relative overflow-hidden bg-transparent">
-            <ReactApexChart 
-                options={chartData.options} 
-                series={chartData.series} 
-                type="area" 
-                height={105}
-            />
+            <ReactApexChart options={chartData.options} series={chartData.series} type="area" height={105} />
         </div>
     );
 };

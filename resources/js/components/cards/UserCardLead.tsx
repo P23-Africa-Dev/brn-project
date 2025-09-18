@@ -22,7 +22,7 @@ const UserCardLead: React.FC<UserCardProps> = ({ name, email, title, rating, ico
             <div className="flex-1">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="text-xl mb-2 font-semibold text-darkBlue">{name}</h3>
+                        <h3 className="text-[18px] mb-2 font-semibold text-darkBlue">{name}</h3>
                         <div className="flex flex-col leading-3 items-start gap-2 text-darkBlue">
                             <p className="text-[13px] font-light">{email}</p>
                             <p className="text-[13px] font-light">{title}</p>

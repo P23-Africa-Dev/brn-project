@@ -101,7 +101,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoComplete="email"
                                     value={data.email}
                                     onChange={(e) => setData('email', e.target.value)}
-                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none focus:ring-0"
+                                    className="w-full rounded-2xl border-2 border-deepBlack py-7 pl-10 font-semibold text-gray-900 ring-1 focus:border-0 focus:ring-0 outline-none "
                                 />
                             </div>
 
@@ -117,7 +117,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     autoComplete="current-password"
                                     value={data.password}
                                     onChange={(e) => setData('password', e.target.value)}
-                                    className="w-full rounded-2xl border-2 border-primary/40 py-5 pl-11 font-semibold text-gray-900 ring outline-none"
+                                     className="w-full rounded-2xl border-2 border-deepBlack py-7 pl-10 font-semibold text-gray-900 ring-1 focus:border-0 focus:ring-0 outline-none "
                                 />
                             </div>
 
@@ -131,7 +131,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                         checked={data.remember}
                                         onClick={() => setData('remember', !data.remember)}
                                         tabIndex={3}
-                                        className="h-4 w-4 accent-primary dark:bg-gray dark:accent-black"
+                                        className="h-4 w-4 accent-deepBlack dark:bg-gray dark:accent-black"
                                     />
                                     Remember for 30 days
                                 </label>

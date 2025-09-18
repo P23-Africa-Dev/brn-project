@@ -259,6 +259,7 @@ export default function Register({ prefill }: RegisterProps) {
                 />
             }
         >
+            {/* ERROR CATHCES ON ON PROFILE PIC */}
             {step === 1 && (
                 <StepOneForm
                     defaultValues={{

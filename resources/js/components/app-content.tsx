@@ -13,7 +13,7 @@ export const AppContent: React.FC<AppContentProps> = ({ children, className = ''
   return (
     <main
       {...props}
-      className={`relative z-0  flex h-full w-full  flex-1 flex-col gap-4 rounded-xl transition-all  ${className}`}
+      className={`relative z-[1]  flex h-full w-full  flex-1 flex-col gap-4 rounded-xl transition-all  ${className}`}
     >
       {children}
     </main>

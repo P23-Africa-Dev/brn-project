@@ -50,7 +50,7 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --color-deepBlack: #0b1727;
-    --color-secondaryWhite: #f3f0e9; 
+    --color-secondaryWhite: #f3f0e9;
     --color-white: #fff;
     --color-gray: #e2e6e9;
     --color-darkBlue: #193e47;
@@ -263,27 +263,32 @@ body {
 body .apexcharts-toolbar {
     display: none !important;
 }
-.grid-card-shadow{
-    box-shadow: 0px 2px 4px 2px rgba(0,0,0,0.2);
+.grid-card-shadow {
+    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.2);
 }
-.blur-card-shadow{
- box-shadow: -5px 11px 32px 26px rgba(0,0,0,0.1);
+.select-dropdown-shadow {
+    box-shadow: 0px 10px 15px 17px rgba(0, 0, 0, 0.3);
 }
-
+.blur-card-shadow {
+    box-shadow: -5px 11px 32px 26px rgba(0, 0, 0, 0.1);
+}
 
 @keyframes spin-slow {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 .animate-spin-slow {
-  animation: spin-slow 4s linear infinite;
+    animation: spin-slow 4s linear infinite;
 }
 
+.active-link-bg {
+    background-image: url('../../public/assets/dashboardBg.png');
+}
 
-/* .grid-card-shadow-card {
-box-shadow: 0px 23px 0px -1px rgba(0,0,0,0.1);
-} */
+[data-slot='sheet-overlay'] {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+}

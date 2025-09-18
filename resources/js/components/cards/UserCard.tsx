@@ -1,5 +1,5 @@
 import images from '@/constants/image';
-import { MapPin, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 
 interface UserCardProps {
     name: string;
@@ -9,37 +9,41 @@ interface UserCardProps {
     rating: number;
     imageSrc: string;
 }
-const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, rating, imageSrc }) => {
+const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, rating, imageSrc, }) => {
     return (
-        <div className="relative flex items-center space-x-4 border-b lg:border-b-3 bg-transparent p-4">
-          
-            <div className="relative w-[60px] h-[60px] lg:h-[100px] lg:w-[100px] overflow-hidden rounded-l-3xl lg:rounded-l-xl bg-transparent lg:bg-[#FDF7E0]">
-                {/* Placeholder for the image, replace with actual image source */}
-                <img src={imageSrc} alt={`${name}'s profile`} className="absolute inset-0  mt-3 lg:rounded-l-xl h-full  w-full max-w-[90px]  object-cover" />
+        <div className="relative flex items-start space-x-4 border-b border-b-gray/60  lg:last:border-b last:border-b-0 bg-transparent p-4 lg:items-center lg:border-b-3 lg:border-b-accent">
+            
+            <div className="relative rounded-l-3xl bg-transparent lg:h-[100px] lg:w-[100px] lg:rounded-l-xl lg:bg-[#FDF7E0]">
+                <div
+                    style={{
+                        backgroundImage: `url(${imageSrc})`,
+                    }}
+                    className="aboslute left-0 h-[85px] w-[80px] max-w-full overflow-hidden rounded-l-xl bg-cover bg-top bg-no-repeat lg:h-full lg:w-[90%]"
+                ></div>
             </div>
-            <div className="flex-1">
+            <div className="flex-1 lg:pr-12">
                 <div className="flex items-center justify-between">
                     <div>
-                        <h3 className="lg:text-lg text-sm font-bold text-white lg:text-darkBlue/95 lg:mb-0 mb-1.5">{name}</h3>
-                        <div className="flex items-center gap-2 text-darkBlue">
-                            {/* <MapPin className="h-4 w-4 font-light text-darkBlue" /> */}
-                            <img src={images.cardlocation} className='h-4 w-4' alt="" />
-                            <p className="lg:text-sm text-[10px] font-light lg:font-medium text-white lg:text-darkBlue/70">{location}</p>
+                        <h3 className="mb-1 text-sm font-semibold text-white lg:mb-0 lg:text-lg lg:text-darkBlue/95">{name}</h3>
+                        <div className="flex items-center gap-1 text-darkBlue">
+                            <img src={images.desktopLocation} className="hidden h-4 w-4 lg:block" alt="" />
+                            <img src={images.cardlocation} className="h-3 w-3 lg:hidden" alt="" />
+                            <p className="text-[10px] font-extralight text-white lg:text-xs lg:font-medium lg:text-darkBlue/70">{location}</p>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-2 text-yellow-500">
-                        <span className="text-xl font-medium text-gray-600">{rating}</span>
+                    <div className="flex items-center space-x-2 ">
+                        <span className="text-base font-light text-white lg:text-xl lg:font-medium lg:text-gray-600">{rating}</span>
                         <Star className="h-5 w-5 fill-darkGreen font-bold text-darkGreen" />
                     </div>
                 </div>
                 <div className="mt-5 flex justify-between text-sm">
                     <div>
-                        <p className="text-darkGreen font-semibold">Title</p>
-                        <p className=" text-darkBlue font-bold">{title}</p>
+                        <p className="text-[11px] font-semibold text-darkGreen lg:text-sm">Title</p>
+                        <p className="text-[10px] font-semibold lg:font-bold text-white lg:text-sm lg:text-darkBlue">{title}</p>
                     </div>
                     <div>
-                        <p className="text-darkGreen font-semibold">Industry</p>
-                        <p className="font-bold text-darkBlue">{industry}</p>
+                        <p className="text-[10px] font-semibold text-darkGreen lg:text-sm">Industry</p>
+                        <p className="text-[9px] font-semibold lg:font-bold text-white lg:text-sm lg:text-darkBlue">{industry}</p>
                     </div>
                 </div>
             </div>
@@ -48,6 +52,3 @@ const UserCard: React.FC<UserCardProps> = ({ name, location, title, industry, ra
 };
 
 export default UserCard;
-
-
-

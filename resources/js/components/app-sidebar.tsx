@@ -1,7 +1,10 @@
-// resources/js/components/ui/sidebar/AppSidebar.tsx
 import images from '@/constants/image';
 import { Link, usePage } from '@inertiajs/react';
-import React, { useEffect, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { HiOutlineUserGroup } from 'react-icons/hi2';
+import { IoPerson } from 'react-icons/io5';
+import { SlSettings } from 'react-icons/sl';
 import { useSidebar } from './sidebar-context';
 
 interface PageProps {
@@ -16,8 +19,19 @@ interface PageProps {
     [key: string]: unknown; // Add index signature to satisfy Inertia's PageProps constraint
 }
 
-
 type NavItem = { name: string; icon: string; href: string };
+type MobileNavItem = { name: string; icon: string; activeIcon: string; href: string };
+type ProfileNavItem = {
+    name: string;
+    href: string;
+    icon: React.ReactNode;
+};
+
+const PROFILE_SHOWCASE_ITEMS: ProfileNavItem[] = [
+    { name: 'Personal Profile', href: '/profile', icon: <IoPerson className="h-5 w-5" /> },
+    { name: 'Company Profile', href: '/company', icon: <HiOutlineUserGroup className="h-5 w-5" /> },
+    { name: 'Settings', href: '/settings', icon: <SlSettings className="h-5 w-5" /> },
+];
 
 const NAV_ITEMS: NavItem[] = [
     { name: 'Dashboard', icon: images.dashboardIcon, href: '/dashboard' },
@@ -25,6 +39,13 @@ const NAV_ITEMS: NavItem[] = [
     { name: 'Messages', icon: images.messageIcon, href: '/messages' },
     { name: 'Directory', icon: images.directoryIcon, href: '/directory' },
     { name: 'Leads', icon: images.LeadsIcon, href: '/leads' },
+];
+const MOBILE_NAV_ITEMS: MobileNavItem[] = [
+    { name: 'Dashboard', icon: images.dashboardIcon, activeIcon: images.dashboardIcon, href: '/dashboard' },
+    { name: 'Messages', icon: images.bubbleChat, activeIcon: images.bubbleChat, href: '/messages' },
+    { name: 'Referrals', icon: images.repeatmobileIcon, activeIcon: images.repeatIcon, href: '/referrals' },
+    { name: 'Directory', icon: images.searchList, activeIcon: images.searchList, href: '/directory' },
+    { name: 'Leads', icon: images.shareKnowledgemobile, activeIcon: images.shareKnowledgemobile, href: '/leads' },
 ];
 
 const userAccountItems: NavItem[] = [
@@ -35,6 +56,28 @@ export const AppSidebar: React.FC = () => {
     const { auth } = usePage<PageProps>().props;
     const { open, setOpen } = useSidebar();
     const [activePath, setActivePath] = useState<string>('');
+    const [profileOpen, setProfileOpen] = useState(false);
+
+    const profileRef = useRef<HTMLDivElement>(null);
+
+    // 👉 Detect outside click
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (profileRef.current && !profileRef.current.contains(event.target as Node)) {
+                setProfileOpen(false); // close if clicked outside
+            }
+        }
+
+        if (profileOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        } else {
+            document.removeEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [profileOpen]);
 
     const profileImage: string = `${images.man6}`;
 
@@ -70,174 +113,323 @@ export const AppSidebar: React.FC = () => {
     }, [auth.user.profile_picture]);
 
     return (
-        <aside
-            className={`sticky top-0 left-0 z-0 h-screen transition-all duration-300 select-none ${open ? 'w-56' : 'w-20'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
-            aria-expanded={open}
-            // 👉 expand on hover, collapse on leave
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-        >
-            <div className="flex h-full flex-col justify-between overflow-visible">
-                {/* Logo */}
-                <div className="mb-18 px-4 pt-14">
-                    {/* <div className="mb-20 px-4 pt-14"> */}
-                    <div className="flex items-center gap-2">
-                        <img src={images.brnLogo} alt="logo" />
+        <div className="">
+            {/* Desktop Navigation */}
+            <aside
+                // style={{
+                //     backgroundImage: `url(${images.sideBarBG})`,
+                // }}
+                // className={`sticky top-0 left-0 z-0 hidden h-screen overflow-hidden bg-cover bg-center transition-all duration-400 select-none lg:block ${open ? 'w-56' : 'w-20'} text-white`}
+                className={`sticky top-0 left-0 z-[2] hidden h-screen overflow-hidden transition-all duration-400 outline-none select-none lg:block ${open ? 'w-56' : 'w-20 overflow-x-hidden'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
+                aria-expanded={open}
+                // 👉 expand on hover, collapse on leave
+                onMouseEnter={() => setOpen(true)}
+                onMouseLeave={() => setOpen(false)}
+            >
+                <div className="flex h-full flex-col justify-between">
+                    {/* Logo */}
+                    <div className="mb-18 px-5 pt-14">
+                        {/* <div className="mb-20 px-4 pt-14"> */}
+                        <div className="flex items-center gap-2">
+                            <img src={images.brnLogo} alt="logo" />
+                        </div>
                     </div>
-                </div>
 
-                {/* NAV */}
-                <nav className=" px-4 pb-10 ">
-                    <ul className="space-y-2">
-                        {NAV_ITEMS.map((item) => {
-                            const isActive = activeName === item.name;
-                            return (
-                                <li key={item.name} className="relative">
-                                    <Link
-                                        href={item.href}
-                                        onClick={() => setActivePath(item.href)}
-                                        className={`relative  flex cursor-pointer items-center transition-all duration-300 ${
-                                            isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
-                                        }`}
-                                        aria-current={isActive ? 'page' : undefined}
-                                    >
-                                        {/* Active background image pattern */}
-                                        {/* 👉 Curved background */}
-                                        {isActive && (
-                                            <div className="">
-                                                {/* <svg
-                                                    className="absolute top-0 left-0 h-full w-8 translate-x-[175px]"
-                                                    viewBox="0 0 24 100"
-                                                    preserveAspectRatio="none"
-                                                >
-                                                   
-                                                    <path d="M24 0 C-10 25 -10 75 24 100 L0 100 L0 0 Z" fill="#0B1727" />
-                                                 
-                                                    <path d="M24 0 C-5 25 -5 75 24 100" stroke="#fff" strokeWidth="0" fill="none" />
-                                                </svg> */}
-{/* 
-                                                <svg
-                                                className="absolute top-0 left-0 h-full w-24 translate-x-[175px]" 
-                                                viewBox="0 0 60 100"
-                                                preserveAspectRatio="none"
-                                                >
-                                                <path
-                                                    d="M60 0 
-                                                    A30 30 0 0 0 30 30 
-                                                    L60 30 Z"
-                                                    fill="#0B1727"
-                                                />
-
-                                                <path
-                                                    d="M60 100 
-                                                    A30 30 0 0 1 30 70 
-                                                    L60 70 Z"
-                                                    fill="#0B1727"
-                                                />
-                                                </svg> */}
-
-                                            </div>
-                                        )}
-
-                                        {/* Highlight background */}
-                                        <div
-                                            className={`absolute top-0 z-0  left-0 h-full w-[600px] transform transition-all duration-300 ${
-                                                isActive ? '-translate-x-3 rounded-l-full rounded-r-2xl bg-white' : ''
+                    {/* NAV */}
+                    <nav className="px-5 pb-10">
+                        <ul className="space-y-2">
+                            {NAV_ITEMS.map((item) => {
+                                const isActive = activeName === item.name;
+                                return (
+                                    <li key={item.name} className="relative">
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setActivePath(item.href)}
+                                            className={`relative z-[1] flex cursor-pointer items-center transition-all duration-300 ${
+                                                // className={`relative flex z-0 !overflow-x-hidden  cursor-pointer items-center transition-all duration-300 ${
+                                                isActive ? 'font-bold' : 'text-gray-400 hover:text-white'
                                             }`}
-                                        ></div>
+                                            aria-current={isActive ? 'page' : undefined}
+                                        >
+                                            {/* Highlight background */}
+                                            <div
+                                                className={`absolute top-0 left-0 z-0 h-full w-[250px] transform bg-cover bg-center bg-no-repeat transition-all duration-300 ${
+                                                    isActive ? `active-link-bg -translate-x-3 rounded-l-full` : ''
+                                                }`}
+                                            ></div>
 
-                                        {/* Icon + Label */}
-                                        <div
-                                            className={`relative flex w-full items-center rounded-lg py-2 transition-colors duration-300 ${
-                                                isActive ? 'py-2.5 font-bold text-deepBlack' : 'font-light text-white'
+                                            {isActive && (
+                                                <img
+                                                    src={images.TopactivesmallBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? '-top-[71px] left-[1680px] -z-[5] h-20' : '-top-[40px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                />
+                                            )}
+                                            {isActive && (
+                                                <img
+                                                    src={images.BottomactivesmallBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? 'top-[71px] left-[1680px] -z-[5] h-20' : '-bottom-[44px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                />
+                                            )}
+                                            {/* {isActive && (
+                                                <img
+                                                    src={images.activetopBG}
+                                                    alt="active pattern"
+                                                    className={`absolute z-[2]  transform transition-all duration-300 ${open ? 'hidden' : 'left-[45px] block h-[130px] w-[200px] '} `}
+                                                />
+                                            )} */}
+
+                                            {isActive && (
+                                                <img
+                                                    src={images.topActiveBg}
+                                                    alt="active pattern"
+                                                    className="absolute -top-[71px] left-[160px] h-20 w-auto transform"
+                                                />
+                                            )}
+                                            {isActive && (
+                                                <img
+                                                    src={images.BottomActiveBg}
+                                                    alt="active pattern"
+                                                    className="absolute -bottom-[70px] left-[172px] h-20 w-auto transform"
+                                                />
+                                            )}
+
+                                            {/* Icon + Label */}
+                                            <div
+                                                className={`relative flex w-full items-center rounded-lg py-2 transition-colors duration-300 ${
+                                                    isActive
+                                                        ? 'py-2.5 font-bold text-deepBlack hover:text-deepBlack/80'
+                                                        : 'font-light text-white hover:text-white/80'
+                                                }`}
+                                            >
+                                                <div
+                                                    className={`mr-3 flex h-8.5 w-8.5 flex-shrink-0 items-center justify-center rounded-full ${
+                                                        isActive ? 'bg-[#0B1727] text-center text-white' : 'bg-[#263D5C8F]'
+                                                    }`}
+                                                >
+                                                    <img src={item.icon} alt="" className="h-6 w-6 object-contain" />
+                                                </div>
+
+                                                <span
+                                                    className={`overflow-hidden whitespace-nowrap transition-all duration-400 ${
+                                                        open ? 'ml-1.5 max-w-[120px] opacity-100' : 'ml-0 max-w-0 opacity-0'
+                                                    }`}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+                    </nav>
+
+                    {/* User Account Section */}
+                    {/* User Account Section */}
+                    <div className="relative mt-5 px-5">
+                        <p
+                            className={`mb-2 text-xs tracking-wider text-gray-400 transition-all duration-400 ${open ? 'max-w-[150px] opacity-60' : 'max-w-0 opacity-0'} overflow-hidden`}
+                        >
+                            USER ACCOUNT
+                        </p>
+
+                        {/* User Profile Trigger */}
+                        <div onClick={() => setProfileOpen(!profileOpen)} className="mb-4 flex cursor-pointer items-center space-x-2">
+                            <div className="relative h-10 w-10 flex-shrink-0 rounded-full bg-[#D6E264] p-2">
+                                <img
+                                    src={getProfilePicture()}
+                                    alt={`${auth.user.name}'s Profile`}
+                                    className="h-full w-full rounded-full object-cover"
+                                    onError={(e) => {
+                                        e.currentTarget.src = profileImage;
+                                    }}
+                                />
+                            </div>
+
+                            <div
+                                className={`overflow-hidden transition-all duration-400 ${open ? 'max-w-[150px] opacity-100' : 'max-w-0 opacity-0'}`}
+                            >
+                                <h3 className="truncate text-[12px] font-semibold">{auth.user.name}</h3>
+                                <p className="truncate text-[11px] font-light text-white/75">
+                                    {auth.user.position && auth.user.company_name
+                                        ? `${auth.user.position} at ${auth.user.company_name}`
+                                        : auth.user.position || auth.user.company_name || ''}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-1 pl-2">
+                            {userAccountItems.map((item: NavItem) => (
+                                <Link
+                                    key={item.name}
+                                    href={item.href}
+                                    className="flex items-center pb-2.5 font-light text-white transition-colors duration-200 hover:text-white/80"
+                                >
+                                    <div className="relative flex items-center rounded-lg transition-colors duration-400">
+                                        <img src={item.icon} className="mr-5" alt="" />
+                                        <span
+                                            className={`overflow-hidden whitespace-nowrap transition-all duration-300 ${
+                                                open ? 'ml-2 max-w-[120px] opacity-100' : 'ml-0 max-w-0 opacity-0'
                                             }`}
                                         >
-                                            <div
-                                                className={`mr-3 flex items-center justify-center rounded-full p-2 ${
-                                                    isActive ? 'bg-[#0B1727] text-center text-white' : 'bg-[#263D5C8F]'
-                                                }`}
-                                            >
-                                                <img src={item.icon} alt="" />
-                                            </div>
-                                            <span
-                                                className={`overflow-hidden text-ellipsis whitespace-nowrap transition-all duration-200 ${
-                                                    open ? 'w-auto opacity-100' : 'w-0 opacity-0'
-                                                }`}
-                                            >
-                                                {item.name}
-                                            </span>
-                                        </div>
-                                    </Link>
-                                </li>
-                            );
-                        })}
-                    </ul>
-                </nav>
-
-                {/* Bottom: user */}
-                {/* <div className="px-4 pb-6">
-                    <div className={`mb-3 flex items-center gap-3 ${open ? '' : 'justify-center'}`}>
-                        <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-1">
-                            <img
-                                src={auth.user?.profile_picture ? auth.user.profile_picture : images.man1}
-                                alt={auth.user?.name ?? 'User'}
-                                className="h-full w-full rounded-full object-cover"
-                                onError={(e) => {
-                                    (e.currentTarget as HTMLImageElement).src = images.man1;
-                                }}
-                            />
+                                            {item.name}
+                                        </span>
+                                    </div>
+                                </Link>
+                            ))}
                         </div>
-                        {open && (
-                            <div className="min-w-0">
-                                <div className="text-sm leading-tight font-semibold">{auth.user?.name}</div>
-                                <div className="text-xs text-gray-300">{auth.user?.position ?? auth.user?.company_name ?? ''}</div>
+                    </div>
+                </div>
+            </aside>
+
+            {/* MObile Bottom Navigation */}
+            <div className="fixed bottom-0 z-20 w-full overflow-hidden bg-transparent lg:hidden">
+                <div className="relative z-0 w-full">
+                    <div
+                        style={{
+                            backgroundImage: `url(${images.curveMobilePattern})`,
+                        }}
+                        className="aboslute top-0 left-0 z-20 h-[160px] overflow-hidden bg-cover bg-top bg-no-repeat"
+                    >
+                        {/* <div className="fixed bottom-4 w-full px-8">
+                            <div className="flex items-center justify-between">
+                                {MOBILE_NAV_ITEMS.map((item, index) => {
+                                    const isActive = activeName === item.name;
+
+                                    const isMiddle = index === 2;
+
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
+                                            onClick={() => setActivePath(item.href)}
+                                            className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? '-mt-10 h-20 w-20' : 'h-14 w-14'} ${isActive ? 'bg-[#27E6A7]' : 'bg-transparent'} `}
+                                            aria-current={isActive ? 'page' : undefined}
+                                            style={{
+                                                boxShadow: isActive ? 'inset 0 4px 6px rgba(0,0,0,0.3)' : 'none',
+                                            }}
+                                        >
+                                            <img
+                                                src={item.icon}
+                                                alt={item.name}
+                                                className={`object-contain transition-all ${isMiddle ? 'h-10 w-10' : 'h-8 w-8'} `}
+                                            />
+                                        </Link>
+                                    );
+                                })}
                             </div>
-                        )}
-                    </div>
-                </div> */}
-                {/* User Account Section */}
-                <div className="mt-5 px-4">
-                    {/* <div className="mt-10 px-4 pb-10"> */}
-                    <p className={`mb-2 text-xs tracking-wider text-gray-400 ${open ? 'w-auto opacity-100' : 'w-0 opacity-0'}`}>USER ACCOUNT</p>
+                        </div> */}
 
-                    {/* User Profile  */}
-                    <div className="mb-4 flex items-center space-x-1.5">
-                        <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
-                            <img
-                                src={getProfilePicture()}
-                                alt={`${auth.user.name}'s Profile`}
-                                className="absolute inset-0 mr-4 h-full w-full rounded-full border-2 border-gray-400 object-center"
-                                onError={(e) => {
-                                    e.currentTarget.src = profileImage;
-                                }}
-                            />
-                        </div>
+                        <div className="fixed bottom-4 w-full px-8">
+                            <div className="flex items-center justify-between">
+                                {MOBILE_NAV_ITEMS.map((item, index) => {
+                                    const isActive = activeName === item.name;
+                                    const isMiddle = index === 2;
 
-                        <div className={`w-auto transition-all duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>
-                            <h3 className="text-[12px] font-semibold">{auth.user.name}</h3>
-                            <p className="text-[11px] font-light text-white/75">
-                                {auth.user.position && auth.user.company_name
-                                    ? `${auth.user.position} at ${auth.user.company_name}`
-                                    : auth.user.position || auth.user.company_name || ''}
-                            </p>
+                                    return (
+                                        <Link
+                                            key={item.name}
+                                            href={item.href}
+                                            onClick={() => setActivePath(item.href)}
+                                            className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? '-mt-10 h-20 w-20 border bg-secondaryWhite shadow-[inset_0_4px_6px_rgba(0,0,0,0.5)]' : 'h-14 w-14'} ${isActive ? 'bg-[#27E6A7] shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)]' : ''} `}
+                                            aria-current={isActive ? 'page' : undefined}
+                                        >
+                                            <img
+                                                src={isActive ? item.activeIcon : item.icon}
+                                                alt={item.name}
+                                                className={`object-contain transition-all ${isMiddle ? 'h-10 w-10' : 'h-8 w-8'} `}
+                                            />
+                                        </Link>
+                                    );
+                                })}
+                            </div>
                         </div>
-                    </div>
-                    <div className="space-y-1">
-                        {userAccountItems.map((item: NavItem) => (
-                            <Link
-                                key={item.name}
-                                href={item.href}
-                                className="flex items-center pb-2.5 font-light text-white transition-colors duration-200 hover:text-white/70"
-                            >
-                                <div className="relative flex items-center rounded-lg transition-colors duration-300">
-                                    <img src={item.icon} className="mr-5" alt="" />
-                                    <span className={`text-sm transition-all duration-200 ${open ? 'opacity-100' : 'opacity-0'}`}>{item.name}</span>
-                                </div>
-                            </Link>
-                        ))}
                     </div>
                 </div>
             </div>
-        </aside>
+
+            {/* Slide-in Profile Showcase */}
+            <AnimatePresence>
+                {profileOpen && (
+                    <motion.div
+                        ref={profileRef}
+                        initial={{ opacity: 0, y: 50, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 50, scale: 0.95 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => setProfileOpen(false)}
+                        className="absolute bottom-3 left-60 z-[10] w-62 rounded-xl bg-deepBlack p-4 text-sm shadow-xl"
+                    >
+                        <div className="absolute top-[65%] left-[-8px] h-4 w-4 rotate-45 bg-deepBlack"></div>
+                        <div className=" flex items-center space-x-3  pb-2">
+                            <div className="relative h-10 w-10  rounded-full bg-[#D6E264] p-2">
+                                <img
+                                    src={getProfilePicture()}
+                                    alt={`${auth.user.name}'s Profile`}
+                                    className="h-full w-full rounded-full object-cover"
+                                    onError={(e) => {
+                                        e.currentTarget.src = profileImage;
+                                    }}
+                                />
+                            </div>
+
+                            <div>
+                                <h4 className="text-[13px] font-semibold text-white">{auth.user.name}</h4>
+                                <p className="text-[11px] text-gray-300">{auth.user.position || 'Member'}</p>
+                            </div>
+                        </div>
+
+                        <ul className="space-y-1 border-b border-secondaryWhite mb-2 pb-2">
+                            {PROFILE_SHOWCASE_ITEMS.map((item) => {
+                                const isActive = activePath === item.href;
+
+                                return (
+                                    <li key={item.name} className="relative">
+                                        <Link
+                                            href={item.href}
+                                            onClick={() => setActivePath(item.href)}
+                                            className={`relative z-[1] flex cursor-pointer items-center transition-all duration-300 ${
+                                                isActive ? 'font-bold text-deepBlack' : 'text-white/80 hover:text-white'
+                                            }`}
+                                            aria-current={isActive ? 'page' : undefined}
+                                        >
+                                            {/* highlight background */}
+                                            {isActive && <div className="absolute top-0 left-0 z-0 h-full w-full rounded-lg bg-secondaryWhite"></div>}
+
+                                            {/* Icon + Label */}
+                                            <div
+                                                className={`relative flex w-full items-center rounded-lg px-2 py-2 transition-colors duration-300 ${
+                                                    isActive ? 'font-bold text-deepBlack' : 'font-light text-white hover:text-white/80'
+                                                }`}
+                                            >
+                                                <div
+                                                    className={`mr-3 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full ${
+                                                        isActive ? 'bg-deepBlack text-white' : 'bg-transparent text-white'
+                                                    }`}
+                                                >
+                                                    {item.icon}
+                                                </div>
+                                                <span>{item.name}</span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                );
+                            })}
+                        </ul>
+
+                        {/* LOGOUT */}
+                        <Link href="/profile" className="flex w-full items-center justify-start gap-2 rounded-xl bg-transparent text-secondaryWhite">
+                            <span className="m-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-deepBlack text-secondaryWhite">
+                                <img src={images.logout} alt="" />
+                                {/* <HiOutlineUserGroup className="h-6 w-6 fill-secondaryWhite text-secondaryWhite" /> */}
+                            </span>
+                            Logout
+                        </Link>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
     );
 };

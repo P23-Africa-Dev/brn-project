@@ -72,14 +72,14 @@ function Dashboard({ auth, users }: Props) {
 
     return (
         <AppLayout>
-            <div className="relative z-0 bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
+            <div className="relative border-0 bg-transparent pt-0 pb-2.5 lg:bg-[#031C5B] lg:pt-2">
                 <div
-                    className="relative flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-3"
+                    className="relative flex flex-1 rounded-4xl bg-cover bg-no-repeat lg:py-2"
                     style={{
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="no-scrollbar flex h-screen max-h-[95vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
+                    <div className="relative z-[10] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
                         {/* USER GREETINGS */}
                         <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
@@ -126,7 +126,7 @@ function Dashboard({ auth, users }: Props) {
                         {/* FIRST ROW */}
                         <div className="grid auto-rows-min gap-4 lg:grid-cols-3">
                             {/* CHART CONTAINER */}
-                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#CCA6FF]/80 p-2 lg:block">
+                            <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl bg-gradient-to-r from-[#A47AF0] to-[#A47AF0]/60 p-2 lg:block">
                                 <SplineAreaChart />
                             </div>
 
@@ -138,8 +138,9 @@ function Dashboard({ auth, users }: Props) {
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1">
                                                 <span
-                                                    className={`text-xl leading-10 font-medium ${activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
-                                                        }`}
+                                                    className={`text-xl leading-10 font-medium ${
+                                                        activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
+                                                    }`}
                                                 >
                                                     {Math.abs(activityChange.change)}%
                                                 </span>
@@ -289,35 +290,51 @@ function Dashboard({ auth, users }: Props) {
                         {/*-------------------------//////////////////////----------------- FIFTH ROW MOBILE----------------//////////////////////------------------------- */}
 
                         {/* SECOND ROW */}
-                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-[385px]">
+                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-[400px]">
                             {/* First child spans 2 columns */}
-                            <div className="grid-card-shadow pt relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-[#0B1727] p-4 shadow-md lg:bg-white lg:pr-14 lg:pl-12">
-                                <div className="no-scrollbar max-h-[50vh] overflow-y-auto bg-transparent">
-                                    {/* Absolute positioning for the half-circles on the sides */}
+                            <div
+                                // style={{
+                                //     backgroundImage: `url(${images.dealBgCard})`,
+                                // }}
+                                className="relative col-span-3 aspect-auto overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 lg:bg-transparent lg:pr-18 lg:pl-12"
+                            >
+                                {/* <div className="relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-deepBlack p-4 lg:bg-transparent lg:pr-18 lg:pl-12"> */}
+                                <img
+                                    src={images.dealBgCard}
+                                    alt={`lead card bg`}
+                                    className="absolute inset-0 hidden h-[410px] w-full rounded-3xl object-center lg:block"
+                                />
 
-                                    <div className="absolute top-[25%] left-0 -ml-4 hidden h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white lg:block"></div>
-                                    <div className="absolute top-[57%] left-0 -ml-4 hidden h-10 w-8 -translate-y-1/2 rounded-r-full border-2 border-l-0 border-gray-200 bg-white lg:block"></div>
-                                    <div className="absolute top-[25%] right-0 -mr-4 hidden h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white lg:block"></div>
-                                    <div className="absolute top-[57%] right-0 -mr-4 hidden h-10 w-8 -translate-y-1/2 rounded-l-full border-2 border-r-0 border-gray-200 bg-white lg:block"></div>
-
+                                {/* <div
+                                    style={{
+                                        backgroundImage: `url(${images.dealBgCard})`,
+                                    }}
+                                    className=" absolute inset-0 border z-[2] hidden h-full w-full overflow-hidden rounded-full bg-cover bg-top bg-no-repeat"
+                                ></div> */}
+                                <div className="relative no-scrollbar max-h-[55vh] overflow-y-auto bg-transparent pb-20 lg:max-h-[50vh] lg:pb-0">
                                     {/* Search Header */}
-                                    <div className="sticky top-0 z-10 flex items-center justify-between border-b-3 bg-[#0B1727] pt-4 pb-3 lg:bg-white">
-                                        <h2 className="w-[170px] text-lg leading-1.5 font-normal text-white italic lg:text-[17px] lg:leading-6 lg:text-gray-800">
+                                    <div className="sticky top-0 z-10 flex items-center justify-between overflow-hidden border-b-0 bg-deepBlack px-3 pt-4 pb-3 lg:border-b-3 lg:bg-white lg:px-0">
+                                        <h2 className="text-[12px] leading-2 font-normal text-white italic lg:w-[170px] lg:text-[17px] lg:leading-6 lg:text-gray-800">
                                             Let's find your{' '}
                                             <span className="tex-white text-base font-bold lg:text-2xl lg:leading-3 lg:text-deepBlue">next deal</span>
                                         </h2>
 
-                                        <div className="flex w-full items-start space-x-2">
-                                            <div className="relative lg:w-full">
+                                        <div className="flex w-full items-center space-x-2 lg:items-start">
+                                            <div className="relative w-[210px] lg:w-full">
                                                 <div className="rleative cursor-pointer">
                                                     <input
                                                         type="text"
                                                         placeholder="Search"
-                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-3 pl-10 text-primary/60 placeholder:text-primary/80 focus:ring focus:ring-primary/30 focus:outline-none lg:bg-[#27E6A729] dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-2 text-primary/60 placeholder:text-white focus:ring focus:ring-primary/30 focus:outline-none lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pl-10 lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                                                    />
+                                                    <img
+                                                        src={images.desktopSearch}
+                                                        className="absolute top-1/2 right-2 hidden h-6 w-6 -translate-y-1/2 lg:right-10 lg:block"
+                                                        alt=""
                                                     />
                                                     <img
                                                         src={images.aiSearch}
-                                                        className="absolute top-1/2 right-10 h-6 w-6 -translate-y-1/2"
+                                                        className="absolute top-1/2 right-2 h-7 w-7 -translate-y-1/2 lg:right-10 lg:hidden"
                                                         alt=""
                                                     />
                                                 </div>
@@ -328,11 +345,28 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
 
                                     {/* Cards Container */}
-
-                                    {users
-                                        ?.filter((user) => auth.user && user.id !== auth.user.id)
-                                        .map((user) => (
+                                    <div className="divide-y divide-white/30">
+                                        {dummyCards.map((card, index) => (
                                             <UserProfileSidebar
+
+<!--                                                 key={index}
+                                                name={card.name}
+                                                title={card.title}
+                                                imageSrc={card.imageSrc}
+                                                experience={card.experience}
+                                                industry={card.industry}
+                                                interest={card.interest}
+                                                reviews={card.reviews}
+                                                baseLocation={card.baseLocation}
+                                                operatesIn={card.operatesIn}
+                                                bio={card.bio}
+                                                companyStage={card.companyStage}
+                                                keyStrength={card.keyStrength}
+                                                topGoal={card.topGoal}
+                                                brnMemberSince={card.brnMemberSince}
+                                                responseRate={card.responseRate}
+                                                successfulDealsRate={card.successfulDealsRate} -->
+
                                                 userId={user.id}           // The user being viewed
                                                 authUserId={auth.user?.id ?? 0}
                                                 key={user.id}
@@ -353,16 +387,53 @@ function Dashboard({ auth, users }: Props) {
                                                 responseRate={'N/A'}
                                                 successfulDealsRate={'N/A'}
                                             >
-                                                <UserCard
+                                                <UserCard {...card} />
+                                            </UserProfileSidebar>
+                                        ))}
+                                        {/* {users
+                                            ?.filter((user) => auth.user && user.id !== auth.user.id)
+                                            .map((user) => (
+                                                <UserProfileSidebar
+                                                    userId={user.id}
+                                                    authUserId={auth.user?.id ?? 0}
+                                                    key={user.id}
                                                     name={user.name}
-                                                    location={user.country || 'Location not specified'}
                                                     title={user.position || 'Position not specified'}
+
+                                                    imageSrc={user.profile_picture || ''}
+                                                    experience={user.years_of_operation || 'N/A'}
+                                                    industry={user.industry || 'N/A'}
+                                                    interest={user.categories || 'N/A'}
+                                                    reviews={user.rating ? user.rating.toString() : '0'}
+                                                    baseLocation={user.country || 'N/A'}
+                                                    operatesIn={user.country || 'N/A'}
+                                                    bio={user.company_description || ''}
+                                                    companyStage={user.selected_outcome || ''}
+                                                    keyStrength={user.great_at || ''}
+                                                    topGoal={user.goals || ''}
+                                                    brnMemberSince={user.created_at || ''}
+                                                    responseRate={'N/A'}
+                                                    successfulDealsRate={'N/A'}
+                                                >
+                                                    <UserCard
+                                                        name={user.name}
+                                                        location={user.country || 'Location not specified'}
+                                                        title={user.position || 'Position not specified'}
+                                                        industry={user.industry || 'N/A'}
+                                                        rating={user.rating || 0}
+                                                        imageSrc={user.profile_picture || ''}
+                                                    />
+                                                </UserProfileSidebar>
+                                            ))} */}
+                                    </div>
+
                                                     industry={user.industry || 'N/A'}
                                                     rating={user.rating || 0}
                                                     imageSrc={user.profile_picture || 'images/no-user-dp.png'}
                                                 />
                                             </UserProfileSidebar>
                                         ))}
+
 
                                     {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
@@ -448,73 +519,6 @@ function Dashboard({ auth, users }: Props) {
                                         ))}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Bottom Nav */}
-                <div className="fixed bottom-0 mx-auto w-full max-w-sm bg-transparent p-4 lg:hidden">
-                    <div className="relative flex h-20 w-full items-center justify-around rounded-3xl border border-[#202730] bg-[#1e2531]">
-                        <div className="absolute -top-8 left-1/2 z-20 flex h-16 w-16 -translate-x-1/2 transform items-center justify-center rounded-full border-4 border-[#121820] bg-[#394d6c] shadow-2xl">
-                            <img src={images.dashboardIcon} alt="" />
-                        </div>
-                        <div className="flex h-full w-full items-center justify-between px-8 pt-4">
-                            <div className="flex items-center space-x-8">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
-                                    />
-                                </svg>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                    />
-                                </svg>
-                            </div>
-                            <div className="w-16"></div>
-                            <div className="flex items-center space-x-8">
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
-                                </svg>
-                                <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-6 w-6 text-white"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                >
-                                    <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                                    />
-                                </svg>
                             </div>
                         </div>
                     </div>
