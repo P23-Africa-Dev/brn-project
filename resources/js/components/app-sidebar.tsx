@@ -85,7 +85,7 @@ export const AppSidebar: React.FC = () => {
         if (typeof window !== 'undefined') {
             setActivePath(window.location.pathname);
         }
-    }, [usePage]); // run on mount & when page changes
+    }, []); // run on mount
 
     // derive active item name from path
     const activeName = useMemo(() => {
@@ -363,8 +363,8 @@ export const AppSidebar: React.FC = () => {
                         className="absolute bottom-3 left-60 z-[10] w-62 rounded-xl bg-deepBlack p-4 text-sm shadow-xl"
                     >
                         <div className="absolute top-[65%] left-[-8px] h-4 w-4 rotate-45 bg-deepBlack"></div>
-                        <div className=" flex items-center space-x-3  pb-2">
-                            <div className="relative h-10 w-10  rounded-full bg-[#D6E264] p-2">
+                        <div className="flex items-center space-x-3 pb-2">
+                            <div className="relative h-10 w-10 rounded-full bg-[#D6E264] p-2">
                                 <img
                                     src={getProfilePicture()}
                                     alt={`${auth.user.name}'s Profile`}
@@ -381,7 +381,7 @@ export const AppSidebar: React.FC = () => {
                             </div>
                         </div>
 
-                        <ul className="space-y-1 border-b border-secondaryWhite mb-2 pb-2">
+                        <ul className="mb-2 space-y-1 border-b border-secondaryWhite pb-2">
                             {PROFILE_SHOWCASE_ITEMS.map((item) => {
                                 const isActive = activePath === item.href;
 

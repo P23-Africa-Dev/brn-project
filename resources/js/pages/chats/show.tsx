@@ -10,7 +10,7 @@ function getOtherParticipant(participants: User[], currentUserId: number): User 
 
 interface Props {
     conversation: {
-        encrypted_id: any;
+        encrypted_id: string | number;
         id: number;
         title: string | null;
         participants: User[];
@@ -40,20 +40,21 @@ type Message = {
 };
 
 export default function Show({ conversation, messages: initialMessages, latestMessage, auth }: Props) {
-    // Add validation check at the start
+    // React hooks must be called before any early returns
+    const [messages, setMessages] = useState<Message[]>(initialMessages || []);
+    const [text, setText] = useState('');
+    const [typingUsers, setTypingUsers] = useState<User[]>([]);
+    const [participants, setParticipants] = useState<User[]>(conversation?.participants || []);
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const channelRef = useRef<{ whisper?: (event: string, data: unknown) => void } | null>(null);
+
+    // Add validation check after hooks
     if (!auth?.user?.id) {
         return <div className="p-4 text-red-500">Authentication required</div>;
     }
 
     // Find the other participant (for 1:1 chat)
     const otherUser = getOtherParticipant(conversation?.participants || [], auth.user.id);
-
-    const [messages, setMessages] = useState<Message[]>(initialMessages || []);
-    const [text, setText] = useState('');
-    const [typingUsers, setTypingUsers] = useState<User[]>([]);
-    const [participants, setParticipants] = useState<User[]>(conversation?.participants || []);
-    const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const channelRef = useRef<any>(null);
 
     useEffect(() => scrollToBottom(), [messages]);
 
@@ -84,7 +85,7 @@ export default function Show({ conversation, messages: initialMessages, latestMe
 
         return () => {
             try {
-                (window as any).Echo.leave(`conversation.${conversation.id}`);
+                (window as { Echo?: { leave: (channel: string) => void } }).Echo?.leave(`conversation.${conversation.id}`);
                 channelRef.current = null;
             } catch (err) {
                 console.warn('Error leaving Echo channel', err);

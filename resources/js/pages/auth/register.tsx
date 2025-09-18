@@ -211,7 +211,7 @@ export default function Register({ prefill }: RegisterProps) {
                         payload.append(`${key}[]`, typeof v === 'boolean' ? String(v) : v);
                     });
                 } else if (value !== null) {
-                    payload.append(key, typeof value === 'boolean' ? String(value) : (value as any));
+                    payload.append(key, typeof value === 'boolean' ? String(value) : String(value));
                 }
             });
 

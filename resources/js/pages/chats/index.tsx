@@ -23,7 +23,7 @@ type Message = {
 };
 
 type ConversationListItem = {
-    id?: any; // may be encrypted in index response — we'll fetch full conversation on select
+    id?: string | number; // may be encrypted in index response — we'll fetch full conversation on select
     encrypted_id: string;
     title?: string | null;
     participants: User[];
@@ -57,9 +57,8 @@ export default function Index({ conversations = [], auth }: Props) {
     const [editingMessageId, setEditingMessageId] = useState<number | null>(null);
     const [editText, setEditText] = useState('');
     const [typingUsers, setTypingUsers] = useState<User[]>([]);
-    const [participants, setParticipants] = useState<User[]>([]);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const channelRef = useRef<any>(null);
+    const channelRef = useRef<{ chan: { whisper?: (event: string, data: unknown) => void }; currentConversationId: number } | null>(null);
 
     // Load conversations list participant avatars already provided by server (props)
     // When selectedEncryptedId changes we fetch that conversation's messages & raw id
@@ -67,7 +66,6 @@ export default function Index({ conversations = [], auth }: Props) {
         if (!selectedEncryptedId) {
             setSelectedConversation(null);
             setMessages([]);
-            setParticipants([]);
             return;
         }
 
@@ -104,7 +102,6 @@ export default function Index({ conversations = [], auth }: Props) {
                         title: conversation.title ?? null,
                     });
                     setMessages(msgs || []);
-                    setParticipants(conversation.participants ?? []);
                     return;
                 }
 
@@ -123,7 +120,6 @@ export default function Index({ conversations = [], auth }: Props) {
                     title: fallbackConv?.title ?? null,
                 });
                 setMessages(fallbackMsgs || []);
-                setParticipants(fallbackConv?.participants ?? []);
             } catch (err) {
                 console.error('Error loading conversation:', err);
                 // If the GET /messages/{encryptedId} returned HTML (Inertia non-JSON) axios may throw
@@ -142,7 +138,6 @@ export default function Index({ conversations = [], auth }: Props) {
                         title: fallbackConv?.title ?? null,
                     });
                     setMessages(fallbackMsgs || []);
-                    setParticipants(fallbackConv?.participants ?? []);
                 } catch (err2) {
                     console.error('Fallback load also failed', err2);
                 }
@@ -159,50 +154,58 @@ export default function Index({ conversations = [], auth }: Props) {
         const conversationId = selectedConversation.id;
 
         // Leave any previous channel first
-        if (channelRef.current && typeof (window as any).Echo.leave === 'function') {
+        if (channelRef.current && (window as { Echo?: { leave: (channel: string) => void } }).Echo?.leave) {
             try {
-                (window as any).Echo.leave(`conversation.${channelRef.current?.currentConversationId}`);
-            } catch (err) {
+                (window as { Echo: { leave: (channel: string) => void } }).Echo.leave(`conversation.${channelRef.current?.currentConversationId}`);
+            } catch {
                 // ignore
             }
             channelRef.current = null;
         }
 
-        const chan = (window as any).Echo?.join(`conversation.${conversationId}`)
-            .here((users: User[]) => {
-                setParticipants(users);
-            })
-            .joining((user: User) => {
-                setParticipants((p: User[]) => [...p, user]);
-            })
-            .leaving((user: User) => {
-                setParticipants((p: User[]) => p.filter((u) => u.id !== user.id));
-            })
-            .listen('MessageSent', (event: { message: Message }) => {
-                const incoming = event.message;
-                if (!incoming) return;
-                // server sends { message: { ... } } — match show.tsx behaviour
-                if (incoming.user && incoming.user.id !== auth.user.id) {
-                    setMessages((prev) => [...prev, incoming]);
-                }
-            })
-            .listenForWhisper('typing', (payload: { user: User }) => {
-                if (payload?.user?.id && payload.user.id !== auth.user.id) {
-                    setTypingUsers((prev) => (prev.find((u) => u.id === payload.user.id) ? prev : [...prev, payload.user]));
-                    setTimeout(() => {
-                        setTypingUsers((prev) => prev.filter((u) => u.id !== payload.user.id));
-                    }, 2000);
-                }
-            });
+        const chan = (window as { Echo?: { join: (channel: string) => unknown } }).Echo?.join(`conversation.${conversationId}`) as {
+            here: (callback: (users: User[]) => void) => unknown;
+            joining: (callback: (user: User) => void) => unknown;
+            leaving: (callback: (user: User) => void) => unknown;
+            listen: (event: string, callback: (data: { message: Message }) => void) => unknown;
+            listenForWhisper: (event: string, callback: (data: { user: User }) => void) => unknown;
+            whisper: (event: string, data: unknown) => void;
+        };
+
+        chan?.here?.(() => {
+            // Users joined the channel
+        });
+        chan?.joining?.(() => {
+            // User joined
+        });
+        chan?.leaving?.(() => {
+            // User left
+        });
+        chan?.listen?.('MessageSent', (event: { message: Message }) => {
+            const incoming = event.message;
+            if (!incoming) return;
+            // server sends { message: { ... } } — match show.tsx behaviour
+            if (incoming.user && incoming.user.id !== auth.user.id) {
+                setMessages((prev) => [...prev, incoming]);
+            }
+        });
+        chan?.listenForWhisper?.('typing', (payload: { user: User }) => {
+            if (payload?.user?.id && payload.user.id !== auth.user.id) {
+                setTypingUsers((prev) => (prev.find((u) => u.id === payload.user.id) ? prev : [...prev, payload.user]));
+                setTimeout(() => {
+                    setTypingUsers((prev) => prev.filter((u) => u.id !== payload.user.id));
+                }, 2000);
+            }
+        });
 
         // store channel and conversation id for leaving later
         channelRef.current = { chan, currentConversationId: conversationId };
 
         return () => {
             try {
-                (window as any).Echo?.leave(`conversation.${conversationId}`);
+                (window as { Echo?: { leave: (channel: string) => void } }).Echo?.leave(`conversation.${conversationId}`);
                 channelRef.current = null;
-            } catch (err) {
+            } catch {
                 // ignore
             }
         };
@@ -276,19 +279,25 @@ export default function Index({ conversations = [], auth }: Props) {
     function handleTyping(e: React.ChangeEvent<HTMLInputElement>) {
         setText(e.target.value);
         try {
-            if (channelRef.current && typeof channelRef.current.chan?.whisper === 'function') {
+            if (channelRef.current?.chan?.whisper) {
                 channelRef.current.chan.whisper('typing', { user: auth.user });
-            } else if ((window as any).Echo && (window as any).Echo.private) {
+            } else if (
+                (window as { Echo?: { private?: unknown; whisper?: (channel: string, event: string, data: unknown) => void } }).Echo?.private
+            ) {
                 // fallback — attempt whisper on the raw channel name if available
                 try {
-                    (window as any).Echo.whisper(`conversation.${selectedConversation?.id}`, 'typing', {
-                        user: auth.user,
-                    });
-                } catch (err) {
+                    (window as unknown as { Echo: { whisper: (channel: string, event: string, data: unknown) => void } }).Echo.whisper(
+                        `conversation.${selectedConversation?.id}`,
+                        'typing',
+                        {
+                            user: auth.user,
+                        },
+                    );
+                } catch {
                     // ignore
                 }
             }
-        } catch (err) {
+        } catch {
             // ignore
         }
     }
@@ -347,13 +356,6 @@ export default function Index({ conversations = [], auth }: Props) {
                             <div className="relative mb-6 flex items-center gap-3 px-8 py-4 pb-0">
                                 {(() => {
                                     const other = getOtherParticipant(selectedConversation.participants, auth.user.id);
-                                    // Find the last message from the other participant, or just the last message
-                                    let lastMsg = null;
-                                    if (messages && messages.length > 0) {
-                                        // Prefer last message from the other participant
-                                        lastMsg =
-                                            [...messages].reverse().find((m) => other && m.user.id === other.id) || messages[messages.length - 1];
-                                    }
                                     return (
                                         <>
                                             <img
@@ -373,7 +375,6 @@ export default function Index({ conversations = [], auth }: Props) {
                                                     setSelectedEncryptedId(null);
                                                     setSelectedConversation(null);
                                                     setMessages([]);
-                                                    setParticipants([]);
                                                     setText('');
                                                     // Optionally update the URL to remove the conversation id
                                                     router.replace({ url: '/messages' });

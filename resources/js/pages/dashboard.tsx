@@ -6,7 +6,7 @@ import BasicPolarChart from '@/components/chart/BasicPolarChart';
 import { FilterSidebar } from '@/components/sidebars/dashbord-filter';
 import UserProfileSidebar from '@/components/sidebars/user-show-sidebar';
 import images from '@/constants/image';
-import { dummyCards, dummyLeads } from '@/dummyDatas/users';
+import { dummyLeads } from '@/dummyDatas/users';
 import { Counter } from '@/hooks/useCounter';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps } from '@/types';
@@ -355,7 +355,6 @@ function Dashboard({ auth, users }: Props) {
                                                     key={user.id}
                                                     name={user.name}
                                                     title={user.position || 'Position not specified'}
-
                                                     imageSrc={user.profile_picture || ''}
                                                     experience={user.years_of_operation || 'N/A'}
                                                     industry={user.industry || 'N/A'}
@@ -382,7 +381,6 @@ function Dashboard({ auth, users }: Props) {
                                                 </UserProfileSidebar>
                                             ))}
                                     </div>
-
 
                                     {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)

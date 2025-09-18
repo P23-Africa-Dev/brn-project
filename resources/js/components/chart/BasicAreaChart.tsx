@@ -8,11 +8,6 @@ interface ChartProps {
     userId?: number;
 }
 
-interface ChartDataPoint {
-    date: string;
-    minutes_online: number;
-}
-
 interface ChartState {
     series: {
         name: string;
@@ -61,7 +56,7 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
                 enabled: false,
             },
             stroke: {
-                curve: 'smooth',
+                curve: 'smooth' as const,
             },
             labels: [],
             xaxis: {
@@ -101,7 +96,7 @@ const BasicAreaChart: React.FC<ChartProps> = ({ userId }) => {
                             data: activityData.map((point) => point.minutes_online),
                         },
                     ],
-                
+
                     options: {
                         ...prev.options,
                         labels: activityData.map((point) => point.date),
