@@ -46,8 +46,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     //     return Inertia::render('chats/index');  // Note the lowercase path
     // })->name('chats.index');
     Route::get('/messages', [ChatController::class, 'index'])->name('chats.index');
+
+    Route::post('/messages/start', [ChatController::class, 'startDirect'])->name('chats.start');
+
     Route::get('/messages/{encryptedId}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/messages/{encryptedId}/messages', [MessageController::class, 'store'])->name('chats.messages.store');
+    Route::patch('/messages/{encryptedId}/messages/{messageId}', [MessageController::class, 'update'])->name('chats.messages.update');
+    Route::delete('/messages/{encryptedId}/messages/{messageId}', [MessageController::class, 'destroy'])->name('chats.messages.destroy');
+
 
     // Route::get('/payment', [PaymentController::class, 'index'])->name('payment.index');
     // Route::post('/api/payment/initialize', [PaymentController::class, 'initializePayment'])->name('payment.initialize');

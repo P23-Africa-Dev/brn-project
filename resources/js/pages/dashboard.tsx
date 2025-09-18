@@ -348,7 +348,8 @@ function Dashboard({ auth, users }: Props) {
                                     <div className="divide-y divide-white/30">
                                         {dummyCards.map((card, index) => (
                                             <UserProfileSidebar
-                                                key={index}
+
+<!--                                                 key={index}
                                                 name={card.name}
                                                 title={card.title}
                                                 imageSrc={card.imageSrc}
@@ -364,7 +365,27 @@ function Dashboard({ auth, users }: Props) {
                                                 topGoal={card.topGoal}
                                                 brnMemberSince={card.brnMemberSince}
                                                 responseRate={card.responseRate}
-                                                successfulDealsRate={card.successfulDealsRate}
+                                                successfulDealsRate={card.successfulDealsRate} -->
+
+                                                userId={user.id}           // The user being viewed
+                                                authUserId={auth.user?.id ?? 0}
+                                                key={user.id}
+                                                name={user.name}
+                                                title={user.position || 'Position not specified'}
+                                                imageSrc={user.profile_picture || 'images/no-user-dp.png'}
+                                                experience={user.years_of_operation || 'N/A'}
+                                                industry={user.industry || 'N/A'}
+                                                interest={user.categories || 'N/A'}
+                                                reviews={user.rating ? user.rating.toString() : '0'}
+                                                baseLocation={user.country || 'N/A'}
+                                                operatesIn={user.country || 'N/A'}
+                                                bio={user.company_description || ''}
+                                                companyStage={user.selected_outcome || ''}
+                                                keyStrength={user.great_at || ''}
+                                                topGoal={user.goals || ''}
+                                                brnMemberSince={user.created_at || ''}
+                                                responseRate={'N/A'}
+                                                successfulDealsRate={'N/A'}
                                             >
                                                 <UserCard {...card} />
                                             </UserProfileSidebar>
@@ -378,6 +399,7 @@ function Dashboard({ auth, users }: Props) {
                                                     key={user.id}
                                                     name={user.name}
                                                     title={user.position || 'Position not specified'}
+
                                                     imageSrc={user.profile_picture || ''}
                                                     experience={user.years_of_operation || 'N/A'}
                                                     industry={user.industry || 'N/A'}
@@ -404,6 +426,14 @@ function Dashboard({ auth, users }: Props) {
                                                 </UserProfileSidebar>
                                             ))} */}
                                     </div>
+
+                                                    industry={user.industry || 'N/A'}
+                                                    rating={user.rating || 0}
+                                                    imageSrc={user.profile_picture || 'images/no-user-dp.png'}
+                                                />
+                                            </UserProfileSidebar>
+                                        ))}
+
 
                                     {/* {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)

@@ -51,9 +51,15 @@ class User extends Authenticatable
 
     public function getProfilePictureAttribute($value)
     {
-        return $value
-            ? asset('storage/' . $value)   // returns full URL like http://127.0.0.1:8000/storage/profile.jpg
-            : asset('images/default-avatar.png'); // fallback image
+        if (!$value) {
+            return '/images/no-user-dp.png';
+        }
+
+        if (str_starts_with($value, 'http')) {
+            return $value;
+        }
+
+        return asset('storage/' . $value);
     }
 
     /**
@@ -89,7 +95,7 @@ class User extends Authenticatable
         return $this->hasMany(\App\Models\Message::class);
     }
 
-        public function connections()
+    public function connections()
     {
         return $this->hasMany(\App\Models\Connection::class, 'user_id');
     }
