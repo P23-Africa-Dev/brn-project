@@ -40,7 +40,12 @@ class ChatController extends Controller
 
         return Inertia::render('chats/index', [
             'conversations' => $mappedConversations,
-            'auth' => ['user' => $user->only(['id', 'name', 'email', 'profile_picture'])],
+            'auth' => ['user' => [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'profile_picture' => $user->getAttribute('profile_picture'), // Apply accessor
+            ]],
         ]);
     }
 
@@ -138,22 +143,38 @@ class ChatController extends Controller
                 return [
                     'id' => $m->id,
                     'body' => $m->body,
-                    'user' => $m->user ? $m->user->only(['id', 'name', 'profile_picture']) : null,
+                    'user' => $m->user ? [
+                        'id' => $m->user->id,
+                        'name' => $m->user->name,
+                        'profile_picture' => $m->user->getAttribute('profile_picture'), // Apply accessor
+                    ] : null,
                     'created_at' => $m->created_at->toDateTimeString(),
                 ];
             });
 
-        // Get participants with profile_picture
+        // Get participants with profile_picture (ensure accessor is applied)
         $participants = $conversation->participants()
             ->select(['users.id', 'users.name', 'users.profile_picture'])
-            ->get();
+            ->get()
+            ->map(function ($p) {
+                return [
+                    'id' => $p->id,
+                    'name' => $p->name,
+                    'profile_picture' => $p->getAttribute('profile_picture'), // Apply accessor
+                ];
+            });
 
         // Get latest message (last in the list)
         $latestMessage = $messages->count() ? $messages->last() : null;
 
         if (request()->wantsJson()) {
             return response()->json([
-                'conversation' => $conversation,
+                'conversation' => [
+                    'id' => $conversation->id, // raw id for Echo
+                    'encrypted_id' => $conversation->encrypted_id, // secure routes
+                    'title' => $conversation->title,
+                    'participants' => $participants,
+                ],
                 'messages' => $messages,
                 'conversations' => $conversations, // ✅ send sidebar too
             ]);
@@ -170,7 +191,11 @@ class ChatController extends Controller
             'latestMessage' => $latestMessage,
             'conversations' => $conversations, // ✅ sidebar data
             'auth' => [
-                'user' => $user->only(['id', 'name', 'profile_picture'])
+                'user' => [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'profile_picture' => $user->getAttribute('profile_picture'), // Apply accessor
+                ]
             ],
         ]);
     }

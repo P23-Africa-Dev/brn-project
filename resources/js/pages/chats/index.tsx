@@ -357,7 +357,7 @@ export default function Index({ conversations = [], auth }: Props) {
                                     return (
                                         <>
                                             <img
-                                                src={other?.profile_picture || '/images/no-user-dp.png'}
+                                                src={other && other.profile_picture ? other.profile_picture : '/images/no-user-dp.png'}
                                                 alt={other?.name || 'User'}
                                                 className="h-12 w-12 rounded-full border object-cover"
                                                 onError={(e) => {
