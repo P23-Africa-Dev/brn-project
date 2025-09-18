@@ -1,9 +1,9 @@
 'use client';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import images from '@/constants/image';
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 import { Star } from 'lucide-react';
-import React from 'react';
+import React, { useState } from 'react';
 import UserDetailedSidebar from './user-profile';
 
 interface UserProfileSidebarProps {
@@ -26,7 +26,7 @@ interface UserProfileSidebarProps {
     children: React.ReactNode;
 }
 
-const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
+const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; authUserId: number }> = ({
     name,
     title,
     imageSrc,
@@ -44,81 +44,77 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
     responseRate,
     successfulDealsRate,
     children,
+    userId,
+    authUserId,
 }) => {
     // Use Inertia page props for connection status, which must be provided by the parent page (from database)
     const {
         connected,
         pending,
-        // conversations = [],
-        // auth,
-    } = usePage().props as {
-        connected?: { id: number }[];
-        pending?: { id: number }[];
-        // conversations?: { id?: string; encrypted_id?: string; participants?: { id: number }[] }[];
-        // auth?: { user?: { id: number } };
+        conversations = [],
+        auth,
+    } = usePage().props as { connected?: any[]; pending?: any[]; conversations?: any[]; auth?: any };
+    let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
+    if (!connected || !pending) {
+        // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
+        console.warn('Sidebar: connected/pending props missing. Ensure parent page provides them from database.');
+    } else if (connected.some((u) => u.id === userId)) {
+        connectionStatus = 'accepted';
+    } else if (pending.some((u) => u.id === userId)) {
+        connectionStatus = 'pending';
+    }
+    const [loading, setLoading] = useState(false);
+
+    // Find existing conversation with this user (if any)
+    let conversationLink: string | null = null;
+    if (Array.isArray(conversations) && auth?.user?.id) {
+        const found = conversations.find((c) => {
+            // Direct message: only 2 participants, and the other is userId
+            if (c.participants && c.participants.length === 2) {
+                return c.participants.some((p: any) => p.id === userId) && c.participants.some((p: any) => p.id === auth.user.id);
+            }
+            return false;
+        });
+        if (found && found.id) {
+            conversationLink = `/messages/${found.id}`;
+        } else if (found && found.encrypted_id) {
+            conversationLink = `/messages/${found.encrypted_id}`;
+        }
+    }
+
+    // Handler to start a new conversation if none exists
+    const handleStartConversation = () => {
+        if (conversationLink) {
+            router.visit(conversationLink);
+        } else {
+            // POST to a route to create a new conversation, then redirect
+            setLoading(true);
+            router.post(
+                '/messages/start',
+                { user_id: userId },
+                {
+                    preserveScroll: true,
+                    onFinish: () => setLoading(false),
+                    onSuccess: () => {
+                        // Expect backend to redirect to the new conversation
+                    },
+                },
+            );
+        }
     };
-    // Connection status logic (currently not displayed in UI but calculated for future use)
-    // let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
-    // if (!connected || !pending) {
-    //     // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
-    //     console.warn('Sidebar: connected/pending props missing. Ensure parent page provides them from database.');
-    // } else if (connected.some((u) => u.id === userId)) {
-    //     connectionStatus = 'accepted';
-    // } else if (pending.some((u) => u.id === userId)) {
-    //     connectionStatus = 'pending';
-    // }
-    // const [loading, setLoading] = useState(false);
 
-    // Find existing conversation with this user (if any) - currently not used in UI
-    // let conversationLink: string | null = null;
-    // if (Array.isArray(conversations) && auth?.user?.id) {
-    //     const found = conversations.find((c) => {
-    //         // Direct message: only 2 participants, and the other is userId
-    //         if (c.participants && c.participants.length === 2 && auth.user) {
-    //             return c.participants.some((p) => p.id === userId) && c.participants.some((p) => p.id === auth.user.id);
-    //         }
-    //         return false;
-    //     });
-    //     if (found && found.id) {
-    //         conversationLink = `/messages/${found.id}`;
-    //     } else if (found && found.encrypted_id) {
-    //         conversationLink = `/messages/${found.encrypted_id}`;
-    //     }
-    // }
-
-    // Handler to start a new conversation if none exists (currently not used in UI)
-    // const handleStartConversation = () => {
-    //     if (conversationLink) {
-    //         router.visit(conversationLink);
-    //     } else {
-    //         // POST to a route to create a new conversation, then redirect
-    //         setLoading(true);
-    //         router.post(
-    //             '/messages/start',
-    //             { user_id: userId },
-    //             {
-    //                 preserveScroll: true,
-    //                 onFinish: () => setLoading(false),
-    //                 onSuccess: () => {
-    //                     // Expect backend to redirect to the new conversation
-    //                 },
-    //             },
-    //         );
-    //     }
-    // };
-
-    // const handleConnect = () => {
-    //     setLoading(true);
-    //     router.post(
-    //         '/connections/send',
-    //         { connected_user_id: userId },
-    //         {
-    //             preserveScroll: true,
-    //             onFinish: () => setLoading(false),
-    //             onSuccess: () => router.reload({ only: ['connected', 'pending'] }),
-    //         },
-    //     );
-    // };
+    const handleConnect = () => {
+        setLoading(true);
+        router.post(
+            '/connections/send',
+            { connected_user_id: userId },
+            {
+                preserveScroll: true,
+                onFinish: () => setLoading(false),
+                onSuccess: () => router.reload({ only: ['connected', 'pending'] }),
+            },
+        );
+    };
 
     // Listen for changes in connected/pending to update UI after accept/decline
     React.useEffect(() => {
@@ -131,30 +127,27 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                 {/* UserCard component triggers this sidebar */}
                 <div className="cursor-pointer">{children}</div>
             </SheetTrigger>
-            <SheetContent
-                side="right"
-                className="rounded-tl-4xl rounded-tr-4xl rounded-br-4xl rounded-bl-4xl border-none bg-white p-0 outline-0 sm:max-w-md lg:max-w-[400px]"
-            >
-                <div className="no-scrollbar flex h-full flex-col overflow-y-auto rounded-3xl shadow-lg">
+            <SheetContent side="right" className=" rounded-tl-4xl rounded-tr-4xl rounded-bl-4xl rounded-br-4xl border-none bg-white p-0 outline-0 sm:max-w-md lg:max-w-[400px]">
+                <div className="no-scrollbar flex h-full flex-col overflow-y-auto rounded-3xl shadow-lg ">
                     {/* Profile Header Section */}
                     <div
-                        className="relative m-2 flex h-[460px] flex-col items-center justify-end rounded-3xl bg-cover bg-top text-white"
+                        className="relative flex h-[460px] flex-col items-center justify-end rounded-3xl m-2 bg-cover bg-top text-white"
                         style={{
                             backgroundImage: `linear-gradient(to top, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.1)), url(${imageSrc})`,
                         }}
                     >
-                        <div className="absolute bottom-15 rounded-xl bg-darkBlue px-3 py-4 pl-5 text-right opacity-60">
+                        <div className="absolute bottom-15 text-right bg-darkBlue  opacity-60 px-3 pl-5 py-4 rounded-xl">
                             <h1 className="text-2xl leading-3.5 font-bold">{name}</h1>
-                            <p className="mt-1 text-sm font-medium">{title}</p>
+                            <p className="mt-1 text-sm font-medium ">{title}</p>
                         </div>
                     </div>
                     {/* Content Section */}
-                    <div className="w-full px-4 pt-1 pb-2">
+                    <div className="  w-full px-4 pt-1 pb-2">
                         {/* Details Grid */}
-                        <div className="flex h-full w-full flex-col rounded-tl-[67px] rounded-br-2xl rounded-bl-2xl bg-darkBlue px-5 py-3 pt-5 pl-7">
-                            <div className="flex w-full pl-5">
-                                <div className="grid grid-cols-3 gap-1">
-                                    <div className="grid w-[200px] grid-cols-2 gap-4 pb-6">
+                        <div className="flex h-full w-full  flex-col rounded-tl-[67px] rounded-br-2xl rounded-bl-2xl bg-darkBlue  px-5 py-3 pt-5 pl-7">
+                            <div className="flex  w-full   pl-5">
+                                <div className="grid grid-cols-3    gap-1">
+                                    <div className="grid grid-cols-2 w-[200px]  pb-6 gap-4">
                                         <div className="flex flex-col">
                                             <p className="text-sm font-semibold text-secondaryWhite">Experience</p>
                                             <p className="text-xs font-extralight text-secondaryWhite">{experience}</p>
@@ -169,14 +162,14 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                                         </div>
                                     </div>
 
-                                    <div className="col-start-1 col-end-3 flex items-center space-x-2 pb-8">
+                                    <div className="flex col-start-1 col-end-3 items-center pb-8 space-x-2">
                                         <p className="text-[16px] font-bold text-secondaryWhite">{reviews}</p>
                                         <Star className="h-6 w-6 fill-[#27E6A7] text-[#27E6A7]" />
                                         {/* <p className="text-sm font-medium text-gray-500">Reviews</p> */}
                                     </div>
                                 </div>
-                                <div className="flex items-start justify-between">
-                                    <div className="flex w-full flex-col gap-2">
+                                <div className=" flex   items-start justify-between">
+                                    <div className=" flex w-full flex-col gap-2">
                                         {/* The "Users" button now triggers the new UserDetailedSidebar */}
                                         <UserDetailedSidebar
                                             name={name}
@@ -214,8 +207,8 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                                 </div>
                             </div>
 
-                            {/* Action Buttons - Currently commented out as handlers are not implemented */}
-                            {/* <div className=" flex space-x-3">
+                            {/* Action Buttons */}
+                            <div className=" flex space-x-3">
                                 {userId !== authUserId &&
                                     (connectionStatus === 'accepted' ? (
                                         <button
@@ -244,7 +237,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps> = ({
                                     <img src={images.bookmark} className="h-6 w-6" alt="" />
                                     <span className='text-[14px]'>Save for later</span>
                                 </button>
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>
