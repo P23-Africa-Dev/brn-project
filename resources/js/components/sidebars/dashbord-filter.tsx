@@ -40,7 +40,7 @@ export const FilterSidebar = () => {
                 </div>
             </SheetTrigger>
 
-            <SheetContent className="w-[336px] rounded-l-[40px] p-10 dark:bg-gray-800 dark:text-gray-100">
+            <SheetContent className="w-[336px] pb-20 xl:pb-0 overflow-y-auto rounded-l-[40px] p-10 dark:bg-gray-800 dark:text-gray-100">
                 <SheetHeader>
                     <SheetTitle className="mb-2 text-2xl font-semibold text-deepBlack dark:text-gray-100">Filter By</SheetTitle>
                     <SheetDescription className="text-sm text-deepBlack dark:text-gray-400">
