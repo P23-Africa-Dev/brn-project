@@ -2,10 +2,10 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
 // Declare global window interface
-declare global {    
+declare global {
     interface Window {
         Pusher: typeof Pusher;
-        Echo: Echo<any>;
+        Echo: Echo<'reverb'>;
     }
 }
 

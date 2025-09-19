@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 
 interface Props {
     conversation: {
-        encrypted_id: any;
+        encrypted_id: string | number;
         id: number;
         title: string | null;
         participants: User[];
@@ -30,18 +30,20 @@ type Message = {
     created_at: string;
 };
 
-export default function Show({ conversation, messages: initialMessages, auth }: Props) {
-    // Add validation check at the start
+
+export default function Show({ conversation, messages: initialMessages, latestMessage, auth }: Props) {
+      // Add validation check at the start
     if (!auth?.user?.id) {
         return <div className="p-4 text-red-500">Authentication required</div>;
     }
+    // React hooks must be called before any early returns
 
     const [messages, setMessages] = useState<Message[]>(initialMessages || []);
     const [text, setText] = useState('');
     const [typingUsers, setTypingUsers] = useState<User[]>([]);
     const [participants, setParticipants] = useState<User[]>(conversation?.participants || []);
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
-    const channelRef = useRef<any>(null);
+    const channelRef = useRef<{ whisper?: (event: string, data: unknown) => void } | null>(null);
 
     useEffect(() => scrollToBottom(), [messages]);
 
@@ -72,13 +74,21 @@ export default function Show({ conversation, messages: initialMessages, auth }: 
 
         return () => {
             try {
-                (window as any).Echo.leave(`conversation.${conversation.id}`);
+                (window as { Echo?: { leave: (channel: string) => void } }).Echo?.leave(`conversation.${conversation.id}`);
                 channelRef.current = null;
             } catch (err) {
                 console.warn('Error leaving Echo channel', err);
             }
         };
     }, [conversation?.id, auth?.user?.id]);
+
+    // Add validation check after all hooks
+    if (!auth?.user?.id) {
+        return <div className="p-4 text-red-500">Authentication required</div>;
+    }
+
+    // Find the other participant (for 1:1 chat)
+    const otherUser = getOtherParticipant(conversation?.participants || [], auth.user.id);
 
     function scrollToBottom() {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });

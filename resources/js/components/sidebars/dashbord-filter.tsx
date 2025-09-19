@@ -22,7 +22,7 @@ const positions = ['CEO', 'CTO', 'CFO', 'Manager', 'Engineer'];
 
 export const FilterSidebar = () => {
     // Search states
-    const [searchCountry, setSearchCountry] = useState('');
+    const [searchCountry] = useState(''); // setSearchCountry removed as it's not used
     const [searchIndustry, setSearchIndustry] = useState('');
     const [searchPosition, setSearchPosition] = useState('');
 
@@ -37,6 +37,7 @@ export const FilterSidebar = () => {
                 <div className="flex w-[40px] md:w-[100px] md:pr-2 lg:w-[50px]  xl:w-[130px] cursor-pointer items-center md:items-end lg:items-center justify-end">
                     <img src={images.desktopSlide} className="xl:h-10 hidden lg:block xl:w-10 lg:w-8 lg:mt-2 xl:mt-0 lg:h-8 cursor-pointer" alt="filter" />
                     <img src={images.preferenceHorizontal} className=" w-7 h-7  lg:hidden  cursor-pointer" alt="filter" />
+
                 </div>
             </SheetTrigger>
 
@@ -54,7 +55,7 @@ export const FilterSidebar = () => {
                         <label htmlFor="country" className="text-base font-semibold text-darkBlue dark:text-gray-200">
                             Country
                         </label>
-                        <div className='mt-2'>
+                        <div className="mt-2">
                             <Select onOpenChange={(o) => setOpenCountry(o)}>
                                 <SelectTrigger
                                     id="country"
@@ -71,7 +72,7 @@ export const FilterSidebar = () => {
                                         </span>
                                     )}
                                 </SelectTrigger>
-                                <SelectContent className="w-full [&_svg]:hidden py-1 select-dropdown-shadow">
+                                <SelectContent className="select-dropdown-shadow w-full py-1 [&_svg]:hidden">
                                     {/* <div className="sticky top-0 z-10 mb-2 bg-white dark:bg-gray-700">
                                     <input
                                         type="text"
@@ -84,7 +85,11 @@ export const FilterSidebar = () => {
                                     {countries
                                         .filter((c) => c.toLowerCase().includes(searchCountry.toLowerCase()))
                                         .map((c, i) => (
-                                            <SelectItem className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={c}>
+                                            <SelectItem
+                                                className="cursor-pointer data-[highlighted]:bg-[#CCA6FF]/15 data-[highlighted]:text-deepBlack"
+                                                key={i}
+                                                value={c}
+                                            >
                                                 {c}
                                             </SelectItem>
                                         ))}
@@ -116,7 +121,11 @@ export const FilterSidebar = () => {
                                     )}
                                 </SelectTrigger>
 
-                                <SelectContent position="popper" sideOffset={4} className="max-h-60 w-[245px] overflow-y-auto border [&_svg]:hidden select-dropdown-shadow">
+                                <SelectContent
+                                    position="popper"
+                                    sideOffset={4}
+                                    className="select-dropdown-shadow max-h-60 w-[245px] overflow-y-auto border [&_svg]:hidden"
+                                >
                                     <div className="sticky top-0 z-10 mt-0 mb-2 bg-white dark:bg-gray-700">
                                         <input
                                             type="text"
@@ -129,7 +138,11 @@ export const FilterSidebar = () => {
                                     {industries
                                         .filter((ind) => ind.toLowerCase().includes(searchIndustry.toLowerCase()))
                                         .map((ind, i) => (
-                                            <SelectItem   className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={ind}>
+                                            <SelectItem
+                                                className="cursor-pointer data-[highlighted]:bg-[#CCA6FF]/15 data-[highlighted]:text-deepBlack"
+                                                key={i}
+                                                value={ind}
+                                            >
                                                 {ind}
                                             </SelectItem>
                                         ))}
@@ -164,7 +177,7 @@ export const FilterSidebar = () => {
                                 <SelectContent
                                     position="popper"
                                     sideOffset={4}
-                                    className="max-h-60 w-[245px] overflow-y-auto border focus:ring-0 focus:ring-offset-0 [&_svg]:hidden select-dropdown-shadow"
+                                    className="select-dropdown-shadow max-h-60 w-[245px] overflow-y-auto border focus:ring-0 focus:ring-offset-0 [&_svg]:hidden"
                                 >
                                     <div className="sticky top-0 z-10 mb-2">
                                         <input
@@ -178,7 +191,11 @@ export const FilterSidebar = () => {
                                     {positions
                                         .filter((p) => p.toLowerCase().includes(searchPosition.toLowerCase()))
                                         .map((p, i) => (
-                                            <SelectItem className="data-[highlighted]:bg-[#CCA6FF]/15  data-[highlighted]:text-deepBlack cursor-pointer" key={i} value={p}>
+                                            <SelectItem
+                                                className="cursor-pointer data-[highlighted]:bg-[#CCA6FF]/15 data-[highlighted]:text-deepBlack"
+                                                key={i}
+                                                value={p}
+                                            >
                                                 {p}
                                             </SelectItem>
                                         ))}
@@ -188,7 +205,7 @@ export const FilterSidebar = () => {
                     </div>
                 </div>
 
-                <Button className="mt-4 w-full rounded-full py-6 shadow-xl text-lg font-semibold text-white" style={{ backgroundColor: '#193E47' }}>
+                <Button className="mt-4 w-full rounded-full py-6 text-lg font-semibold text-white shadow-xl" style={{ backgroundColor: '#193E47' }}>
                     Search
                 </Button>
             </SheetContent>

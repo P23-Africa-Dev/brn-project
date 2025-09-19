@@ -7,7 +7,7 @@ import BasicPolarChart from '@/components/chart/BasicPolarChart';
 import { FilterSidebar } from '@/components/sidebars/dashbord-filter';
 import UserProfileSidebar from '@/components/sidebars/user-show-sidebar';
 import images from '@/constants/image';
-import { dummyCards, dummyLeads } from '@/dummyDatas/users';
+import { dummyLeads } from '@/dummyDatas/users';
 import { Counter } from '@/hooks/useCounter';
 import AppLayout from '@/layouts/app-layout';
 import { PageProps } from '@/types';
@@ -356,30 +356,8 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="divide-y divide-white/30">
-                                        {dummyCards.map((card, index) => (
-                                            <UserProfileSidebar
-                                                key={index}
-                                                name={card.name}
-                                                title={card.title}
-                                                imageSrc={card.imageSrc}
-                                                experience={card.experience}
-                                                industry={card.industry}
-                                                interest={card.interest}
-                                                reviews={card.reviews}
-                                                baseLocation={card.baseLocation}
-                                                operatesIn={card.operatesIn}
-                                                bio={card.bio}
-                                                companyStage={card.companyStage}
-                                                keyStrength={card.keyStrength}
-                                                topGoal={card.topGoal}
-                                                brnMemberSince={card.brnMemberSince}
-                                                responseRate={card.responseRate}
-                                                successfulDealsRate={card.successfulDealsRate}
-                                            >
-                                                <UserCard {...card} />
-                                            </UserProfileSidebar>
-                                        ))}
-                                        {/* {users
+
+                                        {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
                                                 <UserProfileSidebar
@@ -412,7 +390,7 @@ function Dashboard({ auth, users }: Props) {
                                                         imageSrc={user.profile_picture || ''}
                                                     />
                                                 </UserProfileSidebar>
-                                            ))} */}
+                                            ))}
                                     </div>
 
                                     {/* {users

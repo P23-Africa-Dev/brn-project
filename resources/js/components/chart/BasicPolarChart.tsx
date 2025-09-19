@@ -10,12 +10,33 @@ interface ChartProps {
 const BasicPolarChart: React.FC<ChartProps> = ({ apiUrl }) => {
     const [chartData, setChartData] = useState<{
         series: number[];
-        options: any;
+        options: {
+            chart: { type: 'polarArea' };
+            labels: string[];
+            colors: string[];
+            stroke: { colors: string[] };
+            fill: {
+                opacity: number;
+                type: ('pattern' | 'solid')[];
+                pattern: { style: ('slantedLines' | 'solid')[] };
+            };
+            legend: {
+                position: 'bottom';
+                labels: { colors: string };
+            };
+            responsive: Array<{
+                breakpoint: number;
+                options: {
+                    chart: { width: number };
+                    legend: { position: 'bottom' };
+                };
+            }>;
+        };
     }>({
         series: [],
         options: {
             chart: {
-                type: 'polarArea',
+                type: 'polarArea' as const,
             },
             labels: ['Read', 'Unread'], // 🟢 Order: Read first (top), Unread second (bottom)
             colors: ['#A47AF0', '#193E47'], // 🟣 Lavender for Read, Dark Teal for Unread
@@ -78,7 +99,7 @@ const BasicPolarChart: React.FC<ChartProps> = ({ apiUrl }) => {
     }, [apiUrl]);
 
     return (
-        <div className="relative overflow-hidden z-10">
+        <div className="relative z-10 overflow-hidden">
             <ReactApexChart options={chartData.options} series={chartData.series} type="polarArea" height={300} />
         </div>
     );

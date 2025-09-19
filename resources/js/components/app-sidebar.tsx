@@ -85,7 +85,7 @@ export const AppSidebar: React.FC = () => {
         if (typeof window !== 'undefined') {
             setActivePath(window.location.pathname);
         }
-    }, [usePage]); // run on mount & when page changes
+    }, []); // run on mount
 
     // derive active item name from path
     const activeName = useMemo(() => {

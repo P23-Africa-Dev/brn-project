@@ -30,8 +30,9 @@ export async function getAfricanCountries(): Promise<Country[]> {
         } else {
             throw new Error('Unexpected API format');
         }
-    } catch (err: any) {
+    } catch (err: unknown) {
         console.error('Error fetching African countries:', err);
-        throw new Error(err.message || 'Failed to fetch countries');
+        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch countries';
+        throw new Error(errorMessage);
     }
 }
