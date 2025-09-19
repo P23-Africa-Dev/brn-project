@@ -113,7 +113,7 @@ class RegisteredUserController extends Controller
             return Inertia::render('auth/error/auth-error-page', [
                 'message' => 'Invalid or expired link.',
                 'buttonText' => 'Join Membership',
-                'buttonLink' => url('http://127.0.0.1:8080/brn-form')
+                'buttonLink' => url('https://p23africa.com/brn-form')
             ]);
         }
     }
