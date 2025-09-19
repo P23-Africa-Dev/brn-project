@@ -246,15 +246,7 @@ function Dashboard({ auth, users }: Props) {
                                                     backgroundImage: `url(${images.man2})`,
                                                 }}
                                             ></div>
-                                            {/* <div className="relative h-6 w-6 md:h-10 md:w-10 rounded-full">
-                                                <img className="h-full w-full object-cover md:w-10 md:h-10" src={images.man3} alt="User avatar" />
-                                            </div>
-                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-                                                <img className="h-full w-full object-center" src={images.man1} alt="User avatar" />
-                                            </div>
-                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-                                                <img className="h-full w-full object-center" src={images.man2} alt="User avatar" />
-                                            </div> */}
+                                           
                                         </div>
                                         <h4 className="mb-2 w-full flex-1 text-center text-[9px] whitespace-nowrap text-primary">200k+ People</h4>
                                         <button className="rounded-full bg-[#BB98FB] px-3 py-1.5 text-[10px] font-semibold whitespace-nowrap">
