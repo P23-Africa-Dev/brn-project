@@ -41,11 +41,11 @@ const NAV_ITEMS: NavItem[] = [
     { name: 'Leads', icon: images.LeadsIcon, href: '/leads' },
 ];
 const MOBILE_NAV_ITEMS: MobileNavItem[] = [
-    { name: 'Dashboard', icon: images.dashboardIcon, activeIcon: images.dashboardIcon, href: '/dashboard' },
-    { name: 'Messages', icon: images.bubbleChat, activeIcon: images.bubbleChat, href: '/messages' },
-    { name: 'Referrals', icon: images.repeatmobileIcon, activeIcon: images.repeatIcon, href: '/referrals' },
-    { name: 'Directory', icon: images.searchList, activeIcon: images.searchList, href: '/directory' },
-    { name: 'Leads', icon: images.shareKnowledgemobile, activeIcon: images.shareKnowledgemobile, href: '/leads' },
+    { name: 'Dashboard', icon: images.dashboardIcon, activeIcon: images.activeDashboard, href: '/dashboard' },
+    { name: 'Messages', icon: images.bubbleChat, activeIcon: images.activeChat, href: '/messages' },
+    { name: 'Referrals', icon: images.repeatmobileIcon, activeIcon: images.activeRepeat, href: '/referrals' },
+    { name: 'Directory', icon: images.searchList, activeIcon: images.activeSearch, href: '/directory' },
+    { name: 'Leads', icon: images.shareKnowledgemobile, activeIcon: images.activeShare, href: '/leads' },
 ];
 
 const userAccountItems: NavItem[] = [
@@ -122,7 +122,6 @@ export const AppSidebar: React.FC = () => {
                 // className={`sticky top-0 left-0 z-0 hidden h-screen overflow-hidden bg-cover bg-center transition-all duration-400 select-none lg:block ${open ? 'w-56' : 'w-20'} text-white`}
                 className={`sticky top-0 left-0 z-[2] hidden h-screen overflow-hidden transition-all duration-400 outline-none select-none lg:block ${open ? 'w-56' : 'w-20 overflow-x-hidden'} bg-gradient-to-b from-[#031C5B] via-[#0B1727] to-[#031C5B] text-white`}
                 aria-expanded={open}
-                // 👉 expand on hover, collapse on leave
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
             >
@@ -162,14 +161,14 @@ export const AppSidebar: React.FC = () => {
                                                 <img
                                                     src={images.TopactivesmallBG}
                                                     alt="active pattern"
-                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? '-top-[71px] left-[1680px] -z-[5] h-20' : '-top-[40px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                    className={`absolute z-[2] w-full transition-all duration-300 ${open ? '-top-[71px] left-[1680px] -z-[5] h-20' : '-top-[40px] left-[40px] z-0 h-[50px] w-full delay-300'} `}
                                                 />
                                             )}
                                             {isActive && (
                                                 <img
                                                     src={images.BottomactivesmallBG}
                                                     alt="active pattern"
-                                                    className={`absolute z-[2] w-full transition-all duration-300 backface-hidden ${open ? 'top-[71px] left-[1680px] -z-[5] h-20' : '-bottom-[44px] left-[40px] z-0 h-[50px] w-full delay-200'} `}
+                                                    className={`absolute z-[2] w-full transition-all duration-300 ${open ? 'top-[71px] left-[1680px] -z-[5] h-20' : '-bottom-[44px] left-[40px] z-0 h-[50px] w-full delay-300'} `}
                                                 />
                                             )}
                                             {/* {isActive && (
@@ -291,38 +290,9 @@ export const AppSidebar: React.FC = () => {
                         style={{
                             backgroundImage: `url(${images.curveMobilePattern})`,
                         }}
-                        className="aboslute top-0 left-0 z-20 h-[160px] overflow-hidden bg-cover bg-top bg-no-repeat"
+                        className="aboslute top-0 left-0 z-20 h-[160px] overflow-hidden bg-cover bg-top bg-no-repeat sm:h-[200px] md:h-[260px]"
                     >
-                        {/* <div className="fixed bottom-4 w-full px-8">
-                            <div className="flex items-center justify-between">
-                                {MOBILE_NAV_ITEMS.map((item, index) => {
-                                    const isActive = activeName === item.name;
-
-                                    const isMiddle = index === 2;
-
-                                    return (
-                                        <Link
-                                            key={item.name}
-                                            href={item.href}
-                                            onClick={() => setActivePath(item.href)}
-                                            className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? '-mt-10 h-20 w-20' : 'h-14 w-14'} ${isActive ? 'bg-[#27E6A7]' : 'bg-transparent'} `}
-                                            aria-current={isActive ? 'page' : undefined}
-                                            style={{
-                                                boxShadow: isActive ? 'inset 0 4px 6px rgba(0,0,0,0.3)' : 'none',
-                                            }}
-                                        >
-                                            <img
-                                                src={item.icon}
-                                                alt={item.name}
-                                                className={`object-contain transition-all ${isMiddle ? 'h-10 w-10' : 'h-8 w-8'} `}
-                                            />
-                                        </Link>
-                                    );
-                                })}
-                            </div>
-                        </div> */}
-
-                        <div className="fixed bottom-4 w-full px-8">
+                        <div className="fixed bottom-4 w-full px-8 md:px-13 md:bottom-7">
                             <div className="flex items-center justify-between">
                                 {MOBILE_NAV_ITEMS.map((item, index) => {
                                     const isActive = activeName === item.name;
@@ -333,13 +303,13 @@ export const AppSidebar: React.FC = () => {
                                             key={item.name}
                                             href={item.href}
                                             onClick={() => setActivePath(item.href)}
-                                            className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? '-mt-10 h-20 w-20 border bg-secondaryWhite shadow-[inset_0_4px_6px_rgba(0,0,0,0.5)]' : 'h-14 w-14'} ${isActive ? 'bg-[#27E6A7] shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)]' : ''} `}
+                                            className={`flex items-center justify-center rounded-full transition-all duration-300 ${isMiddle ? '-mt-10 h-20 w-20 md:w-26 md:h-26 border bg-secondaryWhite shadow-[inset_0_4px_6px_rgba(0,0,0,0.5)] md:-mt-24' : 'h-14 w-14'} ${isActive ? 'bg-[#27E6A7] shadow-[inset_0_4px_6px_rgba(0,0,0,0.3)] md:p-1.5' : ''} `}
                                             aria-current={isActive ? 'page' : undefined}
                                         >
                                             <img
                                                 src={isActive ? item.activeIcon : item.icon}
                                                 alt={item.name}
-                                                className={`object-contain transition-all ${isMiddle ? 'h-10 w-10' : 'h-8 w-8'} `}
+                                                className={`object-contain transition-all ${isMiddle ? 'h-10 w-10 md:h-16 md:w-16' : 'h-8 w-8 md:h-14 md:w-14'} `}
                                             />
                                         </Link>
                                     );
@@ -423,7 +393,6 @@ export const AppSidebar: React.FC = () => {
                         <Link href="/profile" className="flex w-full items-center justify-start gap-2 rounded-xl bg-transparent text-secondaryWhite">
                             <span className="m-1.5 flex h-8 w-8 items-center justify-center rounded-full bg-deepBlack text-secondaryWhite">
                                 <img src={images.logout} alt="" />
-                                {/* <HiOutlineUserGroup className="h-6 w-6 fill-secondaryWhite text-secondaryWhite" /> */}
                             </span>
                             Logout
                         </Link>

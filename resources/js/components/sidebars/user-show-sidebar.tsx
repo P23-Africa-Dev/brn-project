@@ -48,12 +48,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
     authUserId,
 }) => {
     // Use Inertia page props for connection status, which must be provided by the parent page (from database)
-    const {
-        connected,
-        pending,
-        conversations = [],
-        auth,
-    } = usePage().props as { connected?: any[]; pending?: any[]; conversations?: any[]; auth?: any };
+    const { connected, pending } = usePage().props as { connected?: any[]; pending?: any[] };
     let connectionStatus: 'none' | 'pending' | 'accepted' = 'none';
     if (!connected || !pending) {
         // If not present, warn developer to provide these props from the parent page (e.g., dashboard or user profile page)
@@ -64,44 +59,6 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
         connectionStatus = 'pending';
     }
     const [loading, setLoading] = useState(false);
-
-    // Find existing conversation with this user (if any)
-    let conversationLink: string | null = null;
-    if (Array.isArray(conversations) && auth?.user?.id) {
-        const found = conversations.find((c) => {
-            // Direct message: only 2 participants, and the other is userId
-            if (c.participants && c.participants.length === 2) {
-                return c.participants.some((p: any) => p.id === userId) && c.participants.some((p: any) => p.id === auth.user.id);
-            }
-            return false;
-        });
-        if (found && found.id) {
-            conversationLink = `/messages/${found.id}`;
-        } else if (found && found.encrypted_id) {
-            conversationLink = `/messages/${found.encrypted_id}`;
-        }
-    }
-
-    // Handler to start a new conversation if none exists
-    const handleStartConversation = () => {
-        if (conversationLink) {
-            router.visit(conversationLink);
-        } else {
-            // POST to a route to create a new conversation, then redirect
-            setLoading(true);
-            router.post(
-                '/messages/start',
-                { user_id: userId },
-                {
-                    preserveScroll: true,
-                    onFinish: () => setLoading(false),
-                    onSuccess: () => {
-                        // Expect backend to redirect to the new conversation
-                    },
-                },
-            );
-        }
-    };
 
     const handleConnect = () => {
         setLoading(true);
@@ -142,10 +99,10 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                         </div>
                     </div>
                     {/* Content Section */}
-                    <div className="  w-full px-4 pt-1 pb-2">
+                    <div className="  w-full px-1.5 md:px-4 pt-1 pb-2">
                         {/* Details Grid */}
-                        <div className="flex h-full w-full  flex-col rounded-tl-[67px] rounded-br-2xl rounded-bl-2xl bg-darkBlue  px-5 py-3 pt-5 pl-7">
-                            <div className="flex  w-full   pl-5">
+                        <div className="flex h-full w-full  flex-col rounded-tl-[67px] rounded-br-2xl rounded-bl-2xl bg-darkBlue  px-5 py-3 pt-5 pl-7 ">
+                            <div className="flex  w-full pl-2  xl:pl-5">
                                 <div className="grid grid-cols-3    gap-1">
                                     <div className="grid grid-cols-2 w-[200px]  pb-6 gap-4">
                                         <div className="flex flex-col">
@@ -169,7 +126,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                     </div>
                                 </div>
                                 <div className=" flex   items-start justify-between">
-                                    <div className=" flex w-full flex-col gap-2">
+                                    <div className=" flex  items-end md:items-center w-full flex-col gap-2">
                                         {/* The "Users" button now triggers the new UserDetailedSidebar */}
                                         <UserDetailedSidebar
                                             name={name}
@@ -192,22 +149,35 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                             {/* <Button variant="ghost" className="h-10 w-10 p-0 text-gray-400 hover:text-gray-600">
                                                 <Users className="h-6 w-6" />
                                             </Button> */}
-                                            <button className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
-                                                <img src={images.userList} className="h-6 w-6" alt="" />
+                                            <button className="flex md:h-11 md:w-11 cursor-pointer items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
+                                                <img src={images.userList} className="w-5 h-5 md:h-6 md:w-6" alt="" />
                                             </button>
                                         </UserDetailedSidebar>
 
-                                        <button className="flex h-11 w-11 items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
-                                            <img src={images.messageO} className="h-6 w-6" alt="" />
+                                        <button className="flex md:h-11 md:w-11 items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
+                                            <img src={images.messageO} className="w-5 h-5 md:h-6 md:w-6" alt="" />
                                         </button>
-                                        <button className="flex h-11 w-11 items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
-                                            <img src={images.videoCamera} className="h-6 w-6" alt="" />
+                                        <button className="flex w-8 h-8 md:h-11 md:w-11 items-center justify-center rounded-full bg-[#D7F6EC] p-1 hover:text-gray-600">
+                                            <img src={images.videoCamera} className="w-5 h-5 md:h-6 md:w-6" alt="" />
                                         </button>
                                     </div>
                                 </div>
                             </div>
 
                             {/* Action Buttons */}
+
+                            <div className=" flex space-x-1.5 md:space-x-3">
+<!--                                 <button className="flex items-center justify-center gap-2 rounded-lg bg-[#A47AF0] px-2 py-1 whitespace-nowrap text-secondaryWhite">
+                                    <span className="flex w-5 h-5 md:h-7 md:w-7 items-center justify-center rounded-full bg-secondaryWhite">
+                                        <img src={images.connectLink} className="w-2.5 h-2.5 md:h-4 md:w-4" alt="" />
+                                    </span>
+                                    <span className='text-xs md:text-[14px]'>Connect Now</span>
+                                </button> -->
+                                {userId !== authUserId &&
+                                    (connectionStatus === 'accepted' ? (
+                                        <button
+                                            className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-2 py-1 whitespace-nowrap text-secondaryWhite"
+
                             <div className=" flex space-x-3">
                                 {userId !== authUserId &&
                                     (connectionStatus === 'accepted' ? (
@@ -215,6 +185,7 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                             className="flex items-center justify-center gap-2 rounded-xl bg-green-600 px-2 py-1 whitespace-nowrap text-secondaryWhite"
                                             onClick={handleStartConversation}
                                             disabled={loading}
+
                                         >
                                             <span className="flex h-7 w-7 items-center justify-center rounded-full bg-secondaryWhite">
                                                 <img src={images.messageO} className="h-4 w-4" alt="" />
@@ -233,9 +204,10 @@ const UserProfileSidebar: React.FC<UserProfileSidebarProps & { userId: number; a
                                             <span>{connectionStatus === 'pending' ? 'Pending' : loading ? 'Connecting...' : 'Connect Now'}</span>
                                         </button>
                                     ))}
-                                <button className="flex gap-2  items-center rounded-full bg-transparent px-3 py-2 whitespace-nowrap text-secondaryWhite">
+                                <button className="flex gap-2 md:ml-4  items-center rounded-full bg-transparent px-3 py-2 whitespace-nowrap text-secondaryWhite">
+
                                     <img src={images.bookmark} className="h-6 w-6" alt="" />
-                                    <span className='text-[14px]'>Save for later</span>
+                                    <span className='text-xs md:text-[14px]'>Save for later</span>
                                 </button>
                             </div>
                         </div>

@@ -64,8 +64,8 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
     };
 
     return (
-        <div className="w-full border p-8 lg:overflow-y-auto">
-            <div className="relative z-10 mx-auto max-w-md">
+        <div className="w-full md:h-[670px] relative z-[2] h-[800px] lg:h-auto  p-8 overflow-y-auto overflow-x-hidden ">
+            <div className=" mx-auto max-w-md">
                 {/* Heading */}
                 <div className="mb-10">
                     <h2 className="mb-1 text-3xl font-extrabold text-primary dark:text-black">First, the essentials</h2>
@@ -83,7 +83,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             id="name"
                             type="text"
                             {...register('name', { required: 'Name is required' })}
-                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.name && <p className="text-sm text-red-500">{errors.name.message}</p>}
                     </div>
@@ -97,7 +97,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             id="email"
                             type="email"
                             {...register('email', { required: 'Email is required' })}
-                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
                     </div>
@@ -113,7 +113,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                             {...register('password', {
                                 required: 'Enter your password',
                             })}
-                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.password && <p className="text-sm text-red-500">{errors.password.message}</p>}
                     </div>
@@ -130,7 +130,7 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                                 required: 'Enter your password',
                                 validate: (value) => value === password || "Password doesn't match",
                             })}
-                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-2 ring-[#0B1727]/80 outline-none"
+                            className="w-full rounded-2xl border-1 border-primary py-3 pl-11 font-semibold text-gray-900 ring-1 ring-[#0B1727]/80 outline-none"
                         />
                         {errors.password_confirmation && <p className="text-sm text-red-500">{errors.password_confirmation.message}</p>}
                     </div>
@@ -177,12 +177,27 @@ export default function StepOneForm({ defaultValues, onNext }: Step1Props) {
                     </div>
 
                     {/* Submit */}
-                    <div className="flex flex-col items-center">
+                    <div className="flex flex-col  items-center">
                         <Button type="submit" className="w-full rounded-2xl bg-pinkLight py-8 text-lg font-semibold text-white hover:bg-pinkLight/90">
                             Proceed
                         </Button>
                     </div>
                 </form>
+
+                {/* Login/Signups */}
+                <div className="mx-auto mt-10 w-[400px] px-4 text-left lg:px-0 md:hidden">
+                    <p className="mb-1 pl-10 text-sm font-extralight">
+                        Already have an account?{' '}
+                        <a href="/login" className="font-bold text-deepBlack italic hover:underline dark:text-deepBlack">
+                            Sign In
+                        </a>
+                    </p>
+                    <p className="pl-10 text-sm">
+                        <a href="/help" className="font-bold text-deepBlack italic hover:underline dark:text-deepBlack">
+                            Need Help?
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     );

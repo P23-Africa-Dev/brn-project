@@ -14,8 +14,8 @@ export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent,
                  {LeftDesktopContent}
 
                 {/* Mobile Pattern Screen */}
-                <div className="h-[300px] sm:h-[600px] md:hidden dark:bg-white">
-                    <div className="z-0 h-screen">
+                <div className="h-[330px] sm:h-[600px] md:hidden dark:bg-white">
+                    <div className="relative z-0 h-screen ">
                         <div className="relative">
                             <img src={images.mobilePattern} className="absolute h-auto w-full object-contain" alt="" />
                         </div>
@@ -28,7 +28,7 @@ export default function AuthSimpleLayout({ mobileTopContent, LeftDesktopContent,
                     style={{
                         backgroundImage: `url(${images.formBG})`,
                     }}
-                    className="flex w-full  md:w-2/4 h-screen  md:justify-end  xl:w-full xl:justify-center"
+                    className="flex w-full  md:w-2/4 h-screen   lg:justify-end  xl:w-full xl:justify-center"
                 >
                     {children}
                     

@@ -34,13 +34,14 @@ export const FilterSidebar = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <div className="flex w-[40px] cursor-pointer items-center justify-end lg:w-[130px] lg:items-end">
-                    <img src={images.desktopSlide} className="hidden h-10 w-10 cursor-pointer lg:block" alt="filter" />
-                    <img src={images.preferenceHorizontal} className="h-7 w-7 cursor-pointer lg:hidden" alt="filter" />
+                <div className="flex w-[40px] md:w-[100px] md:pr-2 lg:w-[50px]  xl:w-[130px] cursor-pointer items-center md:items-end lg:items-center justify-end">
+                    <img src={images.desktopSlide} className="xl:h-10 hidden lg:block xl:w-10 lg:w-8 lg:mt-2 xl:mt-0 lg:h-8 cursor-pointer" alt="filter" />
+                    <img src={images.preferenceHorizontal} className=" w-7 h-7  lg:hidden  cursor-pointer" alt="filter" />
+
                 </div>
             </SheetTrigger>
 
-            <SheetContent className="w-[336px] rounded-l-[40px] p-10 dark:bg-gray-800 dark:text-gray-100">
+            <SheetContent className="w-[336px] pb-20 xl:pb-0 overflow-y-auto rounded-l-[40px] p-10 dark:bg-gray-800 dark:text-gray-100">
                 <SheetHeader>
                     <SheetTitle className="mb-2 text-2xl font-semibold text-deepBlack dark:text-gray-100">Filter By</SheetTitle>
                     <SheetDescription className="text-sm text-deepBlack dark:text-gray-400">

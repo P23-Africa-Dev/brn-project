@@ -1,4 +1,7 @@
 import AppLayout from '@/layouts/app-layout';
+
+import { Link } from '@inertiajs/react';
+
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
@@ -31,13 +34,23 @@ type ConversationListItem = {
 };
 
 type Props = {
-    conversations?: ConversationListItem[];
+    conversations?: {
+        id: number;
+        title?: string | null;
+        participants: { id: number; name: string }[];
+        last_message?: { body: string; created_at: string } | null;
+    }[];
     auth: {
-        user: User;
+        user: {
+            id: number;
+            name: string;
+        };
     };
 };
 
 export default function Index({ conversations = [], auth }: Props) {
+  console.log('Conversations:', conversations);
+    console.log('Auth:', auth);
     // Get encryptedId from URL if present
     const urlMatch = typeof window !== 'undefined' ? window.location.pathname.match(/\/messages\/(\w+)/) : null;
     const initialId = urlMatch ? urlMatch[1] : null;
@@ -317,38 +330,36 @@ export default function Index({ conversations = [], auth }: Props) {
                     <h2 className="mb-4 text-xl font-semibold">Direct Messages</h2>
                     <div className="space-y-4">
                         {Array.isArray(conversations) && conversations.length > 0 ? (
-                            conversations.map((c) => {
-                                const other = getOtherParticipant(c.participants, auth.user.id) || c.participants[0];
-                                return (
-                                    <button
-                                        key={c.encrypted_id}
-                                        onClick={() => handleSelectConversation(c.encrypted_id)}
-                                        className={`flex w-full cursor-pointer items-center gap-3 rounded-xl p-4 shadow hover:bg-gray-50 ${selectedEncryptedId === c.encrypted_id ? 'bg-indigo-50' : 'bg-white'}`}
-                                        style={{ border: selectedEncryptedId === c.encrypted_id ? '2px solid #6366f1' : undefined }}
-                                    >
-                                        <img
-                                            src={other?.profile_picture || '/images/no-user-dp.png'}
-                                            alt={other?.name || 'User'}
-                                            className="h-10 w-10 rounded-full border object-cover"
-                                            onError={(e) => {
-                                                (e.target as HTMLImageElement).src = '/images/no-user-dp.png';
-                                            }}
-                                        />
-                                        <div className="min-w-0 flex-1 text-left">
-                                            <div className="truncate font-semibold">{other?.name || 'User'}</div>
-                                            <div className="truncate text-sm text-gray-500">{c.last_message?.body || 'No messages yet'}</div>
+                            conversations.map((c) => (
+                                <Link
+                                    key={c.id}
+                                    href={`/messages/${c.id}`}
+                                    className="flex items-center justify-between rounded-xl bg-white p-4 shadow hover:bg-gray-50"
+                                >
+                                    <div>
+                                        <div className="font-semibold">
+                                            {c.title ||
+                                                c.participants
+                                                    .filter((p) => p.id !== auth.user.id)
+                                                    .map((p) => p.name)
+                                                    .join(', ') ||
+                                                'Unnamed Chat'}
                                         </div>
-                                        <div className="text-xs whitespace-nowrap text-gray-400">
-                                            {c.last_message?.created_at && new Date(c.last_message.created_at).toLocaleTimeString()}
-                                        </div>
-                                    </button>
-                                );
-                            })
+                                        <div className="text-sm text-gray-500">{c.last_message?.body || 'No messages yet'}</div>
+                                    </div>
+                                    <div className="text-xs text-gray-400">
+                                        {c.last_message?.created_at && new Date(c.last_message.created_at).toLocaleTimeString()}
+                                    </div>
+                                </Link>
+                            ))
                         ) : (
                             <div className="py-4 text-center text-gray-500">No conversations available</div>
                         )}
                     </div>
                 </aside>
+
+
+<!--                 <div className="flex flex-1 items-center justify-center text-gray-400">Select a conversation</div> -->
 
                 <div className="flex flex-1 flex-col bg-white">
                     {selectedConversation ? (

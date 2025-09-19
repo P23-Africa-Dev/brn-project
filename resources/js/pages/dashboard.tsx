@@ -2,6 +2,7 @@ import SmartMatchesSection from '@/components/cards/SmartCard';
 import UserCard from '@/components/cards/UserCard';
 import UserCardLead from '@/components/cards/UserCardLead';
 import SplineAreaChart from '@/components/chart/BasicAreaChart';
+import BasicColumnChart from '@/components/chart/BasicColumnChart';
 import BasicPolarChart from '@/components/chart/BasicPolarChart';
 import { FilterSidebar } from '@/components/sidebars/dashbord-filter';
 import UserProfileSidebar from '@/components/sidebars/user-show-sidebar';
@@ -79,7 +80,7 @@ function Dashboard({ auth, users }: Props) {
                         backgroundImage: `url(${images.uibg})`,
                     }}
                 >
-                    <div className="relative z-[10] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-17 lg:pl-12">
+                    <div className="relative z-[10] no-scrollbar flex h-screen max-h-[96vh] w-full flex-col gap-3 overflow-y-auto px-2 pb-1 lg:py-0 lg:pr-9 lg:pl-7 xl:pr-17 xl:pl-12">
                         {/* USER GREETINGS */}
                         <div className="mb-1 hidden w-full lg:block dark:text-deepBlue">
                             {auth.user ? (
@@ -93,20 +94,27 @@ function Dashboard({ auth, users }: Props) {
                             )}
                         </div>
                         {/*-------------------------//////////////////////----------------- FIRST ROW MOBILE----------------//////////////////////------------------------- */}
-                        <div
+                        <div className="relative mt-5 w-full bg-no-repeat px-3 pt-5 pb-6 lg:hidden">
+                            {/* <div
                             className="w-full bg-center bg-no-repeat sm:bg-cover lg:hidden"
                             style={{
                                 backgroundImage: `url(${images.mobileCardBG})`,
                             }}
-                        >
-                            <div className="grid w-full grid-cols-2 place-content-between px-6 py-10">
-                                <div className="mb-1 w-full place-self-center text-white dark:text-white">
+                        > */}
+                            <img
+                                src={images.mobileCardBG}
+                                alt={`lead card bg`}
+                                className="absolute inset-0 top-0 z-[1] h-[100px] w-full object-cover"
+                            />
+
+                            <div className="relative z-[2] grid w-full grid-cols-2 place-content-between px-6 sm:px-12">
+                                <div className="mb-1 w-full place-self-center text-secondaryWhite dark:text-white">
                                     {auth.user ? (
                                         <>
                                             <h3 className="text-2xl font-semibold tracking-wide whitespace-nowrap">
                                                 Hello <span className="font-bold tracking-tight"> Kwame!</span> {/* {auth.user.name}  */}
                                             </h3>
-                                            <h6 className="text-xs font-light text-white">{getGreeting()} </h6>
+                                            <h6 className="text-xs font-light">{getGreeting()} </h6>
                                         </>
                                     ) : (
                                         <h3 className="text-base font-medium">
@@ -132,13 +140,13 @@ function Dashboard({ auth, users }: Props) {
 
                             {/* CONNECTIONS CONTAINER */}
                             <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl lg:block">
-                                <div className="flex flex-col p-3 pl-6">
+                                <div className="flex flex-col p-3 pl-3 xl:pl-6">
                                     <div className="flex justify-between">
-                                        <h4 className="font-bold dark:text-deepBlue">Network Status</h4>
+                                        <h4 className="font-bold lg:text-sm xl:text-base dark:text-deepBlue">Network Status</h4>
                                         <div>
                                             <h5 className="flex items-center justify-end gap-1">
                                                 <span
-                                                    className={`text-xl leading-10 font-medium ${
+                                                    className={`text-xl leading-10 lg:text-sm xl:text-base font-medium ${
                                                         activityChange.isIncrease ? 'text-green-600' : 'text-red-600'
                                                     }`}
                                                 >
@@ -159,26 +167,26 @@ function Dashboard({ auth, users }: Props) {
                                     </div>
                                     <div className="flex justify-between">
                                         <div className="-mt-4 flex items-center divide-x divide-gray-200">
-                                            <div className="pr-5">
-                                                <span className="text-3xl font-bold text-[#F05831]">
+                                            <div className="xl:pr-5">
+                                                <span className="lg:text-lg  xl:text-3xl font-bold text-[#F05831]">
                                                     {' '}
                                                     <Counter end={45000} />
                                                 </span>{' '}
                                                 <br />
-                                                <h6 className="text-[#727677]">Leads</h6>
+                                                <h6 className="lg:text-xs text-[#727677]">Leads</h6>
                                             </div>
                                             <div className="pl-5">
-                                                <span className="text-3xl font-bold text-[#0496FF]">
+                                                <span className="lg:text-lg  xl:text-3xl  font-bold text-[#0496FF]">
                                                     <Counter end={75000} />
                                                 </span>{' '}
                                                 <br />
-                                                <h6 className="text-[#727677]">Connections</h6>
+                                                <h6 className="lg:text-xs text-[#727677]">Connections</h6>
                                             </div>
                                         </div>
 
                                         <div className="mt-2">
-                                            <button className="rounded-xl bg-blue-600 p-3">
-                                                <Upload className="text-white" />
+                                            <button className="rounded-xl  bg-blue-600 p-3">
+                                                <Upload className="text-white lg:w-6 lg:h-6" />
                                             </button>
                                         </div>
                                     </div>
@@ -188,50 +196,60 @@ function Dashboard({ auth, users }: Props) {
                             {/*-------------------------//////////////////////----------------- SECOND ROW MOBILE----------------//////////////////////------------------------- */}
                             {/* MOBILE NETWORK STATUS */}
                             <div className="flex justify-between lg:hidden">
-                                <div className="w-full max-w-[290px]">
-                                    <h5 className="mb-2 pl-6 text-xs font-bold">Network Stats</h5>
+                                <div className="w-full max-w-[290px] md:max-w-[350px]">
+                                    <h5 className="mb-2 pl-6 text-xs font-bold md:text-base">Network Stats</h5>
 
                                     <div className="flex rounded-full border border-primary/70 px-4 py-1 ring">
                                         <div className="grid grid-cols-2 place-items-center gap-3">
-                                            <img src={images.shareKnowledge} alt="" />
+                                            <img src={images.shareKnowledge} className="md::w-8 md:w-8" alt="" />
 
                                             <div className="">
-                                                <span className="text-lg font-bold text-[#F05831]">
+                                                <span className="text-lg font-bold text-[#F05831] md:text-2xl">
                                                     {' '}
                                                     <Counter end={45000} />
                                                 </span>{' '}
-                                                <h6 className="text-xs text-[#727677]">Leads</h6>
+                                                <h6 className="text-xs text-[#727677] md:text-base">Leads</h6>
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-2 place-items-center">
-                                            <img src={images.unlink} alt="" className="-mr-4" />
+                                            <img src={images.unlink} alt="" className="md::w-8 -mr-4 md:-mr-10 md:w-8" />
 
                                             <div className="">
-                                                <span className="text-lg font-bold text-[#0496FF]">
+                                                <span className="text-lg font-bold text-[#0496FF] md:text-2xl">
                                                     <Counter end={75000} />
                                                 </span>{' '}
                                                 <br />
-                                                <h6 className="text-xs text-[#727677]">Connections</h6>
+                                                <h6 className="text-xs text-[#727677] md:text-base">Connections</h6>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="mt-4 flex max-w-[100px] items-center justify-items-end gap-1">
+                                <div className="mt-4 flex  items-center justify-items-end gap-1">
                                     <div className="flex flex-col items-center justify-center">
-                                        <div className="flex">
-                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-                                                <img className="h-full w-full object-center" src={images.man3} alt="User avatar" />
-                                            </div>
-                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-                                                <img className="h-full w-full object-center" src={images.man1} alt="User avatar" />
-                                            </div>
-                                            <div className="relative h-6 w-6 overflow-hidden rounded-full">
-                                                <img className="h-full w-full object-center" src={images.man2} alt="User avatar" />
-                                            </div>
+                                        <div className="flex   ">
+                                            <div
+                                                className="relative flex w-7 h-7 md:h-10 md:w-10 rounded-full bg-cover bg-top "
+                                                style={{
+                                                    backgroundImage: `url(${images.man3})`,
+                                                }}
+                                            ></div>
+                                            <div
+                                                className="relative flex  w-7 h-7 md:h-10 md:w-10 rounded-full bg-cover bg-top "
+                                                style={{
+                                                    backgroundImage: `url(${images.man1})`,
+                                                }}
+                                            ></div>
+                                            <div
+                                                className="relative flex  w-7 h-7 md:h-10 md:w-10 rounded-full bg-cover bg-top "
+                                                style={{
+                                                    backgroundImage: `url(${images.man2})`,
+                                                }}
+                                            ></div>
+                                           
                                         </div>
                                         <h4 className="mb-2 w-full flex-1 text-center text-[9px] whitespace-nowrap text-primary">200k+ People</h4>
-                                        <button className="rounded-full bg-[#BB98FB] px-3 py-1 text-[10px] font-semibold whitespace-nowrap">
+                                        <button className="rounded-full bg-[#BB98FB] px-3 py-1.5 text-[10px] font-semibold whitespace-nowrap">
                                             Active Member
                                         </button>
                                     </div>
@@ -239,7 +257,10 @@ function Dashboard({ auth, users }: Props) {
                             </div>
 
                             {/*-------------------------//////////////////////----------------- THIRD ROW MOBILE----------------//////////////////////------------------------- */}
-                            <img className="block lg:hidden" src={images.mobileGraph} alt="" />
+                            {/* <img className="block lg:hidden" src={images.mobileGraph} alt="" /> */}
+                            <div className="lg:hidden">
+                                <BasicColumnChart />
+                            </div>
 
                             {/*-------------------------//////////////////////----------------- FOURTH ROW MOBILE----------------//////////////////////------------------------- */}
                             <div className="block lg:hidden">
@@ -258,10 +279,10 @@ function Dashboard({ auth, users }: Props) {
 
                             {/* COMMUNITY CONTAINER */}
                             <div className="grid-card-shadow relative hidden aspect-auto overflow-hidden rounded-2xl lg:block">
-                                <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-5">
+                                <div className="h-full w-full bg-gradient-to-r from-[#12553F] to-[#02251A] pl-3.5 xl:pl-5">
                                     <div className="grid grid-cols-2 gap-3">
-                                        <div className="mt-9 ml-2 pr-3">
-                                            <h4 className="mt-2 text-lg leading-5 font-semibold text-white">Let’s Join Our Community</h4>
+                                        <div className="lg:mt-7 xl:mt-9 ml-2 pr-3">
+                                            <h4 className="mt-2 lg:text-[14px] xl:text-lg leading-5 font-semibold text-white">Let’s Join Our Community</h4>
 
                                             <div className="mt-4 flex items-center gap-1">
                                                 <div className="flex">
@@ -279,53 +300,42 @@ function Dashboard({ auth, users }: Props) {
                                                 <h4 className="w-full flex-1 text-[9px] whitespace-nowrap text-white/40">200k+ People</h4>
                                             </div>
                                         </div>
-                                        <div className="relative w-[210px]">
-                                            <img className="absolute right-10 -bottom-7" src={images.flowerPattern} alt="" />
+                                        <div className="relative lg:w-[195px] xl:w-[210px]">
+                                            <img className="absolute lg:right-7 xl:right-10 -bottom-7" src={images.flowerPattern} alt="" />
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        {/*-------------------------//////////////////////----------------- FIFTH ROW MOBILE----------------//////////////////////------------------------- */}
 
                         {/* SECOND ROW */}
-                        <div className="grid auto-rows-max gap-4 md:grid-cols-5 lg:auto-rows-[400px]">
+                        <div className="grid auto-rows-max gap-4 lg:grid-cols-5 lg:auto-rows-[400px]">
                             {/* First child spans 2 columns */}
-                            <div
-                                // style={{
-                                //     backgroundImage: `url(${images.dealBgCard})`,
-                                // }}
-                                className="relative col-span-3 aspect-auto overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 lg:bg-transparent lg:pr-18 lg:pl-12"
-                            >
-                                {/* <div className="relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-deepBlack p-4 lg:bg-transparent lg:pr-18 lg:pl-12"> */}
+                            <div className="relative col-span-3 aspect-auto overflow-hidden rounded-3xl bg-deepBlack bg-cover bg-center bg-no-repeat p-4 lg:bg-transparent lg:pr-12 xl:pr-18 lg:pl-12">
                                 <img
                                     src={images.dealBgCard}
                                     alt={`lead card bg`}
                                     className="absolute inset-0 hidden h-[410px] w-full rounded-3xl object-center lg:block"
                                 />
 
-                                {/* <div
-                                    style={{
-                                        backgroundImage: `url(${images.dealBgCard})`,
-                                    }}
-                                    className=" absolute inset-0 border z-[2] hidden h-full w-full overflow-hidden rounded-full bg-cover bg-top bg-no-repeat"
-                                ></div> */}
-                                <div className="relative no-scrollbar max-h-[55vh] overflow-y-auto bg-transparent pb-20 lg:max-h-[50vh] lg:pb-0">
+                                <div className="relative no-scrollbar max-h-[55vh] overflow-y-auto bg-transparent pb-20 sm:max-h-[65vh] lg:max-h-[50vh] lg:pb-0">
                                     {/* Search Header */}
                                     <div className="sticky top-0 z-10 flex items-center justify-between overflow-hidden border-b-0 bg-deepBlack px-3 pt-4 pb-3 lg:border-b-3 lg:bg-white lg:px-0">
-                                        <h2 className="text-[12px] leading-2 font-normal text-white italic lg:w-[170px] lg:text-[17px] lg:leading-6 lg:text-gray-800">
+                                        <h2 className="text-[12px] leading-2 font-normal text-white italic sm:w-[200px] md:text-[15px] sm:text-[14px] md:w-[150px] lg:w-[180px] xl:w-[170px]  lg:text-[17px] lg:leading-6 lg:text-gray-800">
                                             Let's find your{' '}
-                                            <span className="tex-white text-base font-bold lg:text-2xl lg:leading-3 lg:text-deepBlue">next deal</span>
+                                            <span className="tex-white text-base font-bold sm:text-xl lg:text-2xl lg:leading-3 lg:text-deepBlue">
+                                                next deal
+                                            </span>
                                         </h2>
 
                                         <div className="flex w-full items-center space-x-2 lg:items-start">
-                                            <div className="relative w-[210px] lg:w-full">
+                                            <div className="relative w-[210px] sm:w-[400px]  md:w-full">
                                                 <div className="rleative cursor-pointer">
                                                     <input
                                                         type="text"
                                                         placeholder="Search"
-                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-2 text-primary/60 placeholder:text-white focus:ring focus:ring-primary/30 focus:outline-none lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pl-10 lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
+                                                        className="w-full rounded-full border-0 bg-gray-700 px-4 py-2 text-secondaryWhite placeholder:text-white focus:ring focus:ring-primary/30 focus:outline-none lg:bg-[#27E6A729] lg:px-4 lg:py-3 lg:pl-10 lg:placeholder:text-primary/80 dark:bg-gray-700 dark:text-gray-100 dark:placeholder-gray-400 dark:focus:ring-transparent"
                                                     />
                                                     <img
                                                         src={images.desktopSearch}
@@ -346,6 +356,7 @@ function Dashboard({ auth, users }: Props) {
 
                                     {/* Cards Container */}
                                     <div className="divide-y divide-white/30">
+
                                         {users
                                             ?.filter((user) => auth.user && user.id !== auth.user.id)
                                             .map((user) => (
@@ -443,7 +454,7 @@ function Dashboard({ auth, users }: Props) {
 
                             {/* REMCOMMENDATION LEANDS */}
                             <div className="grid-card-shadow relative col-span-3 aspect-auto overflow-hidden rounded-2xl bg-white">
-                                <div className="mx-auto max-w-[590px] pt-4">
+                                <div className="mx-auto px-10 xl:px-0 max-w-[590px] pt-4">
                                     {/* Header */}
                                     <div className="mb-6 flex items-center justify-between px-3 md:px-0">
                                         <h2 className="text-xl font-bold text-[#193E47] dark:text-gray-100">Recommended Leads</h2>

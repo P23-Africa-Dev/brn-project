@@ -49,10 +49,10 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                 <SheetTrigger asChild>{children}</SheetTrigger>
 
                 <div id="sidebar-profile">
-                    <SheetContent side="right" className="border-none bg-transparent sm:max-w-md lg:max-w-[800px]">
-                        <div className="flex h-full w-full rounded-3xl bg-white p-4 shadow-lg">
+                    <SheetContent side="right" className="border-none bg-transparent  max-w-full  md:w-auto w-[360px]  sm:max-w-md md:max-w-[700px] lg:max-w-[800px]">
+                        <div className="md:flex  overflow-y-scroll md:flex-row h-full w-full rounded-3xl bg-white p-4 shadow-lg">
                             {/* Left Column - User Profile */}
-                            <div className="flex w-[40%] flex-col rounded-l-3xl bg-[#A7D5DD] p-6 shadow-2xl">
+                            <div className="flex md:w-[40%] h-[610px] w-full md:h-auto flex-col rounded-l-3xl bg-[#A7D5DD] p-6 shadow-2xl">
                                 {/***************************** Top Area */}
                                 <div className="flex flex-col items-center text-center">
                                     <div className="relative flex h-40 w-40 items-center justify-center rounded-full bg-gradient-to-tr from-[#325A64] via-[#325A64] to-[#AC7CEE] p-1">
@@ -92,21 +92,21 @@ const UserDetailedSidebar: React.FC<UserDetailedSidebarProps> = ({
                                         </h3>
                                     </div>
                                     <div className="mt-8 flex w-full items-start space-x-2">
-                                        <button className="flex items-center justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
-                                            <img src={images.userMailVoice} className="h-7 w-7" alt="" />
+                                        <button className="flex items-center md:w-10 md:h-10 lg:w-auto lg:h-auto justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
+                                            <img src={images.userMailVoice} className="lg:h-7 lg:w-7" alt="" />
                                         </button>
-                                        <button className="flex items-center justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
-                                            <img src={images.userMessage} className="h-7 w-7" alt="" />
+                                        <button className="flex items-center md:w-10 md:h-10 lg:w-auto lg:h-auto justify-center gap-2 rounded-xl bg-darkBlue p-2 whitespace-nowrap text-secondaryWhite">
+                                            <img src={images.userMessage} className="lg:h-7 lg:w-7" alt="" />
                                         </button>
 
-                                        <button className="flex items-center justify-center gap-2 rounded-full bg-darkBlue p-3 py-3.5 text-sm font-semibold whitespace-nowrap text-[#D7F6EC] shadow-2xl">
+                                        <button className="flex -mr-4 lg:-mr-0 items-center justify-center gap-2 rounded-full bg-darkBlue p-3 py-3.5 text-sm font-semibold whitespace-nowrap text-[#D7F6EC] shadow-2xl">
                                             Request Contact
                                         </button>
                                     </div>
                                 </div>
                             </div>
                             {/* Right Column - Detailed Info */}
-                            <div className="no-scrollbar max-h-max w-[60%] overflow-y-auto p-6">
+                            <div className="no-scrollbar md:max-h-max md:w-[60%] w-full  overflow-y-auto p-3 md:p-6">
                                 <div className="">
                                     <div className="text-darkBlue">
                                         <h2 className="text-lg font-extrabold">Bio</h2>

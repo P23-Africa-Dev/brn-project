@@ -7,7 +7,7 @@ const prefersDark = () => {
         return false;
     }
 
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return window.matchMedia('(prefers-color-scheme: light)').matches;
 };
 
 const setCookie = (name: string, value: string, days = 365) => {
@@ -71,5 +71,3 @@ export function useAppearance() {
 
     return { appearance, updateAppearance } as const;
 }
-
-
