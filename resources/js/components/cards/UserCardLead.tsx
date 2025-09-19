@@ -28,7 +28,7 @@ const UserCardLead: React.FC<UserCardProps> = ({ name, email, title, rating, ico
                             <p className="text-[13px] font-light">{title}</p>
                         </div>
                     </div>
-                    <div className="flex items-center space-x-1 text-yellow-500">
+                    <div className="flex items-center space-x-1 pr-10 xl:pr-20 text-yellow-500">
                         <span className="font-medium text-xl text-gray-600">{rating}</span>
                         <Star className="h-5 w-5 text-darkGreen font-bold fill-darkGreen" />
                     </div>

@@ -42,7 +42,7 @@ export default function StepFourForm({ onNext }: StepFourProps) {
     };
 
     return (
-        <div className="w-full  p-8 lg:overflow-y-auto xl:ml-16">
+        <div className="w-full px-5 pr-10  md:p-8 lg:overflow-y-auto xl:ml-16">
             <div className="relative z-10 mx-auto max-w-md xl:max-w-lg">
                 {/* Heading */}
                 <div className="mb-15">

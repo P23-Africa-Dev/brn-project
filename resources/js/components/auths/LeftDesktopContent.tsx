@@ -19,12 +19,12 @@ const LeftDesktopContent: React.FC<LeftDesktopContent> = ({ topContentLayout }) 
         >
             {/* Step FOrm Inner pattern */}
             <div
-                className="absolute top-0 -right-7 z-0 h-screen bg-cover bg-center text-white md:w-[30px]"
+                className="absolute top-0 -right-7 z-0 h-full bg-cover bg-center text-white md:w-[30px]"
                 style={{
                     backgroundImage: `url(${images.stepFormsInnerPattern})`,
                 }}
             >
-                <div className="h-screen w-full bg-gradient-to-r from-primary/60 dark:from-black from-12% via-primary/0 via-30%"></div>
+                <div className=" w-full h-full bg-gradient-to-r from-primary/60 dark:from-black from-12% via-primary/0 via-30%"></div>
             </div>
 
             <div className="flex h-screen flex-col justify-between py-10">

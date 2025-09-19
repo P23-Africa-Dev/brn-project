@@ -52,7 +52,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
     };
 
     return (
-        <div className="w-full p-8 lg:overflow-y-auto xl:ml-18">
+        <div className="w-full p-3 pl-5 md:p-8 lg:overflow-y-auto xl:ml-18 -mt-5">
             <div className="relative z-10 mx-auto max-w-md xl:max-w-[550px]">
                 {/* Heading */}
                 <div className="mb-4">
@@ -77,7 +77,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
                                             type="button"
                                             key={tag.value}
                                             onClick={() => toggleTag('great_at', tag.value)}
-                                            className={`flex items-center space-x-2 rounded-3xl bg-white px-10 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
+                                            className={`flex items-center space-x-2 rounded-3xl bg-white px-5 md:px-10 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
                                                 isSelected ? 'bg-transparent font-bold text-[#0B1727]' : 'font-semibold text-[#0B1727]/60'
                                             } ${disableRest ? 'pointer-events-none opacity-40 blur-[1px]' : ''}`}
                                         >
@@ -106,7 +106,7 @@ export default function StepThreeForm({ defaultValues, onNext }: StepThreeProps)
                                             type="button"
                                             key={tag.value}
                                             onClick={() => toggleTag('can_help_with', tag.value)}
-                                            className={`flex items-center space-x-2 rounded-3xl bg-white px-8 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
+                                            className={`flex items-center space-x-2 rounded-3xl bg-white px-4 lg:px-8 py-2.5 font-GtrialsTh text-base tracking-wide shadow-md transition-all duration-200 ${
                                                 isSelected ? 'bg-transparent font-bold text-[#0B1727]' : 'font-semibold text-[#0B1727]/60'
                                             } ${disableRest ? 'pointer-events-none opacity-60 blur-[1px]' : ''}`}
                                         >

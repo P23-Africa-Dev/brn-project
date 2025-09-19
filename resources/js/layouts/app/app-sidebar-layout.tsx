@@ -5,7 +5,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
-        <div className="mx-auto max-w-[2560px]">
+        <div className="mx-auto max-w-[2060px]">
             <AppShell defaultSidebarOpen={true}>
                 <div className="flex    ">
                     <AppSidebar />

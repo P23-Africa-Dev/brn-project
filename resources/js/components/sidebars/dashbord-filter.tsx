@@ -34,8 +34,8 @@ export const FilterSidebar = () => {
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <div className="flex w-[40px] lg:w-[130px] cursor-pointer items-center lg:items-end justify-end">
-                    <img src={images.desktopSlide} className="h-10 hidden lg:block w-10 cursor-pointer" alt="filter" />
+                <div className="flex w-[40px] md:w-[100px] md:pr-2 lg:w-[50px]  xl:w-[130px] cursor-pointer items-center md:items-end lg:items-center justify-end">
+                    <img src={images.desktopSlide} className="xl:h-10 hidden lg:block xl:w-10 lg:w-8 lg:mt-2 xl:mt-0 lg:h-8 cursor-pointer" alt="filter" />
                     <img src={images.preferenceHorizontal} className=" w-7 h-7  lg:hidden  cursor-pointer" alt="filter" />
                 </div>
             </SheetTrigger>

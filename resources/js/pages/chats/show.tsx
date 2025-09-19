@@ -2,12 +2,6 @@ import AppLayout from '@/layouts/app-layout';
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
 
-// Helper to get the other participant (for 1:1 chat)
-function getOtherParticipant(participants: User[], currentUserId: number): User | null {
-    if (!participants || participants.length < 2) return null;
-    return participants.find((u) => u.id !== currentUserId) || null;
-}
-
 interface Props {
     conversation: {
         encrypted_id: any;
@@ -16,12 +10,10 @@ interface Props {
         participants: User[];
     };
     messages: Message[];
-    latestMessage?: Message | null;
     auth: {
         user: {
             id: number;
             name: string;
-            profile_picture: string;
         };
     };
 }
@@ -29,7 +21,6 @@ interface Props {
 type User = {
     id: number;
     name: string;
-    profile_picture?: string;
 };
 
 type Message = {
@@ -39,14 +30,11 @@ type Message = {
     created_at: string;
 };
 
-export default function Show({ conversation, messages: initialMessages, latestMessage, auth }: Props) {
+export default function Show({ conversation, messages: initialMessages, auth }: Props) {
     // Add validation check at the start
     if (!auth?.user?.id) {
         return <div className="p-4 text-red-500">Authentication required</div>;
     }
-
-    // Find the other participant (for 1:1 chat)
-    const otherUser = getOtherParticipant(conversation?.participants || [], auth.user.id);
 
     const [messages, setMessages] = useState<Message[]>(initialMessages || []);
     const [text, setText] = useState('');
@@ -116,9 +104,9 @@ export default function Show({ conversation, messages: initialMessages, latestMe
         setText(e.target.value);
 
         try {
-            if (channelRef.current && typeof channelRef.current.whisper === 'function') {
-                channelRef.current.whisper('typing', { user: auth.user });
-            }
+                    if (channelRef.current && typeof channelRef.current.whisper === 'function') {
+                        channelRef.current.whisper('typing', { user: auth.user });
+                    }
         } catch (err) {
             console.error('Error sending typing notification:', err);
         }
@@ -128,33 +116,8 @@ export default function Show({ conversation, messages: initialMessages, latestMe
         <AppLayout>
             <div className="flex h-screen bg-white">
                 <div className="w-96 border-r p-6">
-                    {/* Show other participant's name and profile picture */}
-                    {otherUser ? (
-                        <div className="flex items-center gap-3">
-                            {/* Use real profile image from backend, fallback to default */}
-                            <img
-                                src={otherUser.profile_picture || '/images/no-user-dp.png'}
-                                alt={otherUser.name}
-                                className="h-12 w-12 rounded-full border object-cover"
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).src = '/images/no-user-dp.png';
-                                }}
-                            />
-                            <div>
-                                <h3 className="text-lg font-semibold">{otherUser.name}</h3>
-                                {/* Latest message under name */}
-                                {latestMessage && latestMessage.body && (
-                                    <div className="mt-1 max-w-xs truncate text-sm text-gray-500">{latestMessage.body}</div>
-                                )}
-                            </div>
-                        </div>
-                    ) : (
-                        <h3 className="text-lg font-semibold">{conversation.title ?? 'Conversation'}</h3>
-                    )}
-                    {/* Optionally, show all participants for group chats */}
-                    {participants.length > 2 && (
-                        <div className="mt-2 text-sm text-gray-500">Participants: {participants.map((p) => p.name).join(', ')}</div>
-                    )}
+                    <h3 className="text-lg font-semibold">{conversation.title ?? 'Conversation'}</h3>
+                    <div className="mt-2 text-sm text-gray-500">Participants: {participants.map((p) => p.name).join(', ')}</div>
                 </div>
 
                 <div className="flex flex-1 flex-col">
