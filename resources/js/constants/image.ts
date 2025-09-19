@@ -82,6 +82,7 @@ import activeChat from '../../../public/assets/active-bubble-chat.png';
 import activeDashboard from '../../../public/assets/active-dashboard-square-03.png';
 import activeSearch from '../../../public/assets/active-search-list-02.png';
 import activeShare from '../../../public/assets/active-share-knowledge.png';
+import activeRepeat from '../../../public/assets/active-repeat.png';
 
 // star
 // userList
@@ -93,6 +94,7 @@ import activeShare from '../../../public/assets/active-share-knowledge.png';
 
 const images = {
     userMessage,
+    activeRepeat,
     activeDashboard,
     activeChat,
     activeSearch,
